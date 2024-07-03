@@ -31,4 +31,5 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":data:local")
 include(":core:system:ui")
+include(":feature:welcome-impl")
 include(":core:resource")
