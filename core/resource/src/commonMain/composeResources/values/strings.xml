@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">SecureWallet</string>
+    <string name="welcome_msg">Welcome to Secure Wallet</string>
+    <string name="create_wallet">Create a new Wallet</string>
+    <string name="import_wallet">Import an existing Wallet</string>
+</resources>
