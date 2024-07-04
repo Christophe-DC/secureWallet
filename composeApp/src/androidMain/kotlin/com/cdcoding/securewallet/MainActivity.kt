@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.cdcoding.system.ui.theme.SecureWalletTheme
@@ -22,22 +23,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SecureWalletTheme {
-                enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.light(
-                        MaterialTheme.colorScheme.background.toArgb(),
-                        MaterialTheme.colorScheme.background.toArgb()
-                    ),
-                    navigationBarStyle = SystemBarStyle.light(
-                        MaterialTheme.colorScheme.background.toArgb(),
-                        MaterialTheme.colorScheme.background.toArgb()
-                    )
-                )
-               // WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-               Surface(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
-                   App()
-               }
-            }
+            App(
+                darkTheme = isSystemInDarkTheme(),
+                dynamicColor = true
+            )
         }
     }
 }
@@ -45,5 +34,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App()
+    App(false, false)
 }

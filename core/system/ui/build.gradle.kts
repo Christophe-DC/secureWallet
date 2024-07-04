@@ -30,6 +30,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(compose.material3)
+            implementation(libs.androidx.core.ktx)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
