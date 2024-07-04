@@ -39,7 +39,11 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.core.system.ui)
-            implementation(projects.feature.welcomeImpl)
+            implementation(projects.feature.welcome.welcomeDi)
+            implementation(projects.feature.welcome.welcomeImpl)
+            implementation(libs.voyager)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
