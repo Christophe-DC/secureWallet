@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -22,19 +20,19 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "welcome-impl"
+            baseName = "welcome-di"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.resource)
-            implementation(projects.core.system.ui)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.uiToolingPreview)
+            api(projects.feature.welcome.welcomeImpl)
+            api(projects.core.navigation)
+
+           // implementation(projects.features.welcome.welcomeApi)
+            implementation(libs.koin.core)
+            implementation(libs.voyager)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -43,7 +41,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.cdcoding.welcomeimpl"
+    namespace = "com.cdcoding.welcomedi"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

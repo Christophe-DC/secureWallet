@@ -15,22 +15,27 @@ kotlin {
     }
 
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "resource"
+            baseName = "welcome-impl"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            api(compose.components.resources)
+            implementation(projects.core.resource)
+            implementation(projects.core.system.ui)
+            implementation(libs.voyager)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.ui)
+            implementation(compose.components.uiToolingPreview)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -38,14 +43,8 @@ kotlin {
     }
 }
 
-compose.resources {
-    publicResClass = true
-    packageOfResClass = "com.cdcoding.core.resource"
-    generateResClass = always
-}
-
 android {
-    namespace = "com.cdcoding.core.resource"
+    namespace = "com.cdcoding.welcomeimpl"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

@@ -26,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.system.ui.theme.mediumMarginDimens
 import com.cdcoding.core.resource.Res
@@ -36,8 +39,29 @@ import com.cdcoding.core.resource.welcome_msg
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+class WelcomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
+      /*  val viewModel: HomeViewModel = useInject()
+
+        val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
+        val accountScreen = rememberScreen(AccountDestination.Account)
+        val authenticatorScreen = rememberScreen(AuthenticatorDestination.Authenticator)
+        val passwordHealthScreen = rememberScreen(PasswordHealthDestination.PasswordHealth)
+        val helpScreen = rememberScreen(HelpDestination.Help)
+        val generatePasswordScreen = rememberScreen(GeneratePasswordDestination.GeneratePassword)
+        val uiState = viewModel.state.collectAsStateWithLifecycle()*/
+
+        WelcomeScreenContent()
+    }
+}
+
+
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier) {
+fun WelcomeScreenContent(modifier: Modifier = Modifier) {
 
     Column(
         Modifier.fillMaxWidth()
