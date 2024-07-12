@@ -14,8 +14,12 @@ compose-plugin = "1.6.11"
 junit = "4.13.2"
 kotlin = "2.0.0"
 voyager = "1.0.0-rc10"
-koin-core = "3.4.3"
-koin-compose = "1.0.4"
+navigation-compose = "2.7.0-alpha07"
+koin-core = "3.6.0-Beta4"
+koin-compose = "1.2.0-Beta4"
+lifecycle-viewModel = "2.8.2"
+moko = "0.16.1"
+wallet-core = "4.0.42"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -29,8 +33,16 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 voyager = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+lyfecycle-viewmodel = { group = "androidx.lyfecycle", name = "lyfecycle-viewmodel", version.ref = "lifecycle-viewModel" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin-core" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin-core" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose" }
+moko-mvvm-compose = { group = "dev.icerock.moko", name = "mvvm-compose", version.ref = "moko" }
+
+wallet-core = { module = "com.trustwallet:wallet-core", version.ref = "wallet-core" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

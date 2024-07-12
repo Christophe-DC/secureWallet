@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -15,32 +13,25 @@ kotlin {
     }
 
     jvm("desktop")
-
+    
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "welcome-impl"
+            baseName = "createwallet-di"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.designsystem)
-            implementation(projects.core.navigation)
-            implementation(projects.core.resource)
-            implementation(projects.core.system.ui)
-            implementation(libs.voyager)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.uiToolingPreview)
+            api(projects.feature.createwallet.createwalletImpl)
+            api(projects.core.navigation)
+
             implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.voyager)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -49,7 +40,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.cdcoding.welcomeimpl"
+    namespace = "com.cdcoding.createwalletdi"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

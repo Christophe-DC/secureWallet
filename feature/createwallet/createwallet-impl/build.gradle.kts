@@ -15,20 +15,21 @@ kotlin {
     }
 
     jvm("desktop")
-
+    
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "welcome-impl"
+            baseName = "createwallet-impl"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.blockchain.wallet)
             implementation(projects.core.designsystem)
             implementation(projects.core.navigation)
             implementation(projects.core.resource)
@@ -49,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.cdcoding.welcomeimpl"
+    namespace = "com.cdcoding.createwalletimpl"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

@@ -26,9 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cdcoding.core.designsystem.hooks.useInject
+import com.cdcoding.core.navigation.CreateWalletDestination
+import com.cdcoding.core.navigation.ImportWalletDestination
 import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.system.ui.theme.mediumMarginDimens
 import com.cdcoding.core.resource.Res
@@ -36,8 +40,10 @@ import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.import_wallet
 import com.cdcoding.core.resource.secure_wallet_logo
 import com.cdcoding.core.resource.welcome_msg
+import com.cdcoding.welcomeimpl.presentation.WelcomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class WelcomeScreen : Screen {
 
@@ -45,9 +51,13 @@ class WelcomeScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-      /*  val viewModel: HomeViewModel = useInject()
+        val viewModel: WelcomeViewModel = useInject()
+       // val viewModel = koinViewModel<WelcomeViewModel>()
+        //val uiState = viewModel.state.collectAsStateWithLifecycle()
 
-        val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
+
+
+       /* val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
         val accountScreen = rememberScreen(AccountDestination.Account)
         val authenticatorScreen = rememberScreen(AuthenticatorDestination.Authenticator)
         val passwordHealthScreen = rememberScreen(PasswordHealthDestination.PasswordHealth)
@@ -55,13 +65,21 @@ class WelcomeScreen : Screen {
         val generatePasswordScreen = rememberScreen(GeneratePasswordDestination.GeneratePassword)
         val uiState = viewModel.state.collectAsStateWithLifecycle()*/
 
-        WelcomeScreenContent()
+        val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
+      //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
+
+        WelcomeScreenContent(
+           navigateToCreateWallet = { navigator.push(createWalletScreen) },
+       //     navigateToImportWallet = { navigator.push(importWalletScreen) },
+            )
     }
 }
 
 
 @Composable
-fun WelcomeScreenContent(modifier: Modifier = Modifier) {
+fun WelcomeScreenContent(modifier: Modifier = Modifier,
+                         navigateToCreateWallet: () -> Unit = {},
+                         navigateToImportWallet: () -> Unit = {}) {
 
     Column(
         Modifier.fillMaxWidth()
@@ -82,7 +100,7 @@ fun WelcomeScreenContent(modifier: Modifier = Modifier) {
         Card(
             Modifier
                 .fillMaxWidth()
-                .clickable { },
+                .clickable { navigateToCreateWallet.invoke() },
 
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLow,

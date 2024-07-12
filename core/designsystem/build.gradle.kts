@@ -15,29 +15,25 @@ kotlin {
     }
 
     jvm("desktop")
-
+    
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "welcome-impl"
+            baseName = "designsystem"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.designsystem)
-            implementation(projects.core.navigation)
-            implementation(projects.core.resource)
-            implementation(projects.core.system.ui)
-            implementation(libs.voyager)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
-            implementation(compose.components.uiToolingPreview)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -49,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.cdcoding.welcomeimpl"
+    namespace = "com.cdcoding.core.designsystem"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
