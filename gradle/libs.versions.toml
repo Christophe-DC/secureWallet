@@ -19,7 +19,7 @@ koin-core = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
 lifecycle-viewModel = "2.8.2"
 moko = "0.16.1"
-wallet-core = "4.0.42"
+wallet-core = "4.0.49"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
