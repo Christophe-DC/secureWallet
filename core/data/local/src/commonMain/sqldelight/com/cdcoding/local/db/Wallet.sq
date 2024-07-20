@@ -1,0 +1,16 @@
+import com.cdcoding.local.db;
+
+CREATE TABLE IF NOT EXISTS WalletEntity(
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    wallet_index INTEGER NOT NULL,
+    type TEXT NOT NULL
+);
+
+getAllWallets:
+SELECT * FROM WalletEntity;
+
+insertWallet:
+INSERT OR REPLACE INTO WalletEntity(id, name, wallet_index, type) VALUES (?, ?, ?, ?);
+
+

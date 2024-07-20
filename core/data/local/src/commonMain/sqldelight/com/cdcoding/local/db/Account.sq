@@ -1,0 +1,19 @@
+import com.cdcoding.local.db;
+
+CREATE TABLE IF NOT EXISTS AccountEntity(
+    id TEXT PRIMARY KEY,
+    chain TEXT NOT NULL,
+    address TEXT NOT NULL,
+    derivationPath TEXT NOT NULL,
+    extendedPublicKey TEXT,
+    wallet_Id TEXT NOT NULL ,
+    FOREIGN KEY (wallet_Id) REFERENCES WalletEntity(id) ON DELETE CASCADE
+);
+
+getAccounts:
+SELECT * FROM AccountEntity;
+
+insertAccount:
+INSERT OR REPLACE INTO AccountEntity(id, chain, address, derivationPath, extendedPublicKey, wallet_Id) VALUES (?, ?, ?, ?, ?, ?);
+
+

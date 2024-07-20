@@ -117,9 +117,11 @@ fun SWTextField(
                 enabled = enabled,
                 value = textValue,
                 onValueChange = { newValue -> onValueChanged.invoke(newValue) },
-                textStyle = MaterialTheme.typography.bodyLarge,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.primary
+                ),
                 singleLine = true,
-                //  cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 decorationBox = { innerTextField ->
                     if (textValue.isEmpty()) {
                         Text(
