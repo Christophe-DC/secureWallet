@@ -70,8 +70,10 @@ kotlin {
             implementation(libs.koin.core)
         }
         commonMain.dependencies {
-            implementation(projects.core.system.ui)
             implementation(projects.core.blockchain.wallet)
+            implementation(projects.core.domain)
+            implementation(projects.core.data.local)
+            implementation(projects.core.system.ui)
             implementation(projects.feature.welcome.welcomeDi)
             implementation(projects.feature.welcome.welcomeImpl)
             implementation(projects.feature.createwallet.createwalletDi)

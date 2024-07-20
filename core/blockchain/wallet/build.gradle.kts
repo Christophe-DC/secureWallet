@@ -68,6 +68,12 @@ kotlin {
             api(libs.wallet.core)
         }
         commonMain.dependencies {
+            implementation(libs.koin.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.coroutines.core)
+           // implementation(libs.compose.runtime.android)
+            implementation(projects.core.data.local)
+            implementation(projects.core.common)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

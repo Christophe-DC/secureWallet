@@ -55,6 +55,8 @@ import com.cdcoding.createwalletimpl.presentation.CreateWalletEvent
 import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.createwalletimpl.presentation.CreateWalletViewModel
 import com.cdcoding.system.ui.theme.mediumMarginDimens
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
 
 class CreateWalletScreen : Screen {
@@ -93,8 +95,33 @@ class CreateWalletScreen : Screen {
 fun CreateWalletScreenContent(
     modifier: Modifier = Modifier,
     onEvent: (CreateWalletEvent) -> Unit,
+    //flow: Flow<AddNewPasswordEffect>,
     popBackStack: () -> Unit,
 ) {
+
+    /*useEffect(true) {
+        flow.collectLatest { effect ->
+            when (effect) {
+                is AddNewPasswordEffect.Failure -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = effect.message,
+                        )
+                    }
+                }
+                AddNewPasswordEffect.GeneratePassword -> {
+                    navigateToGeneratePassword.invoke()
+                }
+                is AddNewPasswordEffect.Success -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = effect.message,
+                        )
+                    }
+                }
+            }
+        }
+    }*/
 
     var text by remember { mutableStateOf("") }
 

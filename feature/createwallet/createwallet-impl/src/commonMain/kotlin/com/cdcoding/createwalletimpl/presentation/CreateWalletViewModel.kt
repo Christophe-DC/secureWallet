@@ -2,11 +2,11 @@ package com.cdcoding.createwalletimpl.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cdcoding.wallet.WalletClient
+import com.cdcoding.domain.GetCreateWalletUseCase
 import kotlinx.coroutines.launch
 
 
-class CreateWalletViewModel(val walletClient: WalletClient)  : ViewModel() {
+class CreateWalletViewModel(private val getCreateWalletUseCase: GetCreateWalletUseCase)  : ViewModel() {
 
    fun onEvent(event: CreateWalletEvent) {
       when(event) {
@@ -17,8 +17,16 @@ class CreateWalletViewModel(val walletClient: WalletClient)  : ViewModel() {
    private fun onCreateNewWallet() {
       viewModelScope.launch {
 
-         val result = walletClient.createWallet().getOrNull()
-         println("result: $result")
+        // val result = getCreateWalletUseCase().getOrNull()
+         runCatching { getCreateWalletUseCase("test") }
+            .onSuccess { result ->
+               println("result: ${result.getOrNull()}")
+              // next.invoke(AddNewPasswordWish.InsertSuccess("Successfully added!"))
+            }
+            .onFailure {
+               val failureMessage = it.message ?: "Error is occurred."
+               //next.invoke(AddNewPasswordWish.InsertFailed(failureMessage))
+            }
       }
    }
 }
