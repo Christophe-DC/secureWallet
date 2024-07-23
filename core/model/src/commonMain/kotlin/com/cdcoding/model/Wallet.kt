@@ -1,19 +1,11 @@
-package com.cdcoding.wallet.model
+package com.cdcoding.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-@Serializable
 enum class WalletType(val string: String) {
-	@SerialName("multicoin")
 	multicoin("multicoin"),
-	@SerialName("single")
 	single("single"),
-	@SerialName("view")
 	view("view"),
 }
 
-@Serializable
 data class Wallet (
 	val id: String,
 	val name: String,

@@ -7,8 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
+import com.cdcoding.core.navigation.tab.registry.TabRegistry
 import com.cdcoding.createwalletdi.createWalletScreenModule
+import com.cdcoding.homedi.homeScreenModule
 import com.cdcoding.system.ui.theme.SecureWalletTheme
+import com.cdcoding.walletdetaildi.walletDetailScreenModule
 import com.cdcoding.welcomedi.welcomeScreenModule
 import com.cdcoding.welcomeimpl.ui.WelcomeScreen
 import org.koin.compose.KoinContext
@@ -24,8 +27,13 @@ fun App(
 
             ScreenRegistry {
                 welcomeScreenModule()
+                homeScreenModule()
                 createWalletScreenModule()
               //  importWalletScreenModule()
+            }
+
+            TabRegistry {
+                walletDetailScreenModule()
             }
 
             Surface(

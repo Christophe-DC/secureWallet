@@ -28,6 +28,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.blockchain.wallet)
+            api(projects.core.model)
             implementation(libs.koin.core)
         }
         commonTest.dependencies {

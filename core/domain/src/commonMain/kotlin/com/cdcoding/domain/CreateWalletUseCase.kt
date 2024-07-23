@@ -1,9 +1,9 @@
 package com.cdcoding.domain
 
-import com.cdcoding.wallet.model.Wallet
+import com.cdcoding.model.Wallet
 import com.cdcoding.wallet.repository.WalletRepository
 
-class GetCreateWalletUseCase(
+class CreateWalletUseCase(
     private val walletRepository: WalletRepository,
 ) {
 

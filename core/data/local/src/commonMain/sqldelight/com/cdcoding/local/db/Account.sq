@@ -1,19 +1,23 @@
+import com.cdcoding.data.local.db.model.ChainEntity;
 import com.cdcoding.local.db;
 
 CREATE TABLE IF NOT EXISTS AccountEntity(
     id TEXT PRIMARY KEY,
-    chain TEXT NOT NULL,
+    chain TEXT AS ChainEntity NOT NULL,
     address TEXT NOT NULL,
     derivationPath TEXT NOT NULL,
     extendedPublicKey TEXT,
-    wallet_Id TEXT NOT NULL ,
-    FOREIGN KEY (wallet_Id) REFERENCES WalletEntity(id) ON DELETE CASCADE
+    walletId TEXT NOT NULL,
+    FOREIGN KEY (walletId) REFERENCES WalletEntity(id) ON DELETE CASCADE
 );
 
 getAccounts:
 SELECT * FROM AccountEntity;
 
+getAccountsByWalletId:
+SELECT * FROM AccountEntity WHERE (walletId = ?);
+
 insertAccount:
-INSERT OR REPLACE INTO AccountEntity(id, chain, address, derivationPath, extendedPublicKey, wallet_Id) VALUES (?, ?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO AccountEntity(id, chain, address, derivationPath, extendedPublicKey, walletId) VALUES (?, ?,  ?, ?, ?, ?);
 
 

@@ -30,6 +30,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.voyager)
+            implementation(libs.voyager.tabNavigator)
             implementation(compose.runtime)
             implementation(compose.runtimeSaveable)
         }

@@ -1,6 +1,6 @@
 package com.cdcoding.wallet.operator
 
-import com.cdcoding.wallet.model.Chain
+import com.cdcoding.model.Chain
 import wallet.core.jni.CoinType
 
 class ChainTypeProxy {

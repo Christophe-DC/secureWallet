@@ -1,9 +1,7 @@
-package com.cdcoding.wallet.model
+package com.cdcoding.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Account (
+	val id: String,
 	val chain: Chain,
 	val address: String,
 	val derivationPath: String,

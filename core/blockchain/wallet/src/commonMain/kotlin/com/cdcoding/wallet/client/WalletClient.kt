@@ -1,7 +1,7 @@
 package com.cdcoding.wallet.client
 
-import com.cdcoding.wallet.model.Account
-import com.cdcoding.wallet.model.Chain
+import com.cdcoding.model.Account
+import com.cdcoding.model.Chain
 
 expect class WalletClient() {
     suspend fun createWallet(): String

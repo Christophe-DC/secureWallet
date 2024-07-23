@@ -1,4 +1,4 @@
-package com.cdcoding.wallet.model
+package com.cdcoding.model
 
 data class ImportType(
     val walletType: WalletType,

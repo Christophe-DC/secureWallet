@@ -1,62 +1,50 @@
 package com.cdcoding.createwalletimpl.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
+import com.cdcoding.core.designsystem.hooks.useScope
+import com.cdcoding.core.designsystem.hooks.useSnackbar
+import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.textfield.SWTextField
+import com.cdcoding.core.navigation.HomeDestination
+import com.cdcoding.core.navigation.HomeDestinationEvent
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.create
 import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.name
+import com.cdcoding.createwalletimpl.presentation.CreateWalletEffect
 import com.cdcoding.createwalletimpl.presentation.CreateWalletEvent
+import com.cdcoding.createwalletimpl.presentation.CreateWalletState
 import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.createwalletimpl.presentation.CreateWalletViewModel
-import com.cdcoding.system.ui.theme.mediumMarginDimens
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 class CreateWalletScreen : Screen {
@@ -66,8 +54,7 @@ class CreateWalletScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val viewModel: CreateWalletViewModel = useInject()
-        // val viewModel = koinViewModel<WelcomeViewModel>()
-        //val uiState = viewModel.state.collectAsStateWithLifecycle()
+        val uiState = viewModel.state.collectAsStateWithLifecycle()
 
 
         /* val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
@@ -81,9 +68,16 @@ class CreateWalletScreen : Screen {
         // val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
         //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
 
+        val homeScreenWithWalletCreatedEvent = rememberScreen(HomeDestination.Home(HomeDestinationEvent.WalletCreated))
+
         CreateWalletScreenContent(
+            uiState = uiState.value,
             onEvent = viewModel::onEvent,
+            eventFlow = viewModel.eventFlow,
             popBackStack = { navigator.pop() },
+            onWalletCreated = {
+                navigator.replaceAll(homeScreenWithWalletCreatedEvent)
+            }
             //     navigateToImportWallet = { navigator.push(importWalletScreen) },
         )
     }
@@ -94,9 +88,11 @@ class CreateWalletScreen : Screen {
 @Composable
 fun CreateWalletScreenContent(
     modifier: Modifier = Modifier,
+    uiState: CreateWalletState,
     onEvent: (CreateWalletEvent) -> Unit,
-    //flow: Flow<AddNewPasswordEffect>,
+    eventFlow: SharedFlow<CreateWalletEffect>,
     popBackStack: () -> Unit,
+    onWalletCreated: () -> Unit,
 ) {
 
     /*useEffect(true) {
@@ -123,10 +119,36 @@ fun CreateWalletScreenContent(
         }
     }*/
 
-    var text by remember { mutableStateOf("") }
+    val snackbarState = useSnackbar()
+    val scope = useScope()
+    //var text by remember { mutableStateOf("") }
+
+    useEffect(true) {
+
+        eventFlow.collectLatest { newEffect ->
+            when (newEffect) {
+                is CreateWalletEffect.Failure -> {
+                    scope.launch { snackbarState.showSnackbar(newEffect.message) }
+                }
+
+                CreateWalletEffect.WalletCreated -> {
+                    onWalletCreated.invoke()
+                }
+
+            }
+        }
+    }
 
 
     Scaffold(
+        modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarState,
+                modifier = modifier.fillMaxWidth().wrapContentHeight(Alignment.Bottom),
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBar(
                 title = {
@@ -157,8 +179,9 @@ fun CreateWalletScreenContent(
         ) {
             SWTextField(
                 label = stringResource(Res.string.name),
-                textValue = text,
-                onValueChanged = { newText -> text = newText },
+                hint = uiState.defaultWalletName,
+                textValue = uiState.walletName,
+                onValueChanged = { newText -> onEvent(CreateWalletEvent.OnWalletNameChanged(newText)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -169,7 +192,7 @@ fun CreateWalletScreenContent(
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
-                enabled = text.isNotEmpty()
+                enabled = uiState.walletName.isNotEmpty()
             ) {
                 Text(
                     text = stringResource(Res.string.create),

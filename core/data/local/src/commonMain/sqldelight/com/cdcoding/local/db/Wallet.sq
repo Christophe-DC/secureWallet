@@ -1,16 +1,17 @@
+import com.cdcoding.data.local.db.model.WalletTypeEntity;
 import com.cdcoding.local.db;
 
 CREATE TABLE IF NOT EXISTS WalletEntity(
     id TEXT PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
-    wallet_index INTEGER NOT NULL,
-    type TEXT NOT NULL
+    walletIndex INTEGER NOT NULL,
+    type TEXT AS WalletTypeEntity NOT NULL
 );
 
 getAllWallets:
 SELECT * FROM WalletEntity;
 
 insertWallet:
-INSERT OR REPLACE INTO WalletEntity(id, name, wallet_index, type) VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO WalletEntity(id, name, walletIndex, type) VALUES (?, ?, ?, ?);
 
 

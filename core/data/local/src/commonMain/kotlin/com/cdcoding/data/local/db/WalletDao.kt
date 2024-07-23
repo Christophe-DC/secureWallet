@@ -2,58 +2,66 @@ package com.cdcoding.data.local.db
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.cdcoding.local.db.AccountEntity
+import com.cdcoding.data.local.db.model.asEntity
+import com.cdcoding.data.local.mapper.asExternal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import com.cdcoding.local.db.SecureWalletDatabase
-import com.cdcoding.local.db.WalletEntity
+import com.cdcoding.model.Account
+import com.cdcoding.model.Wallet
+import kotlinx.coroutines.flow.map
 
 interface WalletDao {
-    fun getAllWallets(): Flow<List<WalletEntity>>
-    fun insertWallet(wallet: WalletEntity)
-    fun insertWalletWithAccount(wallet: WalletEntity, accounts: List<AccountEntity>)
+    fun getAllWallets(): Flow<List<Wallet>>
+    fun insertWallet(wallet: Wallet)
+    fun insertWalletWithAccount(wallet: Wallet, accounts: List<Account>)
 }
 
 class DefaultWalletDao(
     database: SecureWalletDatabase
 ) : WalletDao {
 
-    private val queries = database.walletQueries
+    private val walletQueries = database.walletQueries
     private val accountQueries = database.accountQueries
 
-    override fun getAllWallets(): Flow<List<WalletEntity>> {
-        return queries.getAllWallets().asFlow().mapToList(Dispatchers.IO)
+    override fun getAllWallets(): Flow<List<Wallet>> {
+        return walletQueries.getAllWallets().asFlow().mapToList(Dispatchers.IO).map{ walletEntities ->
+            walletEntities.map { walletEntity ->
+                val accounts = accountQueries.getAccountsByWalletId(walletEntity.id).executeAsList()
+                walletEntity.asExternal(accounts.map { it.asExternal() })
+            }
+        }
     }
 
-    override fun insertWallet(wallet: WalletEntity) {
-        queries.transaction {
+    override fun insertWallet(wallet: Wallet) {
+        walletQueries.transaction {
             println("Entity is $wallet")
-            queries.insertWallet(
+            walletQueries.insertWallet(
                 id = wallet.id,
                 name = wallet.name,
-                wallet_index = wallet.wallet_index,
-                type = wallet.type
+                walletIndex = wallet.index,
+                type = wallet.type.asEntity()
             )
         }
     }
 
-    override fun insertWalletWithAccount(wallet: WalletEntity, accounts: List<AccountEntity>) {
-        queries.transaction {
-            queries.insertWallet(
+    override fun insertWalletWithAccount(wallet: Wallet, accounts: List<Account>) {
+        walletQueries.transaction {
+            walletQueries.insertWallet(
                 id = wallet.id,
                 name = wallet.name,
-                wallet_index = wallet.wallet_index,
-                type = wallet.type
+                walletIndex = wallet.index,
+                type = wallet.type.asEntity()
             )
             accounts.forEach { account ->
                 accountQueries.insertAccount(
                     id = account.id,
-                    chain = account.chain,
+                    chain = account.chain.asEntity(),
                     address = account.address,
                     derivationPath = account.derivationPath,
                     extendedPublicKey = account.extendedPublicKey,
-                    wallet_Id = wallet.id
+                    walletId = wallet.id
                 )
             }
         }

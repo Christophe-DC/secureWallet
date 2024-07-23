@@ -74,6 +74,7 @@ kotlin {
            // implementation(libs.compose.runtime.android)
             implementation(projects.core.data.local)
             implementation(projects.core.common)
+            implementation(projects.core.model)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

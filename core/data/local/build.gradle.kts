@@ -36,6 +36,7 @@ kotlin {
             implementation(libs.sqldelight.adapter)
             implementation(compose.runtime)
             implementation(projects.core.common)
+            implementation(projects.core.model)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

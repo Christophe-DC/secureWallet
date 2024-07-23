@@ -1,7 +1,8 @@
 package com.cdcoding.wallet.client
 
-import com.cdcoding.wallet.model.Account
-import com.cdcoding.wallet.model.Chain
+import com.cdcoding.common.utils.uuid4
+import com.cdcoding.model.Account
+import com.cdcoding.model.Chain
 import com.cdcoding.wallet.operator.ChainTypeProxy
 import wallet.core.jni.Derivation
 import wallet.core.jni.HDWallet
@@ -27,6 +28,7 @@ actual class WalletClient {
             hdWallet.getExtendedPublicKey(coinType.purpose(), coinType, coinType.xpubVersion())
         }
         return Account(
+            id = uuid4(),
             chain = chain,
             address = address,
             derivationPath = coinType.derivationPath(),
