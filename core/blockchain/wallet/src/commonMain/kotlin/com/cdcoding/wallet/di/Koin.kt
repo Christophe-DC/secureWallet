@@ -9,6 +9,6 @@ expect fun platformModule(): Module
 
 val walletModule = module {
     includes(platformModule())
-    single { WalletRepository(get(), get(), get()) }
+    single { WalletRepository(get(), get(), get(), get()) }
     factory<WalletClient> { WalletClient() }
 }

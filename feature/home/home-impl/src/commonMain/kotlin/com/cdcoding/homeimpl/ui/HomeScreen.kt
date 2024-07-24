@@ -18,24 +18,45 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.cdcoding.core.designsystem.hooks.useEffect
+import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.hooks.useScope
 import com.cdcoding.core.designsystem.hooks.useSnackbar
+import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
+import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.navigation.HomeDestinationEvent
+import com.cdcoding.core.navigation.WelcomeDestination
 import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
+import com.cdcoding.homeimpl.presentation.HomeViewModel
 import kotlinx.coroutines.launch
 
 class HomeScreen(private val homeDestinationEvent: HomeDestinationEvent) : Screen {
 
     @Composable
     override fun Content() {
+
+        val viewModel: HomeViewModel = useInject()
+        val uiState = viewModel.state.collectAsStateWithLifecycle()
+        val navigator = LocalNavigator.currentOrThrow
+
+        val welcomeScreen = rememberScreen(WelcomeDestination.Welcome)
+
+        useEffect(true) {
+            if (!uiState.value.hasSession) {
+                navigator.replace(welcomeScreen)
+            }
+        }
+
         HomeScreenContent(
             homeDestinationEvent = homeDestinationEvent,
         )

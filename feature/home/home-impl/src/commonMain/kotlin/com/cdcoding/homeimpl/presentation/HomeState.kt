@@ -5,5 +5,5 @@ import com.cdcoding.model.Wallet
 
 @Immutable
 data class HomeState(
-    val wallet: Wallet? = null,
+    val hasSession: Boolean = false,
 )

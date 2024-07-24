@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS WalletEntity(
     type TEXT AS WalletTypeEntity NOT NULL
 );
 
+getAllWallet:
+SELECT * FROM WalletEntity WHERE id=?;
+
 getAllWallets:
 SELECT * FROM WalletEntity;
 

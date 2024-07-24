@@ -20,16 +20,16 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "domain"
+            baseName = "session"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            api(projects.core.blockchain.wallet)
-            api(projects.core.session)
-            api(projects.core.model)
+            implementation(projects.core.data.local)
+            implementation(projects.core.model)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.koin.core)
         }
         commonTest.dependencies {
@@ -39,7 +39,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.cdcoding.domain"
+    namespace = "com.cdcoding.session"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

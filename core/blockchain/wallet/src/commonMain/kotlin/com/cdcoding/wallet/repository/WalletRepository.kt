@@ -1,6 +1,7 @@
 package com.cdcoding.wallet.repository
 
 import com.cdcoding.common.utils.uuid4
+import com.cdcoding.data.local.db.SessionDao
 import com.cdcoding.data.local.db.WalletDao
 import com.cdcoding.model.Account
 import com.cdcoding.model.Chain
@@ -18,6 +19,7 @@ import kotlinx.coroutines.withContext
 
 class WalletRepository (
     private val walletsDao: WalletDao,
+    private val sessionDao: SessionDao,
     private val walletClient: WalletClient,
     private val phraseValidator: PhraseValidator,
 ) {
@@ -57,6 +59,7 @@ class WalletRepository (
             return result
         }
         val wallet = result.getOrNull() ?: return Result.failure(Exception("Unknown error"))
+        sessionDao.setWallet(wallet)
         return Result.success(wallet)
     }
 

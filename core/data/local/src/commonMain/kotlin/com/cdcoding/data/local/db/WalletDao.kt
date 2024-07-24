@@ -13,25 +13,33 @@ import com.cdcoding.model.Wallet
 import kotlinx.coroutines.flow.map
 
 interface WalletDao {
+    fun getAllWallet(id: String): Wallet
     fun getAllWallets(): Flow<List<Wallet>>
     fun insertWallet(wallet: Wallet)
     fun insertWalletWithAccount(wallet: Wallet, accounts: List<Account>)
 }
 
 class DefaultWalletDao(
-    database: SecureWalletDatabase
+    database: SecureWalletDatabase,
+    private val accountDao: AccountDao
 ) : WalletDao {
 
     private val walletQueries = database.walletQueries
-    private val accountQueries = database.accountQueries
+
+    override fun getAllWallet(id: String): Wallet {
+        val wallet = walletQueries.getAllWallet(id).executeAsList().first()
+        val accounts = accountDao.getAccountsByWalletId(wallet.id)
+        return wallet.asExternal(accounts)
+    }
 
     override fun getAllWallets(): Flow<List<Wallet>> {
-        return walletQueries.getAllWallets().asFlow().mapToList(Dispatchers.IO).map{ walletEntities ->
-            walletEntities.map { walletEntity ->
-                val accounts = accountQueries.getAccountsByWalletId(walletEntity.id).executeAsList()
-                walletEntity.asExternal(accounts.map { it.asExternal() })
+        return walletQueries.getAllWallets().asFlow().mapToList(Dispatchers.IO)
+            .map { walletEntities ->
+                walletEntities.map { walletEntity ->
+                    val accounts = accountDao.getAccountsByWalletId(walletEntity.id)
+                    walletEntity.asExternal(accounts)
+                }
             }
-        }
     }
 
     override fun insertWallet(wallet: Wallet) {
@@ -54,16 +62,10 @@ class DefaultWalletDao(
                 walletIndex = wallet.index,
                 type = wallet.type.asEntity()
             )
-            accounts.forEach { account ->
-                accountQueries.insertAccount(
-                    id = account.id,
-                    chain = account.chain.asEntity(),
-                    address = account.address,
-                    derivationPath = account.derivationPath,
-                    extendedPublicKey = account.extendedPublicKey,
-                    walletId = wallet.id
-                )
-            }
+            accountDao.insertAccounts(
+                accounts = accounts,
+                walletId = wallet.id
+            )
         }
     }
 }
