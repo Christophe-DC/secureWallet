@@ -1,12 +1,21 @@
 package com.cdcoding.homeimpl.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +26,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
@@ -32,15 +43,15 @@ import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.hooks.useScope
 import com.cdcoding.core.designsystem.hooks.useSnackbar
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
-import com.cdcoding.core.navigation.HomeDestination
-import com.cdcoding.core.navigation.HomeDestinationEvent
 import com.cdcoding.core.navigation.WelcomeDestination
 import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
 import com.cdcoding.homeimpl.presentation.HomeViewModel
+import com.cdcoding.system.ui.theme.largeMarginDimens
+import com.cdcoding.system.ui.theme.smallMarginDimens
 import kotlinx.coroutines.launch
 
-class HomeScreen(private val homeDestinationEvent: HomeDestinationEvent) : Screen {
+class HomeScreen() : Screen {
 
     @Composable
     override fun Content() {
@@ -57,9 +68,7 @@ class HomeScreen(private val homeDestinationEvent: HomeDestinationEvent) : Scree
             }
         }
 
-        HomeScreenContent(
-            homeDestinationEvent = homeDestinationEvent,
-        )
+        HomeScreenContent()
     }
 }
 
@@ -67,19 +76,8 @@ class HomeScreen(private val homeDestinationEvent: HomeDestinationEvent) : Scree
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalVoyagerApi::class)
 @Composable
 fun HomeScreenContent(
-    modifier: Modifier = Modifier,
-    homeDestinationEvent: HomeDestinationEvent
+    modifier: Modifier = Modifier
 ) {
-
-    val snackbarState = useSnackbar()
-    val scope = useScope()
-
-    useEffect(true) {
-        when (homeDestinationEvent) {
-            HomeDestinationEvent.WalletCreated -> scope.launch { snackbarState.showSnackbar("Wallet Created") }
-            HomeDestinationEvent.None -> {}
-        }
-    }
 
     val walletDetailTab = rememberTab(WalletDetailDestination.WalletDetail)
 
@@ -94,27 +92,48 @@ fun HomeScreenContent(
     ) { tabNavigator ->
         Scaffold(
             modifier = modifier,
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarState,
-                    modifier = modifier.fillMaxWidth().wrapContentHeight(Alignment.Bottom),
-                )
-            },
             containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopAppBar(
                     title = {
-                        if(tabNavigator.current.key == walletDetailTab.key) {
-                            Text(text = tabNavigator.current.options.title)
-                            Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                        if (tabNavigator.current.key == walletDetailTab.key) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = tabNavigator.current.options.title,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Icon(
+                                    imageVector = Icons.Filled.ExpandMore,
+                                    contentDescription = null
+                                )
+                            }
                         } else {
-                            Text(text = tabNavigator.current.options.title)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = tabNavigator.current.options.title,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
                         }
                     },
                 )
             },
-            content = {
-                CurrentTab()
+            content = { innerPadding ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    CurrentTab()
+                }
             },
             bottomBar = {
                 BottomNavigation {

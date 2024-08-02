@@ -1,6 +1,6 @@
 package com.cdcoding.domain
 
-import com.cdcoding.session.repository.SessionRepository
+import com.cdcoding.data.repository.SessionRepository
 
 class GetHasSessionUseCase(
     private val sessionRepository: SessionRepository,

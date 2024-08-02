@@ -1,0 +1,55 @@
+package com.cdcoding.network.client
+
+import com.cdcoding.model.AssetFull
+import com.cdcoding.model.Subscription
+import com.cdcoding.network.model.FiatAssets
+import com.cdcoding.network.util.NetworkError
+import com.cdcoding.network.util.Result
+import com.cdcoding.network.util.getResult
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+
+class GemApiClient(
+    private val httpClient: HttpClient
+) {
+
+    companion object {
+        const val GEM_URL = "https://api.gemwallet.com"
+    }
+
+    suspend fun getFiatAssets(): Result<FiatAssets, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/fiat/on_ramp/assets").getResult()
+    }
+
+    suspend fun getAssets(deviceId: String, walletIndex: Int, fromTimestamp: Int = 0): Result<List<String>, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/assets/by_device_id/$deviceId") {
+            parameter("wallet_index", walletIndex)
+            parameter("from_timestamp", fromTimestamp)
+        }
+        .getResult()
+    }
+
+    suspend fun search(query: String): Result<List<AssetFull>, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/assets/search") {
+            parameter("query", query)
+        }
+        .getResult()
+    }
+
+
+    suspend fun getSubscriptions(deviceId: String): Result<List<Subscription>, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/subscriptions/$deviceId").getResult()
+    }
+
+    suspend fun addSubscriptions(deviceId: String, request: List<Subscription>): Result<Any, NetworkError> {
+        return httpClient.post("$GEM_URL/v1/subscriptions/$deviceId"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+}

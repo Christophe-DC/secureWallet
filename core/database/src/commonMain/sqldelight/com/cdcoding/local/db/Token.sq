@@ -1,0 +1,58 @@
+import com.cdcoding.database.db.model.AssetTypeEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS TokenEntity(
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT  NOT NULL,
+    symbol TEXT  NOT NULL,
+    decimals INTEGER NOT NULL,
+    type TEXT AS AssetTypeEntity NOT NULL,
+    rank INTEGER NOT NULL
+);
+
+getTokens:
+SELECT * FROM TokenEntity;
+
+getTokenById:
+SELECT * FROM TokenEntity WHERE id=?;
+
+getTokensById:
+SELECT * FROM TokenEntity WHERE id IN ?;
+
+getTokensByType:
+SELECT * FROM TokenEntity WHERE type IN ? ORDER BY rank DESC;
+
+search:
+SELECT * FROM TokenEntity WHERE type IN ? AND (id LIKE '%' || ?2 || '%' OR symbol LIKE '%' || ?2 || '%' OR name LIKE '%' || ?2 || '%') COLLATE NOCASE ORDER BY rank DESC;
+
+assembleAssetInfo:
+SELECT TokenEntity.*, AccountEntity.*,
+            AccountEntity.address AS owner_address,
+            WalletEntity.type AS walletType,
+            WalletEntity.name AS walletName,
+            0 AS is_visible,
+            0 AS is_buy_enabled,
+            0 AS is_swap_enabled,
+            0 AS is_stake_enabled
+        FROM TokenEntity, AccountEntity
+        JOIN WalletEntity ON WalletEntity.id = AccountEntity.walletId
+        WHERE
+            AccountEntity.walletId = (SELECT walletId FROM SessionEntity WHERE SessionEntity.id = 1)
+            AND AccountEntity.chain = ?
+            AND TokenEntity.id = ?;
+
+insertToken:
+INSERT OR REPLACE INTO TokenEntity(id,
+                                   name,
+                                   symbol,
+                                   decimals,
+                                   type,
+                                   rank)
+                                   VALUES (?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?);
+
+

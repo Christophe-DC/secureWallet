@@ -7,7 +7,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -27,10 +27,11 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            api(projects.core.data)
             api(projects.core.blockchain.wallet)
-            api(projects.core.session)
             api(projects.core.model)
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -45,7 +46,7 @@ android {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

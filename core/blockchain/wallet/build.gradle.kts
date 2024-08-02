@@ -8,7 +8,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -72,9 +72,13 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
            // implementation(libs.compose.runtime.android)
-            implementation(projects.core.data.local)
+            implementation(projects.core.database)
             implementation(projects.core.common)
+            implementation(projects.core.datastore)
             implementation(projects.core.model)
+            implementation(projects.core.network)
+
+            implementation(libs.bignum)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -110,7 +114,7 @@ android {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
-import com.cdcoding.core.navigation.HomeDestinationEvent
 import com.cdcoding.core.navigation.tab.registry.TabRegistry
 import com.cdcoding.createwalletdi.createWalletScreenModule
 import com.cdcoding.homedi.homeScreenModule
@@ -43,7 +42,7 @@ fun App(
                     .fillMaxSize()
                     .safeDrawingPadding()
             ) {
-                Navigator(screen = HomeScreen(HomeDestinationEvent.None))
+                Navigator(screen = HomeScreen())
             }
       //  }
     }

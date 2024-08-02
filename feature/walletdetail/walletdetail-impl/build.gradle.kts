@@ -9,7 +9,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -30,8 +30,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.designsystem)
+            implementation(projects.core.common)
             implementation(projects.core.domain)
             implementation(projects.core.navigation)
+            implementation(projects.core.network)
             implementation(projects.core.resource)
             implementation(projects.core.system.ui)
             implementation(libs.voyager)
@@ -44,9 +46,23 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+
+            implementation(libs.kamel.image)
+
+            implementation(libs.kotlinx.datetime)
+
+            implementation(libs.bignum)
+
+            implementation(libs.kotlinx.collections.immutable)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+        }
+        iosMain.dependencies {
         }
     }
 }
@@ -58,7 +74,7 @@ android {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

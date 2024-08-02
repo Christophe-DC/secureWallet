@@ -25,6 +25,8 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cdcoding.core.designsystem.circularProgress.CircularProgressIndicator16
+import com.cdcoding.core.designsystem.circularProgress.CircularProgressIndicator32
 import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.hooks.useScope
@@ -32,11 +34,11 @@ import com.cdcoding.core.designsystem.hooks.useSnackbar
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.textfield.SWTextField
 import com.cdcoding.core.navigation.HomeDestination
-import com.cdcoding.core.navigation.HomeDestinationEvent
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.create
 import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.name
+import com.cdcoding.core.resource.wallet_created
 import com.cdcoding.createwalletimpl.presentation.CreateWalletEffect
 import com.cdcoding.createwalletimpl.presentation.CreateWalletEvent
 import com.cdcoding.createwalletimpl.presentation.CreateWalletState
@@ -45,6 +47,8 @@ import com.cdcoding.createwalletimpl.presentation.CreateWalletViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getResourceUri
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 class CreateWalletScreen : Screen {
@@ -68,7 +72,7 @@ class CreateWalletScreen : Screen {
         // val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
         //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
 
-        val homeScreenWithWalletCreatedEvent = rememberScreen(HomeDestination.Home(HomeDestinationEvent.WalletCreated))
+        val homeScreenWithWalletCreatedEvent = rememberScreen(HomeDestination.Home)
 
         CreateWalletScreenContent(
             uiState = uiState.value,
@@ -132,6 +136,7 @@ fun CreateWalletScreenContent(
                 }
 
                 CreateWalletEffect.WalletCreated -> {
+                    scope.launch { snackbarState.showSnackbar(getString(Res.string.wallet_created)) }
                     onWalletCreated.invoke()
                 }
 
@@ -185,19 +190,23 @@ fun CreateWalletScreenContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            FilledTonalButton(
-                modifier = Modifier.padding(bottom = largeMarginDimens.margin),
-                onClick = { onEvent(CreateWalletEvent.OnCreateNewWallet) },
-                colors = ButtonDefaults.filledTonalButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
-                enabled = uiState.walletName.isNotEmpty()
-            ) {
-                Text(
-                    text = stringResource(Res.string.create),
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            if (uiState.walletIsCreating) {
+                CircularProgressIndicator32(modifier = Modifier.padding(bottom = largeMarginDimens.margin))
+            } else {
+                FilledTonalButton(
+                    modifier = Modifier.padding(bottom = largeMarginDimens.margin),
+                    onClick = { onEvent(CreateWalletEvent.OnCreateNewWallet) },
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    enabled = uiState.walletName.isNotEmpty()
+                ) {
+                    Text(
+                        text = stringResource(Res.string.create),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
 
         }

@@ -1,0 +1,73 @@
+import com.cdcoding.database.db.model.AssetTypeEntity;
+import com.cdcoding.database.db;
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS AssetEntity(
+    id TEXT NOT NULL,
+    address TEXT NOT NULL,
+    name TEXT  NOT NULL,
+    symbol TEXT  NOT NULL,
+    decimals INTEGER NOT NULL,
+    type TEXT AS AssetTypeEntity NOT NULL,
+    isVisible INTEGER AS Boolean NOT NULL DEFAULT 1,
+    isBuyEnabled INTEGER AS Boolean NOT NULL DEFAULT 0,
+    isSwapEnabled INTEGER AS Boolean NOT NULL DEFAULT 0,
+    isStakeEnabled INTEGER AS Boolean NOT NULL DEFAULT 0,
+    stakingApr REAL,
+    links TEXT,
+    market TEXT,
+    rank INTEGER NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL,
+    PRIMARY KEY (id, address)
+);
+
+getAssets:
+SELECT * FROM AssetEntity;
+
+getAssetsByAddressAndId:
+SELECT DISTINCT * FROM AssetEntity WHERE address IN ? AND id IN ?;
+
+getAssetsById:
+SELECT * FROM AssetEntity WHERE id=?;
+
+getAssetsByOwner:
+SELECT * FROM AssetEntity WHERE address IN ? AND (id LIKE '%' || ?2 || '%' OR symbol LIKE '%' || ?2 || '%' OR name LIKE '%' || ?2 || '%') COLLATE NOCASE;
+
+
+insertAsset:
+INSERT OR REPLACE INTO AssetEntity(id,
+                                   address,
+                                   name,
+                                   symbol,
+                                   decimals,
+                                   type,
+                                   isVisible,
+                                   isBuyEnabled,
+                                   isSwapEnabled,
+                                   isStakeEnabled,
+                                   stakingApr,
+                                   links,
+                                   market,
+                                   rank,
+                                   createdAt,
+                                   updatedAt
+                                   )
+                                   VALUES (?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                    ?,
+                                     ?,
+                                      ?);
+
+

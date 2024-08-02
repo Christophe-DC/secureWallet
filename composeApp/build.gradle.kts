@@ -71,9 +71,12 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.core.blockchain.wallet)
+            implementation(projects.core.datastore)
             implementation(projects.core.domain)
-            implementation(projects.core.data.local)
-            implementation(projects.core.session)
+            implementation(projects.core.data)
+            implementation(projects.core.database)
+            implementation(projects.core.network)
+            implementation(projects.core.data)
             implementation(projects.core.system.ui)
             implementation(projects.feature.welcome.welcomeDi)
             implementation(projects.feature.welcome.welcomeImpl)
