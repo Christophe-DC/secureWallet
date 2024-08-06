@@ -1,7 +1,5 @@
 package com.cdcoding.common.utils
 
-import com.cdcoding.core.resource.Res
-import com.cdcoding.core.resource.chains
 import com.cdcoding.model.Asset
 import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetType

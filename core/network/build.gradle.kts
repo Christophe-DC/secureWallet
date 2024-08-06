@@ -33,7 +33,6 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.model)
             implementation(libs.koin.core)
-            implementation(libs.wallet.core)
             implementation(libs.bundles.ktor)
 
             implementation(libs.bignum)

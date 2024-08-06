@@ -23,13 +23,13 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "resource"
-            isStatic = true
+            isStatic = false
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
+            api(compose.runtime)
             api(compose.components.resources)
         }
         commonTest.dependencies {

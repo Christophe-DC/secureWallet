@@ -33,6 +33,7 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
             implementation(compose.runtime)
             implementation(compose.runtimeSaveable)
+            implementation(compose.ui)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -30,15 +30,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.koin.core)
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.sqldelight.ext)
-            implementation(libs.sqldelight.adapter)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.datetime)
-            implementation(compose.runtime)
-            implementation(projects.core.common)
-            implementation(projects.core.model)
+            api(libs.koin.core)
+            api(libs.sqldelight.runtime)
+            api(libs.sqldelight.ext)
+            api(libs.sqldelight.adapter)
+            api(libs.kotlinx.serialization.json)
+            api(libs.kotlinx.datetime)
+            api(compose.runtime)
+            api(projects.core.common)
+            api(projects.core.model)
 
         }
         commonTest.dependencies {
@@ -46,8 +46,8 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(libs.sqldelight.android)
-            implementation(libs.koin.android)
+            api(libs.sqldelight.android)
+            api(libs.koin.android)
         }
         iosMain.dependencies {
             api(libs.sqldelight.native)

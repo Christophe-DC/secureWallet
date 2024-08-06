@@ -8,14 +8,13 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-   // kotlin("native.cocoapods")
 }
 
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     
@@ -31,7 +30,6 @@ kotlin {
             isStatic = true
         }
     }
-
     /*cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -40,7 +38,7 @@ kotlin {
         framework {
             baseName = "Shared"
 
-            isStatic = false
+            isStatic = true
 
             export(project(":core:blockchain:wallet"))
             //transitiveExport = true
@@ -70,23 +68,7 @@ kotlin {
             implementation(libs.koin.core)
         }
         commonMain.dependencies {
-            implementation(projects.core.blockchain.wallet)
-            implementation(projects.core.datastore)
-            implementation(projects.core.domain)
-            implementation(projects.core.data)
-            implementation(projects.core.database)
-            implementation(projects.core.network)
-            implementation(projects.core.data)
-            implementation(projects.core.system.ui)
-            implementation(projects.feature.welcome.welcomeDi)
-            implementation(projects.feature.welcome.welcomeImpl)
-            implementation(projects.feature.createwallet.createwalletDi)
-            implementation(projects.feature.createwallet.createwalletImpl)
-            implementation(projects.feature.home.homeDi)
-            implementation(projects.feature.home.homeImpl)
-            implementation(projects.feature.walletdetail.walletdetailDi)
-            implementation(projects.feature.walletdetail.walletdetailImpl)
-            //implementation(projects.feature.importWallet.importWalletDi)
+            implementation(projects.shared)
             implementation(libs.voyager)
             implementation(libs.koin.compose)
             implementation(libs.koin.core)
@@ -132,8 +114,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true

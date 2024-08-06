@@ -27,11 +27,11 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.common)
-            implementation(projects.core.model)
+            api(projects.core.common)
+            api(projects.core.model)
             api(libs.androidx.datastore)
             api(libs.androidx.datastore.preferences)
-            implementation(libs.koin.core)
+            api(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
