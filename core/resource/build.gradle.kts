@@ -29,7 +29,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
+            api(compose.runtime)
             api(compose.components.resources)
         }
         commonTest.dependencies {

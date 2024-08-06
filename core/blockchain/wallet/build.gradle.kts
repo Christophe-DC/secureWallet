@@ -1,7 +1,9 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-   // kotlin("native.cocoapods")
+    kotlin("native.cocoapods")
 }
 
 kotlin {
@@ -15,6 +17,7 @@ kotlin {
 
     jvm("desktop")
 
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -22,88 +25,87 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "wallet"
-            isStatic = true
+            isStatic = false
         }
     }
 
 
-/*    cocoapods {
-
+    cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
-        ios.deploymentTarget = "17"
-        //podfile = project.file("../../../iosApp/Podfile")
-        //podfile = project.file("src/iosMain/Podfile")
+        ios.deploymentTarget = "14.1"
+
+        noPodspec()
+        dependencies {
+            pod("TrustWalletCore", moduleName = "WalletCore")
+        }
+        podfile = project.file("../../../iosApp/Podfile")
         framework {
             baseName = "wallet"
-            isStatic = false
-            // Dependency export
-            //export(project(":core:blockchain:wallet"))
-            //transitiveExport = true
-            // Bitcode embedding
-            //embedBitcode(BITCODE)
+            listOf(
+                iosX64(),
+                iosArm64(),
+                iosSimulatorArm64()
+            ).forEach {
+                it.binaries.all {
+                    linkerOpts += "-ld64"
+                }
+            }
         }
-       // pod("TrustWalletCore")
-        pod(name = "TrustWalletCore", version = "4.0.49", moduleName = "WalletCore")
-        //pod(name = "TrustWalletCore", version = "4.0.49", moduleName = "SwiftProtobuf")
-       // pod(name = "TrustWalletCore", url: "https://github.com/trustwallet/wallet-core",  version = "3.1.0", moduleName = "WalletCore")
-
-        /*pod("wallet_wrapper") {
-            version = "1.0"
-            source = path(project.file("src/iosMain/kotlin/com/cdcoding/wallet/swift"))
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }*/
-
-
-
-      //  extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
-    }*/*/
-
-
-
+    }
 
     sourceSets {
-        androidMain.dependencies {
-            api(libs.wallet.core)
-        }
-        commonMain.dependencies {
-            implementation(libs.koin.core)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.coroutines.core)
-           // implementation(libs.compose.runtime.android)
-            implementation(projects.core.database)
-            implementation(projects.core.common)
-            implementation(projects.core.datastore)
-            implementation(projects.core.model)
-            implementation(projects.core.network)
-
-            implementation(libs.bignum)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        val commonMain by getting {
+            dependencies {
+                api(libs.koin.core)
+                api(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.coroutines.core)
+               // implementation(libs.wallet.core)
+                api("com.trustwallet:wallet-core-kotlin:+")
+                api(projects.core.database)
+                api(projects.core.common)
+                api(projects.core.datastore)
+                api(projects.core.model)
+                api(projects.core.network)
+                api(libs.bignum)
+            }
         }
 
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
 
-       /* val iosX64Main by getting
+        val androidMain by getting {
+            dependencies {
+                // Add android specific dependencies if needed
+            }
+        }
+
+        val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
 
         val iosMain by creating {
-         //   dependsOn(commonMain)
+            dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
         }
+
         val iosX64Test by getting
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
+
         val iosTest by creating {
-         //   dependsOn(commonTest)
+            dependsOn(commonTest)
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
-        }*/
+        }
     }
 }
 

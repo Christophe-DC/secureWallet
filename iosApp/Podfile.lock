@@ -1,0 +1,31 @@
+PODS:
+  - shared (1.0.0):
+    - TrustWalletCore
+  - SwiftProtobuf (1.27.0)
+  - TrustWalletCore (4.1.0):
+    - TrustWalletCore/Core (= 4.1.0)
+  - TrustWalletCore/Core (4.1.0):
+    - TrustWalletCore/Types
+  - TrustWalletCore/Types (4.1.0):
+    - SwiftProtobuf
+
+DEPENDENCIES:
+  - shared (from `../shared`)
+
+SPEC REPOS:
+  trunk:
+    - SwiftProtobuf
+    - TrustWalletCore
+
+EXTERNAL SOURCES:
+  shared:
+    :path: "../shared"
+
+SPEC CHECKSUMS:
+  shared: ab3499b8e9c8c726fb06be0d654db95cea0105d6
+  SwiftProtobuf: 07b360b482e7015be5add8475cbe314853516814
+  TrustWalletCore: f5a665f79951f970b74f1213d276cc6568ec57ee
+
+PODFILE CHECKSUM: f282da88f39e69507b0a255187c8a6b644477756
+
+COCOAPODS: 1.15.2

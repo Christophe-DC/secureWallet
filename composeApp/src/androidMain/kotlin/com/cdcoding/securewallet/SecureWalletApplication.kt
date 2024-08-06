@@ -1,7 +1,7 @@
 package com.cdcoding.securewallet
 
 import android.app.Application
-import com.cdcoding.securewallet.di.initKoin
+import com.cdcoding.shared.di.initKoin
 import org.koin.android.ext.koin.androidContext
 
 class SecureWalletApplication : Application() {

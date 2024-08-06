@@ -1,12 +1,14 @@
 package com.cdcoding.wallet.di
 
+import com.cdcoding.wallet.client.DefaultWalletClient
+import com.cdcoding.wallet.validator.DefaultPhraseValidator
+import com.cdcoding.wallet.validator.PhraseValidator
 import com.cdcoding.wallet.client.WalletClient
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-expect fun platformModule(): Module
 
 val walletModule = module {
-    includes(platformModule())
-    factory<WalletClient> { WalletClient() }
+    factory<WalletClient> { DefaultWalletClient() }
+    factory<PhraseValidator> { DefaultPhraseValidator() }
 }
