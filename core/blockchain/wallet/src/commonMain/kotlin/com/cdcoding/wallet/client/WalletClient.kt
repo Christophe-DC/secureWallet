@@ -23,13 +23,13 @@ class DefaultWalletClient() :  WalletClient{
         val hdWallet = HDWallet(data, "")
         val coinType = ChainTypeProxy().invoke(chain = chain)
         val address = if (chain == Chain.Solana) {
-            hdWallet.getAddressDerivation(coinType, Derivation.Solana)
+            hdWallet.getAddressDerivation(coinType, Derivation.SolanaSolana)
         } else {
             hdWallet.getAddressForCoin(coinType)
         }
         val extendedPublicKey = if (chain == Chain.Solana) {
             hdWallet.getExtendedPublicKeyDerivation(coinType.purpose, coinType,
-                Derivation.Solana, coinType.xpubVersion)
+                Derivation.SolanaSolana, coinType.xpubVersion)
         } else {
             hdWallet.getExtendedPublicKey(coinType.purpose, coinType, coinType.xpubVersion)
         }

@@ -47,9 +47,7 @@ kotlin {
         framework {
             baseName = "shared"
             linkerOpts.add("-lsqlite3")
-            //export(project(":core:blockchain:wallet"))
-            //transitiveExport = true
-            //export("dev.icerock.moko:resources:0.22.3")
+            export(projects.core.resource)
             listOf(
                 iosX64(),
                 iosArm64(),
@@ -65,7 +63,7 @@ kotlin {
             pod("TrustWalletCore", moduleName = "WalletCore")
         }
 
-        extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
+       // extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
 
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
@@ -82,6 +80,7 @@ kotlin {
                 api(projects.core.database)
                 api(projects.core.network)
                 api(projects.core.data)
+                api(projects.core.resource)
                 api(projects.core.system.ui)
                 api(projects.feature.welcome.welcomeDi)
                 api(projects.feature.welcome.welcomeImpl)
@@ -133,6 +132,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                api(libs.kotlinx.coroutines.core)
+            }
         }
 
         val iosX64Test by getting

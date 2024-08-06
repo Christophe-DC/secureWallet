@@ -23,7 +23,7 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "resource"
-            isStatic = true
+            isStatic = false
         }
     }
 
