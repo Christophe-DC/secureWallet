@@ -1,7 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -30,33 +29,6 @@ kotlin {
             isStatic = true
         }
     }
-    /*cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "17"
-        framework {
-            baseName = "Shared"
-
-            isStatic = true
-
-            export(project(":core:blockchain:wallet"))
-            //transitiveExport = true
-        }
-        podfile = project.file("../iosApp/Podfile")
-
-        pod(name = "TrustWalletCore", version = "4.0.49", moduleName = "WalletCore")
-
-        pod("wallet_wrapper") {
-            version = "1.0"
-            source = path(project.file("src/iosMain/kotlin/com/cdcoding/securewallet/swift"))
-            packageName = "HDWalletWrapper"
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }
-        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
-        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
-        extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
-    }*/*/
 
     sourceSets {
         val desktopMain by getting

@@ -1,8 +1,13 @@
 package com.cdcoding.network.client
 
+import com.cdcoding.common.utils.toIdentifier
 import com.cdcoding.model.AssetFull
+import com.cdcoding.model.AssetId
+import com.cdcoding.model.AssetPrice
+import com.cdcoding.model.AssetPricesRequest
 import com.cdcoding.model.Subscription
 import com.cdcoding.network.model.FiatAssets
+import com.cdcoding.network.model.PricesResponse
 import com.cdcoding.network.util.NetworkError
 import com.cdcoding.network.util.Result
 import com.cdcoding.network.util.getResult
@@ -48,6 +53,17 @@ class GemApiClient(
 
     suspend fun addSubscriptions(deviceId: String, request: List<Subscription>): Result<Any, NetworkError> {
         return httpClient.post("$GEM_URL/v1/subscriptions/$deviceId"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
+    suspend fun getPrices(currencyCode: String, assets: List<AssetId>): Result<PricesResponse, NetworkError> {
+        val request = AssetPricesRequest(
+            currency = currencyCode,
+            assetIds = assets.map { it.toIdentifier() },
+        )
+        return httpClient.post("$GEM_URL/v1/prices"){
             contentType(ContentType.Application.Json)
             setBody(request)
         }.getResult()

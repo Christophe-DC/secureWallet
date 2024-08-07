@@ -436,7 +436,7 @@ fun ListItem(
         modifier = modifier,
         dividerShowed = dividerShowed,
         leading = {
-            AssetIcon(iconUrl = iconUrl, placeholder = placeholder, supportIcon = supportIcon)
+            AssetIcon(iconUrl = iconUrl, placeholderText = placeholder, supportIcon = supportIcon)
         },
         trailing = trailing,
         body = body,

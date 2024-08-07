@@ -7,6 +7,7 @@ import com.cdcoding.model.AssetPrice
 import com.cdcoding.model.AssetType
 import com.cdcoding.model.Currency
 import com.cdcoding.model.Fiat
+import com.cdcoding.model.PriceState
 import kotlin.math.absoluteValue
 import kotlin.math.round
 
@@ -70,10 +71,4 @@ data class PriceUIState(
             }
         }
     }
-}
-
-enum class PriceState {
-    None,
-    Up,
-    Down,
 }

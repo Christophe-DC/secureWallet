@@ -39,7 +39,7 @@ fun Asset.asEntity(): AssetEntity {
 }*/
 
 fun AssetId.toAssetEntityId(): String {
-    return "${this.chain.string}_${this.tokenId ?: ""}"
+    return "${chain.string}${if (tokenId.isNullOrEmpty()) "" else "_${tokenId}"}"
 }
 
 

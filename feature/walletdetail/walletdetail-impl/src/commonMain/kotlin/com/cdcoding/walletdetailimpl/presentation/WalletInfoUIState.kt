@@ -1,5 +1,6 @@
 package com.cdcoding.walletdetailimpl.presentation
 
+import com.cdcoding.model.PriceState
 import com.cdcoding.model.WalletType
 
 data class WalletInfoUIState(

@@ -55,8 +55,9 @@ class WalletDetailViewModel constructor(
                             currency = session.currency,
                             swapEnabled = swapEnabled,
                         ).toUIState()
-                        onRefresh()
                     }
+
+                    onRefresh()
 
                 }
             }

@@ -209,7 +209,7 @@ class WalletRepository(
         }
         assetRepository.setVisibility(owner, assetId, visibility)
         assetRepository.updateBalances(owner, listOf(assetId))
-        //updatePrices(currency)
+        assetRepository.updatePrices(currency)
         //onRefreshAssets.forEach { it() }
     }
 

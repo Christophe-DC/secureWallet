@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.cdcoding.walletdetailimpl.presentation.PriceState
+import com.cdcoding.model.PriceState
 
 @Composable
 fun WalletDetailHeader(

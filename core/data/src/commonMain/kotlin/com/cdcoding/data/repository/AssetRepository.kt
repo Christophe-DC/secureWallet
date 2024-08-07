@@ -18,6 +18,8 @@ import com.cdcoding.model.Balances
 import com.cdcoding.model.Currency
 import com.cdcoding.model.Wallet
 import com.cdcoding.network.client.BalancesRemoteSource
+import com.cdcoding.network.client.GemApiClient
+import com.cdcoding.network.util.getOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
@@ -35,13 +37,15 @@ interface AssetRepository {
     fun addAssets(assets: List<Asset>, address: String?)
     suspend fun setVisibility(account: Account, assetId: AssetId, visibility: Boolean)
     suspend fun updateBalances(account: Account, tokens: List<AssetId>): List<Balances>
+    suspend fun updatePrices(currency: Currency, vararg assetIds: AssetId)
 }
 
 class DefaultAssetRepository(
     private val assetDao: AssetDao,
     private val balanceDao: BalanceDao,
     private val pricesDao: PriceDao,
-    private val balancesRemoteSource: BalancesRemoteSource
+    private val balancesRemoteSource: BalancesRemoteSource,
+    private val gemApiClient: GemApiClient
 ) : AssetRepository {
 
     override suspend fun syncTokens(wallet: Wallet, currency: Currency) =
@@ -50,7 +54,7 @@ class DefaultAssetRepository(
                 updateBalances(wallet)
             }
             val pricesJob = async(Dispatchers.IO) {
-                //updatePrices(currency)
+                updatePrices(currency)
             }
             balancesJob.await()
             pricesJob.await()
@@ -203,5 +207,17 @@ class DefaultAssetRepository(
             balancesRemoteSource.getBalances(account, tokens).getOrNull() ?: return emptyList()
         // assetsLocalSource.setBalances(account, balances)
         return balances
+    }
+
+    override suspend fun updatePrices(currency: Currency, vararg assetIds: AssetId) = withContext(Dispatchers.IO) {
+        val ids = if (assetIds.isEmpty()) {
+            assetDao.getAssets().mapNotNull { it?.id }.toSet().toList()
+        } else {
+            assetIds.toList()
+        }
+        val prices = gemApiClient.getPrices(currency.string, ids).getOrNull()?.prices //?: return@withContext
+        if (prices != null) {
+            pricesDao.setPrices(prices)
+        }
     }
 }

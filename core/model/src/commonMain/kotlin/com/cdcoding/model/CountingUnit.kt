@@ -2,6 +2,8 @@ package com.cdcoding.model
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.BigDecimal.Companion.parseStringWithMode
+import com.ionspin.kotlin.bignum.decimal.DecimalMode
+import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import kotlin.math.min
 import kotlin.math.abs
 import kotlin.math.pow
@@ -33,15 +35,16 @@ abstract class CountingUnit<T, C>(
         val result = if (decimalPlace == -1) {
             value
         } else {
-            val minDecimalPlaces = min(decimalPlace, fraction.toString().length - 2)
+            val minDecimalPlaces = min(decimalPlace, fraction.length - 2)
             val result = if (minDecimalPlaces > 0) {
                // BigDecimal.("${whole}.${fraction.substring(2 until minDecimalPlaces + 2)}")
-
+                BigDecimal.parseString("${whole.toBigInteger()}.${fraction.substring(2 until minDecimalPlaces + 2)}")
+                /*
                 parseStringWithMode(
                     "${whole}.${fraction.substring(2 until minDecimalPlaces + 2)}"
                     .dropLastWhile { it == '0' }, value.decimalMode).roundSignificand(
                     value.decimalMode
-                )
+                )*/
             } else {
                 whole
             }

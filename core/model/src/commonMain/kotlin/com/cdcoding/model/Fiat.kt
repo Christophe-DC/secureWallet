@@ -32,9 +32,9 @@ class Fiat(value: BigDecimal) : CountingUnit<BigDecimal, Crypto>(
     ): String {
         val (value, place) = cutFraction(value(0), decimalPlace, dynamicPlace)
         val formatted = if (decimals > -1) {
-            BigDecimal.fromBigDecimal(value, value.decimalMode?.copy(decimalPrecision = place.toLong())).toString()
+            BigDecimal.fromBigDecimal(value, value.decimalMode?.copy(decimalPrecision = place.toLong())).toStringExpanded()
         } else {
-            value.toString()
+            value.toStringExpanded()
         }
 
         val zeroCompare = value.compareTo(0.0)
@@ -45,11 +45,5 @@ class Fiat(value: BigDecimal) : CountingUnit<BigDecimal, Crypto>(
         } else {
             "${if (showSign == SignMode.All) "+" else ""}$formatted $symbol"
         }
-        /*val format = NumberFormat.getCurrencyInstance()
-        if (decimals > -1) {
-            format.maximumFractionDigits = place
-        }
-        format.currency = Currency.getInstance(symbol)
-        return format.format(value)*/
     }
 }

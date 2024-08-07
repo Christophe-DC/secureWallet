@@ -14,7 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cdcoding.walletdetailimpl.presentation.PriceState
+import com.cdcoding.core.designsystem.util.priceColor
+import com.cdcoding.model.PriceState
 import com.cdcoding.walletdetailimpl.presentation.PriceUIState
 
 
@@ -29,7 +30,7 @@ fun PriceInfo(
     isHighlightPercentage: Boolean = false,
     internalPadding: Dp = 16.dp,
 ) {
-    val highlightColor = Color.Red //priceColor(state)
+    val highlightColor = priceColor(state)
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -62,7 +63,7 @@ fun PriceInfo(
     isHighlightPercentage: Boolean = false,
     internalPadding: Dp = 16.dp,
 ) {
-    val color = Color.Red // priceColor(price.state)
+    val color = priceColor(price.state)
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,

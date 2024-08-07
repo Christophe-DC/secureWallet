@@ -48,7 +48,7 @@ class Crypto(atomicValue: BigInteger) : CountingUnit<BigInteger, Fiat>(
             formatter.minimumFractionDigits = 0
             formatter.format(value)
         }*/
-        val formatted = value
+        val formatted = value.toStringExpanded()
         val zeroCompare = value.compareTo(BigDecimal.ZERO)
         return if (zeroCompare < 0) {
             "${if (showSign != SignMode.NoSign) "-" else ""}$formatted $symbol"

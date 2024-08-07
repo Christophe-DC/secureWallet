@@ -16,6 +16,7 @@ import kotlinx.datetime.Clock
 
 interface AssetDao {
     fun assets(): Flow<List<Asset?>>
+    fun getAssets(): List<Asset?>
     fun getAssetsById(addresses: List<String>, assetId: List<String>): List<Asset?>
     fun getAssetsById(assetId: String): List<Asset?>
     fun getAssetsByOwner(addresses: List<String>, query: String): Flow<List<Asset?>>
@@ -36,6 +37,11 @@ class DefaultAssetDao(
                 assetEntity.asExternal()
             }
         }
+
+    override fun getAssets(): List<Asset?> {
+        return assetQueries.getAssets().executeAsList()
+            .map { it.asExternal() }
+    }
 
     override fun getAssetsById(addresses: List<String>, assetId: List<String>): List<Asset?> {
         return assetQueries.getAssetsByAddressAndId(addresses, assetId).executeAsList()

@@ -1,10 +1,6 @@
 package com.cdcoding.network.util
 
-import com.cdcoding.network.model.FiatAssets
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.call.receive
-import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
