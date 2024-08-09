@@ -1,6 +1,7 @@
 package com.cdcoding.domain.di
 
 import com.cdcoding.domain.CreateWalletUseCase
+import com.cdcoding.domain.GetAssetsByQueryUseCase
 import com.cdcoding.domain.GetAssetsByWalletUseCase
 import com.cdcoding.domain.GetHasSessionUseCase
 import com.cdcoding.domain.GetNextWalletNumberUseCase
@@ -13,4 +14,5 @@ val useCaseDomainModule = module {
     single<GetHasSessionUseCase> { GetHasSessionUseCase(get()) }
     single<GetAssetsByWalletUseCase> { GetAssetsByWalletUseCase(get()) }
     single<GetSessionUseCase> { GetSessionUseCase(get()) }
+    single<GetAssetsByQueryUseCase> { GetAssetsByQueryUseCase(get(), get()) }
 }

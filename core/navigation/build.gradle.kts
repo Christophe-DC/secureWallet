@@ -29,6 +29,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.model)
             implementation(libs.voyager)
             implementation(libs.voyager.tabNavigator)
             implementation(compose.runtime)

@@ -31,6 +31,7 @@ import kotlinx.coroutines.withContext
 interface AssetRepository {
     suspend fun getById(accounts: List<Account>, ids: List<AssetId>): Result<List<AssetInfo>>
     suspend fun getById(accounts: List<Account>, assetId: AssetId): Result<List<AssetInfo>>
+    fun getAllByAccounts(accounts: List<Account>, query: String): Flow<List<AssetInfo>>
     fun getAllByWalletFlow(wallet: Wallet): Flow<List<AssetInfo>>
     suspend fun syncTokens(wallet: Wallet, currency: Currency)
     fun addAsset(asset: Asset, address: String? = null, isVisible: Boolean? = null)
@@ -128,7 +129,7 @@ class DefaultAssetRepository(
     }
 
 
-    private fun getAllByAccounts(accounts: List<Account>, query: String): Flow<List<AssetInfo>> {
+    override fun getAllByAccounts(accounts: List<Account>, query: String): Flow<List<AssetInfo>> {
         val addresses = accounts.map { it.address }.toSet().toList()
         val chains = accounts.map { it.chain }
         val assetsFlow = assetDao.getAssetsByOwner(addresses, query)

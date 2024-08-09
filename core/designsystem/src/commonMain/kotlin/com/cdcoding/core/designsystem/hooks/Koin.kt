@@ -5,9 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.LocalKoinScope
 import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.parameter.emptyParametersHolder
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.scope.Scope
 
@@ -37,6 +40,12 @@ inline fun <reified T> useInject(
     qualifier: Qualifier? = null,
     scope: Scope = LocalKoinScope.current,
     noinline parameters: ParametersDefinition? = null,
+    arguments: Map<String, Any?> = emptyMap()
 ): T {
-  return remember(qualifier, scope, parameters) { scope.get(qualifier, parameters) }
+    val savedStateHandle = remember {
+        SavedStateHandle(arguments)
+    }
+    val params = parameters ?: { parametersOf(savedStateHandle) }
+
+  return remember(qualifier, scope, params) { scope.get(qualifier, params) }
 }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -30,6 +32,8 @@ kotlin {
             implementation(projects.core.model)
             implementation(projects.core.resource)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.lyfecycle.viewmodel)
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

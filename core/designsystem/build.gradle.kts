@@ -31,6 +31,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.common)
             implementation(projects.core.model)
+            implementation(projects.core.network)
             implementation(projects.core.resource)
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -40,6 +41,9 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.kamel.image)
+            implementation(libs.chaintech.qrKit)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

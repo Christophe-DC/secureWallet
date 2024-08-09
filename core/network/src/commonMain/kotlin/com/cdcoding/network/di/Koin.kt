@@ -8,6 +8,8 @@ import com.cdcoding.network.client.GemApiClient
 import com.cdcoding.network.client.GetTokenClient
 import com.cdcoding.network.client.bitcoin.BitcoinApiClient
 import com.cdcoding.network.client.bitcoin.BitcoinBalanceClient
+import com.cdcoding.network.service.GemNameResolveService
+import com.cdcoding.network.service.NameResolveService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -17,7 +19,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-expect fun platformModule(): Module
+//expect fun platformModule(): Module
 
 internal fun availableChains() = Chain.entries.toSet()
 
@@ -40,6 +42,7 @@ val networkModule = module {
     single<GemApiClient> { GemApiClient(get()) }
 
     single { BitcoinApiClient(get()) }
+    single<NameResolveService> { GemNameResolveService(get()) }
     single<BalancesRemoteSource> { BalancesRetrofitRemoteSource(get()) }
     single<List<BalanceClient>> {
         availableChains().map {

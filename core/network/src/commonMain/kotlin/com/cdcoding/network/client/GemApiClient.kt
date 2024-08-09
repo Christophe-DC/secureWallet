@@ -5,6 +5,7 @@ import com.cdcoding.model.AssetFull
 import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetPrice
 import com.cdcoding.model.AssetPricesRequest
+import com.cdcoding.model.NameRecord
 import com.cdcoding.model.Subscription
 import com.cdcoding.network.model.FiatAssets
 import com.cdcoding.network.model.PricesResponse
@@ -66,6 +67,13 @@ class GemApiClient(
         return httpClient.post("$GEM_URL/v1/prices"){
             contentType(ContentType.Application.Json)
             setBody(request)
+        }.getResult()
+    }
+
+
+    suspend fun resolve( domain: String, chain: String): Result<NameRecord, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/name/resolve/$domain") {
+            parameter("chain", chain)
         }.getResult()
     }
 }

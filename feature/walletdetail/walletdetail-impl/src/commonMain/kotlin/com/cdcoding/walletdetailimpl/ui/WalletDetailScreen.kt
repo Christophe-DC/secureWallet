@@ -7,6 +7,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,18 +15,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
+import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.model.AssetId
 import com.cdcoding.model.TransactionExtended
-import com.cdcoding.walletdetailimpl.presentation.AssetUIState
+import com.cdcoding.model.AssetUIState
+import com.cdcoding.walletdetailimpl.presentation.WalletDetailEvent
 import com.cdcoding.walletdetailimpl.presentation.WalletDetailViewModel
 import com.cdcoding.walletdetailimpl.presentation.WalletInfoUIState
-import com.cdcoding.walletdetailimpl.ui.component.AssetList
+import com.cdcoding.core.designsystem.components.AssetList
+import com.cdcoding.core.designsystem.components.WalletDetailHeader
+import com.cdcoding.core.designsystem.components.WalletDetailHeaderActions
+import com.cdcoding.core.navigation.SelectAssetDestination
 import kotlinx.collections.immutable.ImmutableList
 
 class WalletDetailScreen : Tab {
@@ -66,6 +73,8 @@ class WalletDetailScreen : Tab {
         val viewModel: WalletDetailViewModel = useInject()
         val uiState by viewModel.state.collectAsStateWithLifecycle()
 
+        val selectAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset)
+
         /* Box(
              Modifier.width(300.dp)
                  .height(200.dp)
@@ -83,7 +92,10 @@ class WalletDetailScreen : Tab {
             assets = uiState.assets,
             transactions = uiState.pendingTransactions,
             swapEnabled = uiState.swapEnabled,
-            onRefresh = viewModel::onRefresh,
+            onEvent = viewModel::onEvent,
+            onSendClick = {
+                navigator.parent?.push(selectAssetDestinationEvent)
+            }
             /*onShowWallets = onShowWallets,
             onShowAssetManage = onShowAssetManage,
             onSendClick = onSendClick,
@@ -110,7 +122,7 @@ fun WalletDetailScreenContent(
     assets: ImmutableList<AssetUIState>,
     transactions: ImmutableList<TransactionExtended>,
     swapEnabled: Boolean,
-    onRefresh: () -> Unit = {},
+    onEvent: (WalletDetailEvent) -> Unit,
     onShowAssetManage: () -> Unit = {},
     onSendClick: () -> Unit = {},
     onReceiveClick: () -> Unit = {},
@@ -121,10 +133,27 @@ fun WalletDetailScreenContent(
     onAssetHide: (AssetId) -> Unit = {},
     listState: LazyListState = rememberLazyListState()
 ) {
-    val pullRefreshState = rememberPullRefreshState(isLoading, { onRefresh() })
-    Box {
+    val pullRefreshState =
+        rememberPullRefreshState(isLoading, { onEvent(WalletDetailEvent.OnRefresh) })
+    Box(
+        modifier = modifier.pullRefresh(pullRefreshState),
+    ) {
         AssetList(
-            walletInfo = walletInfo,
+            headerItem = {
+                WalletDetailHeader(
+                    amount = walletInfo.totalValue,
+                    actions = {
+                        WalletDetailHeaderActions(
+                            walletType = walletInfo.type,
+                            onTransfer = onSendClick,
+                            transferEnabled = true,
+                            onReceive = onReceiveClick,
+                            onBuy = onBuyClick,
+                            onSwap = if (swapEnabled) onSwapClick else null,
+                        )
+                    }
+                )
+            },
             assets = assets,
             transactions = transactions,
             swapEnabled = swapEnabled,

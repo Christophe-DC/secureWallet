@@ -80,6 +80,7 @@ kotlin {
                 api(projects.core.database)
                 api(projects.core.network)
                 api(projects.core.data)
+                api(projects.core.designsystem)
                 api(projects.core.resource)
                 api(projects.core.system.ui)
                 api(projects.feature.welcome.welcomeDi)
@@ -88,6 +89,8 @@ kotlin {
                 api(projects.feature.createwallet.createwalletImpl)
                 api(projects.feature.home.homeDi)
                 api(projects.feature.home.homeImpl)
+                api(projects.feature.selectAsset)
+                api(projects.feature.sendasset)
                 api(projects.feature.walletdetail.walletdetailDi)
                 api(projects.feature.walletdetail.walletdetailImpl)
                 //implementation(projects.feature.importWallet.importWalletDi)
@@ -103,6 +106,7 @@ kotlin {
                 api(compose.components.resources)
                 api(compose.components.uiToolingPreview)
                 api(libs.voyager)
+                implementation(libs.voyager.transitions)
             }
         }
         val commonTest by getting {

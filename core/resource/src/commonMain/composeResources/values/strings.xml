@@ -26,4 +26,13 @@
     <string name="wallet_copy_address">Copy Address</string>
     <string name="wallet_manage_token_list">Manage Token List</string>
     <string name="common_hide">Hide</string>
+    <string name="select_asset_send_title">Send</string>
+    <string name="transaction_recipient">Recipient</string>
+    <string name="common_try_again">Try Again</string>
+    <string name="transfer_recipient_address_field">Address or name</string>
+    <string name="errors_invalid_address_name">Invalid address or name</string>
+    <string name="search_hint">Search...</string>
+    <string name="assets_no_assets_found">No assets found</string>
+    <string name="assets_add_custom_token">Add Custom Token</string>
+    <string name="common_continue">Continue</string>
 </resources>

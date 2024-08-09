@@ -20,7 +20,7 @@ voyager = "1.0.0-rc10"
 navigation-compose = "2.7.0-alpha07"
 koin-core = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
-lifecycle-viewModel = "2.8.2"
+lifecycle-viewModel = "2.8.0"
 wallet-core = "4.1.1"
 runtimeAndroid = "1.6.8"
 sqldelight = "2.0.2"
@@ -30,6 +30,8 @@ bignum = "0.3.10"
 kamelImage = "0.9.5"
 kotlinxDatetime = "0.6.0"
 kotlinxCollectionsImmutable = "0.3.7"
+lifecycleViewmodelAndroid = "2.8.4"
+qrKit = "1.0.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -60,10 +62,11 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 
 
 voyager = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-bottomSheetNavigator = { group = "cafe.adriel.voyager", name = "voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { group = "cafe.adriel.voyager", name = "voyager-tab-navigator", version.ref = "voyager" }
 navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
-lyfecycle-viewmodel = { group = "androidx.lyfecycle", name = "lyfecycle-viewmodel", version.ref = "lifecycle-viewModel" }
+lyfecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewModel" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin-core" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin-core" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin-compose" }
@@ -78,6 +81,8 @@ bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
 
+chaintech-qrKit = { module = "network.chaintech:qr-kit", version.ref = "qrKit" }
+
 #sqldelight
 sqldelight-runtime = { group = "app.cash.sqldelight", name = "runtime", version.ref = "sqldelight" }
 sqldelight-android = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
@@ -85,6 +90,7 @@ sqldelight-native = { group = "app.cash.sqldelight", name = "native-driver", ver
 sqldelight-ext = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-adapter = { group = "app.cash.sqldelight", name = "primitive-adapters", version.ref = "sqldelight" }
 sqldelight-test = { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqldelight" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 
 

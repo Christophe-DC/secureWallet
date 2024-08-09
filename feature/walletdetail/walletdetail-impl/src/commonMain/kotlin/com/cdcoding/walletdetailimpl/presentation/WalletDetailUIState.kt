@@ -1,8 +1,8 @@
 package com.cdcoding.walletdetailimpl.presentation
 
+import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.Session
 import com.cdcoding.model.TransactionExtended
-import com.cdcoding.model.WalletType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

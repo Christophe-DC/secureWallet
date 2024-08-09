@@ -25,7 +25,7 @@ class CreateWalletViewModel(
 
     fun onEvent(event: CreateWalletEvent) {
         when (event) {
-            CreateWalletEvent.OnCreateNewWallet -> onCreateNewWallet()
+            is CreateWalletEvent.OnCreateNewWallet -> onCreateNewWallet()
             is CreateWalletEvent.OnWalletNameChanged -> onWalletNameChanged(event.name)
         }
     }

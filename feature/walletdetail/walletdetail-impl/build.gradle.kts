@@ -47,7 +47,6 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
             implementation(libs.kamel.image)
 
             implementation(libs.kotlinx.datetime)

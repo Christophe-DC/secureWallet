@@ -6,17 +6,19 @@ import com.cdcoding.data.repository.AssetRepository
 import com.cdcoding.common.utils.getIconUrl
 import com.cdcoding.domain.GetAssetsByWalletUseCase
 import com.cdcoding.domain.GetSessionUseCase
+import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetInfo
+import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.Chain
 import com.cdcoding.model.Currency
 import com.cdcoding.model.EVMChain
 import com.cdcoding.model.Fiat
+import com.cdcoding.model.PriceUIState
 import com.cdcoding.model.Session
 import com.cdcoding.model.TransactionExtended
 import com.cdcoding.model.Wallet
 import com.cdcoding.model.WalletSummary
 import com.cdcoding.model.WalletType
-import com.cdcoding.network.client.GemApiClient
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -38,6 +40,13 @@ class WalletDetailViewModel constructor(
     private val _state =
         MutableStateFlow(WalletDetailUIState())
     val state = _state.asStateFlow()
+
+    fun onEvent(event: WalletDetailEvent) {
+        when (event) {
+            is WalletDetailEvent.OnRefresh -> onRefresh()
+            is WalletDetailEvent.HideAsset -> hideAsset(event.assetId)
+        }
+    }
 
     init {
         viewModelScope.launch {
@@ -123,13 +132,13 @@ class WalletDetailViewModel constructor(
             }.toImmutableList()
     }
 
-    /*fun hideAsset(assetId: AssetId) {
+    fun hideAsset(assetId: AssetId) {
         viewModelScope.launch(Dispatchers.IO) {
-            val session = sessionRepository.getSession() ?: return@launch
+           /* val session = sessionRepository.getSession() ?: return@launch
             val account = session.wallet.getAccount(assetId.chain) ?: return@launch
-            assetsRepository.switchVisibility(account, assetId, false, session.currency)
+            assetsRepository.switchVisibility(account, assetId, false, session.currency)*/
         }
-    }*/
+    }
 
     private fun calcWalletInfo(wallet: Wallet, assets: List<AssetInfo>): WalletSummary {
         val totals = assets.map {
