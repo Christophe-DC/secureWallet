@@ -11,7 +11,7 @@ class AndroidDatabaseDriverFactory(private val context: Context) : DatabaseDrive
         return AndroidSqliteDriver(
             schema = SecureWalletDatabase.Schema,
             context = context,
-            name = "launch.db",
+            name = DB_NAME,
             callback = object : AndroidSqliteDriver.Callback(SecureWalletDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     db.setForeignKeyConstraintsEnabled(true)

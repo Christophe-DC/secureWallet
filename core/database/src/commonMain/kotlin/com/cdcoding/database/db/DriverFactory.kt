@@ -14,6 +14,7 @@ import com.cdcoding.local.db.SessionEntity
 import com.cdcoding.local.db.TokenEntity
 import com.cdcoding.local.db.WalletEntity
 
+val DB_NAME = "securewallet.db"
 
 interface DatabaseDriverFactory {
     fun createDriver(): SqlDriver

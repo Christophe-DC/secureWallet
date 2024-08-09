@@ -53,6 +53,7 @@ class CreateWalletViewModel(
                 }
                 .onFailure {
                     _state.value = state.value.copy(walletIsCreating = false)
+                    it.printStackTrace()
                     val failureMessage = it.message ?: "Error is occurred."
                     _eventFlow.emit(
                         CreateWalletEffect.Failure(message = failureMessage)

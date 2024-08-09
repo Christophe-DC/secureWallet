@@ -52,6 +52,11 @@ kotlin {
         iosMain.dependencies {
             api(libs.sqldelight.native)
         }
+
+        val desktopMain by getting
+        desktopMain.dependencies {
+            implementation(libs.sqldelight.desktop)
+        }
     }
 }
 
