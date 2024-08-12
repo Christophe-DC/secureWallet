@@ -35,4 +35,12 @@
     <string name="assets_no_assets_found">No assets found</string>
     <string name="assets_add_custom_token">Add Custom Token</string>
     <string name="common_continue">Continue</string>
+    <string name="transfer_amount_title">Amount</string>
+    <string name="amount_error_invalid_amount">Invalid amount</string>
+    <string name="common_required_field">%s is required</string>
+    <string name="transfer_amount">Amount</string>
+    <string name="transfer_insufficient_balance">Insufficient %1$s balance.</string>
+    <string name="transfer_minimum_amount">Minimum Amount is %1$s</string>
+    <string name="transfer_max">Max</string>
+    <string name="transfer_balance">Balance: %1$s</string>
 </resources>

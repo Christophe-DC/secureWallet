@@ -34,6 +34,7 @@ kotlin {
             implementation(projects.core.model)
             implementation(libs.koin.core)
             implementation(libs.bundles.ktor)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.bignum)
         }

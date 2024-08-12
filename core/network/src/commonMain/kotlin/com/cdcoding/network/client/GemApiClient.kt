@@ -6,6 +6,7 @@ import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetPrice
 import com.cdcoding.model.AssetPricesRequest
 import com.cdcoding.model.NameRecord
+import com.cdcoding.model.StakeValidator
 import com.cdcoding.model.Subscription
 import com.cdcoding.network.model.FiatAssets
 import com.cdcoding.network.model.PricesResponse
@@ -75,5 +76,9 @@ class GemApiClient(
         return httpClient.get("$GEM_URL/v1/name/resolve/$domain") {
             parameter("chain", chain)
         }.getResult()
+    }
+
+    suspend fun getValidators( chain:String): Result<List<StakeValidator>, NetworkError> {
+        return httpClient.get("$GEM_URL/blockchains/$chain/validators.json").getResult()
     }
 }

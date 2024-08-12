@@ -8,6 +8,7 @@ import com.cdcoding.homeimpl.presentation.HomeViewModel
 import com.cdcoding.walletdetailimpl.presentation.WalletDetailViewModel
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
 import com.cdcoding.sendasset.presentation.SendAssetViewModel
+import com.cdcoding.amount.presentation.AmountViewModel
 import com.cdcoding.core.designsystem.components.AddressChainViewModel
 
 actual val viewModelModule = module {
@@ -18,4 +19,5 @@ actual val viewModelModule = module {
     viewModelOf(::SelectAssetViewModel)
     viewModelOf(::SendAssetViewModel)
     viewModelOf(::AddressChainViewModel)
+    viewModelOf(::AmountViewModel)
 }

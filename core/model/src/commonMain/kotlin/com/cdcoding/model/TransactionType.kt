@@ -4,22 +4,17 @@ package com.cdcoding.model
 enum class TransactionType(val string: String) {
 	Transfer("transfer"),
 	Swap("swap"),
-	TokenApproval("tokenApproval"),
-	StakeDelegate("stakeDelegate"),
-	StakeUndelegate("stakeUndelegate"),
-	StakeRewards("stakeRewards"),
-	StakeRedelegate("stakeRedelegate"),
-	StakeWithdraw("stakeWithdraw"),
+	TokenApproval("tokenApproval");
 }
 
 
 fun TransactionType.getValue(direction: TransactionDirection, value: String): String {
 	return when (this) {
-		TransactionType.StakeUndelegate,
+		/*TransactionType.StakeUndelegate,
 		TransactionType.StakeRewards,
 		TransactionType.StakeRedelegate,
 		TransactionType.StakeWithdraw -> value
-		TransactionType.StakeDelegate -> value
+		TransactionType.StakeDelegate -> value*/
 		TransactionType.Transfer,
 		TransactionType.Swap -> when (direction) {
 			TransactionDirection.SelfTransfer,

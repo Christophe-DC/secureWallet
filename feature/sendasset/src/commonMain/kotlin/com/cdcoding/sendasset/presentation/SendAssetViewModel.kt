@@ -40,12 +40,12 @@ class SendAssetViewModel(
     private fun initialize() {
         val assetId: AssetId? = savedStateHandle["assetId"]
         if (assetId == null) {
-            setState { copy(screen = SendAssetScreen.Fatal(error = "Missing assetId")) }
+            setState { copy(screen = SendAssetStateScreen.Fatal(error = "Missing assetId")) }
             return
         }
         val wallet = sessionRepository.getSession()?.wallet
         if (wallet == null) {
-            setState { copy(screen = SendAssetScreen.Fatal(error = "Select asset")) }
+            setState { copy(screen = SendAssetStateScreen.Fatal(error = "Select asset")) }
             return
         }
 
@@ -54,7 +54,7 @@ class SendAssetViewModel(
                 address = savedStateHandle["destinationAddress"] ?: "",
                 addressDomain = savedStateHandle["addressDomain"] ?: "",
                 memo = savedStateHandle["memo"] ?: "",
-                screen = SendAssetScreen.Loading
+                screen = SendAssetStateScreen.Loading
             )
         }
 
@@ -65,14 +65,14 @@ class SendAssetViewModel(
                         setState {
                             copy(
                                 assetInfo = it.first(),
-                                screen = SendAssetScreen.Idle
+                                screen = SendAssetStateScreen.Idle
                             )
                         }
                     }
                 ) {
                     setState {
                         copy(
-                            screen = SendAssetScreen.Fatal(
+                            screen = SendAssetStateScreen.Fatal(
                                 error = it.message ?: "Asset doesn't found"
                             )
                         )
@@ -87,21 +87,21 @@ class SendAssetViewModel(
     }
 
     private fun onQrScanner(scanType: ScanType) {
-        setState { copy(screen = SendAssetScreen.ScanQr(scanType)) }
+        setState { copy(screen = SendAssetStateScreen.ScanQr(scanType)) }
     }
 
     private fun onScanCanceled() {
-        setState { copy(screen = SendAssetScreen.Idle) }
+        setState { copy(screen = SendAssetStateScreen.Idle) }
     }
 
     private fun setQrData(data: String) {
-        if (uiState.value.screen is SendAssetScreen.ScanQr) {
-            when ((uiState.value.screen as SendAssetScreen.ScanQr).scanType) {
+        if (uiState.value.screen is SendAssetStateScreen.ScanQr) {
+            when ((uiState.value.screen as SendAssetStateScreen.ScanQr).scanType) {
                 ScanType.Address -> setState { copy(address = data) }
                 ScanType.Memo -> setState { copy(memo = data) }
             }
         }
-        setState { copy(screen = SendAssetScreen.Idle) }
+        setState { copy(screen = SendAssetStateScreen.Idle) }
     }
 
     private fun onNext(

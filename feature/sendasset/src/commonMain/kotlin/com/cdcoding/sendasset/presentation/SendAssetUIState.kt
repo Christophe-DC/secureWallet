@@ -12,7 +12,7 @@ data class SendAssetUIState(
     val hasMemo: Boolean = false,
     val addressError: RecipientFormError = RecipientFormError.None,
     val memoError: RecipientFormError = RecipientFormError.None,
-    val screen: SendAssetScreen = SendAssetScreen.Idle
+    val screen: SendAssetStateScreen = SendAssetStateScreen.Idle
 )
 
 
@@ -21,11 +21,11 @@ sealed interface RecipientFormError {
     data object IncorrectAddress : RecipientFormError
 }
 
-sealed interface SendAssetScreen {
-    data object Loading : SendAssetScreen
-    data object Idle : SendAssetScreen
-    data class ScanQr(val scanType: ScanType) : SendAssetScreen
-    data class Fatal(val error: String) : SendAssetScreen
+sealed interface SendAssetStateScreen {
+    data object Loading : SendAssetStateScreen
+    data object Idle : SendAssetStateScreen
+    data class ScanQr(val scanType: ScanType) : SendAssetStateScreen
+    data class Fatal(val error: String) : SendAssetStateScreen
 }
 
 enum class ScanType {

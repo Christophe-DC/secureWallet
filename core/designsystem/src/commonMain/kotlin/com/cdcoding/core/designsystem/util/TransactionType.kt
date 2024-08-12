@@ -20,25 +20,15 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun TransactionType.getTitle(): String {
     return when (this) {
-        TransactionType.StakeDelegate -> stringResource(Res.string.transfer_stake_title)
-        TransactionType.StakeUndelegate -> stringResource(Res.string.transfer_unstake_title)
-        TransactionType.StakeRedelegate -> stringResource(Res.string.transfer_redelegate_title)
-        TransactionType.StakeRewards -> stringResource(Res.string.transfer_rewards_title)
         TransactionType.Transfer -> stringResource(Res.string.transfer_title)
         TransactionType.Swap -> stringResource(Res.string.wallet_swap)
         TransactionType.TokenApproval -> stringResource(Res.string.transfer_approve_title)
-        TransactionType.StakeWithdraw -> stringResource(Res.string.transfer_withdraw_title)
     }
 }
 
 @Composable
 fun TransactionType.getTransactionTitle(assetSymbol: String): String {
     return when (this) {
-        TransactionType.StakeDelegate,
-        TransactionType.StakeUndelegate,
-        TransactionType.StakeRewards,
-        TransactionType.StakeRedelegate,
-        TransactionType.StakeWithdraw,
         TransactionType.Transfer,
         TransactionType.Swap -> getTitle()
         TransactionType.TokenApproval -> "${stringResource(Res.string.transfer_approve_title)} $assetSymbol"
@@ -54,11 +44,6 @@ fun TransactionType.getAddress(direction: TransactionDirection, from: String, to
             TransactionDirection.Incoming -> "${stringResource(Res.string.transfer_from)} ${from.getAddressEllipsisText()}"
         }
         TransactionType.Swap,
-        TransactionType.TokenApproval,
-        TransactionType.StakeDelegate,
-        TransactionType.StakeUndelegate,
-        TransactionType.StakeRedelegate,
-        TransactionType.StakeWithdraw,
-        TransactionType.StakeRewards -> ""
+        TransactionType.TokenApproval -> ""
     }
 }

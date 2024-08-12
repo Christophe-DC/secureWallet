@@ -38,6 +38,7 @@ import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.hooks.useScope
 import com.cdcoding.core.designsystem.hooks.useSnackbar
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
+import com.cdcoding.core.navigation.AmountDestination
 import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.common_continue
@@ -50,7 +51,7 @@ import com.cdcoding.sendasset.presentation.RecipientFormError
 import com.cdcoding.sendasset.presentation.ScanType
 import com.cdcoding.sendasset.presentation.SendAssetEvent
 import com.cdcoding.sendasset.presentation.SendAssetIntent
-import com.cdcoding.sendasset.presentation.SendAssetScreen
+import com.cdcoding.sendasset.presentation.SendAssetStateScreen
 import com.cdcoding.sendasset.presentation.SendAssetUIState
 import com.cdcoding.sendasset.presentation.SendAssetViewModel
 import com.cdcoding.system.ui.theme.largeMarginDimens
@@ -84,7 +85,14 @@ class SendAssetScreen(
         HandleEvents(viewModel.effect)
 
 
-        val amountScreen = rememberScreen(HomeDestination.Home)
+        val amountScreen = rememberScreen(
+            AmountDestination.Amount(
+                uiState.value.assetInfo?.asset?.id ?: assetId,
+                uiState.value.address,
+                uiState.value.addressDomain,
+                uiState.value.memo
+            )
+        )
 
         SendAssetScreenContent(
             uiState = uiState.value,
@@ -127,7 +135,7 @@ fun SendAssetScreenContent(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        if(uiState.screen is SendAssetScreen.ScanQr) {
+                        if (uiState.screen is SendAssetStateScreen.ScanQr) {
                             onIntent(SendAssetIntent.OnScanCanceled)
                         } else {
                             popBackStack()
@@ -151,23 +159,23 @@ fun SendAssetScreenContent(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             when (uiState.screen) {
-                is SendAssetScreen.Fatal -> FatalErrorView(
+                is SendAssetStateScreen.Fatal -> FatalErrorView(
                     message = uiState.screen.error,
                 )
 
-                is SendAssetScreen.Idle -> Idle(
+                is SendAssetStateScreen.Idle -> Idle(
                     uiState = uiState,
                     onIntent = onIntent,
                     nextStack = nextStack,
                 )
 
-                is SendAssetScreen.Loading -> {
+                is SendAssetStateScreen.Loading -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
                 }
 
-                is SendAssetScreen.ScanQr -> QrCodeRequest(
+                is SendAssetStateScreen.ScanQr -> QrCodeRequest(
                     onResult = { onIntent(SendAssetIntent.SetQrData(it)) },
                     onCanceled = { onIntent(SendAssetIntent.OnScanCanceled) }
                 )
@@ -211,7 +219,14 @@ private fun Idle(
         title = stringResource(Res.string.common_continue),
         enabled = inputStateError == RecipientFormError.None,
         onClick = {
-            onIntent(SendAssetIntent.OnNext(uiState.address, nameRecordState, uiState.memo, nextStack ) )
+            onIntent(
+                SendAssetIntent.OnNext(
+                    uiState.address,
+                    nameRecordState,
+                    uiState.memo,
+                    nextStack
+                )
+            )
         },
     )
 

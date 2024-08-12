@@ -8,6 +8,7 @@ import com.cdcoding.network.client.GemApiClient
 import com.cdcoding.network.client.GetTokenClient
 import com.cdcoding.network.client.bitcoin.BitcoinApiClient
 import com.cdcoding.network.client.bitcoin.BitcoinBalanceClient
+import com.cdcoding.network.client.cosmo.CosmosApiClient
 import com.cdcoding.network.service.GemNameResolveService
 import com.cdcoding.network.service.NameResolveService
 import io.ktor.client.HttpClient
@@ -42,6 +43,7 @@ val networkModule = module {
     single<GemApiClient> { GemApiClient(get()) }
 
     single { BitcoinApiClient(get()) }
+    single { CosmosApiClient(get()) }
     single<NameResolveService> { GemNameResolveService(get()) }
     single<BalancesRemoteSource> { BalancesRetrofitRemoteSource(get()) }
     single<List<BalanceClient>> {

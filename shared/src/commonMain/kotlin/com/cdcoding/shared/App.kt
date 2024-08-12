@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import com.cdcoding.amount.di.amountScreenModule
 import com.cdcoding.core.navigation.tab.registry.TabRegistry
 import com.cdcoding.createwalletdi.createWalletScreenModule
 import com.cdcoding.homedi.homeScreenModule
@@ -33,6 +34,7 @@ fun App(
                 createWalletScreenModule()
                 selectAssetScreenModule()
                 sendAssetScreenModule()
+                amountScreenModule()
               //  importWalletScreenModule()
             }
 
