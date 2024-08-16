@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.kamel.image)
             implementation(libs.chaintech.qrKit)
+            implementation(libs.bundles.ktor)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

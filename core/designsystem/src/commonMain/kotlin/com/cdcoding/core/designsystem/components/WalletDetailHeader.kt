@@ -36,7 +36,7 @@ fun WalletDetailHeader(
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            //HeaderIcon(iconUrl = iconUrl, supportIconUrl = supportIconUrl, placeholder = placeholder)
+            HeaderIcon(iconUrl = iconUrl, supportIconUrl = supportIconUrl, placeholder = placeholder)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = amount,

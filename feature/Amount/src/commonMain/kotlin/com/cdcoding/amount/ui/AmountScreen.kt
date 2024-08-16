@@ -29,6 +29,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -45,6 +46,7 @@ import com.cdcoding.core.designsystem.components.FatalErrorView
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.textfield.AmountField
+import com.cdcoding.core.navigation.ConfirmDestination
 import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.amount_error_invalid_amount
@@ -86,13 +88,14 @@ class AmountScreen(
         val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
 
-        val HomeDestination = rememberScreen(HomeDestination.Home)
 
         AmountScreenContent(
             uiState = uiState.value,
             onIntent = viewModel::setIntent,
             popBackStack = { navigator.pop() },
-            nextStack = { navigator.push(HomeDestination) }
+            nextStack = { confirmParam ->
+                navigator.push(ScreenRegistry.get(ConfirmDestination.Confirm(confirmParam)))
+            }
         )
     }
 }
@@ -227,9 +230,7 @@ private fun AmountLoaded(
         enabled = uiState.error == AmountError.None,
         loading = uiState.loading,
         onClick = {
-            if (uiState.assetInfo?.asset?.address != null) {
-                onIntent(AmountIntent.OnNext(nextStack))
-            }
+            onIntent(AmountIntent.OnNext(nextStack))
         }
     )
 

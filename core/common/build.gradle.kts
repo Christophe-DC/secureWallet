@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.lyfecycle.viewmodel)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.bignum)
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

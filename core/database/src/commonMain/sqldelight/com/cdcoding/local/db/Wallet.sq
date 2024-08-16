@@ -17,4 +17,7 @@ SELECT * FROM WalletEntity;
 insertWallet:
 INSERT OR REPLACE INTO WalletEntity(id, name, walletIndex, type) VALUES (?, ?, ?, ?);
 
+deleteWallet:
+DELETE FROM WalletEntity WHERE id=?;
+
 

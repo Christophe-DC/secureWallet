@@ -10,10 +10,12 @@ import com.cdcoding.database.db.DefaultBalanceDao
 import com.cdcoding.database.db.DefaultPriceDao
 import com.cdcoding.database.db.DefaultSessionDao
 import com.cdcoding.database.db.DefaultTokenDao
+import com.cdcoding.database.db.DefaultTransactionDao
 import com.cdcoding.database.db.DefaultWalletDao
 import com.cdcoding.database.db.PriceDao
 import com.cdcoding.database.db.SessionDao
 import com.cdcoding.database.db.TokenDao
+import com.cdcoding.database.db.TransactionDao
 import com.cdcoding.database.db.WalletDao
 import com.cdcoding.database.db.createDatabase
 import org.koin.core.module.Module
@@ -31,4 +33,5 @@ val databaseModule = module {
     single<BalanceDao> { DefaultBalanceDao(get()) }
     single<PriceDao> { DefaultPriceDao(get()) }
     single<TokenDao> { DefaultTokenDao(get()) }
+    single<TransactionDao> { DefaultTransactionDao(get()) }
 }

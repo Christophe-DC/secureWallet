@@ -1,5 +1,6 @@
 package com.cdcoding.shared.di
 
+import com.cdcoding.common.di.commonModule
 import com.cdcoding.data.di.dataModule
 import com.cdcoding.database.di.databaseModule
 import com.cdcoding.domain.di.useCaseDomainModule
@@ -22,6 +23,7 @@ fun initKoin(declaration: KoinAppDeclaration = {}) =
             viewModelModule,
             walletModule,
             dataStoreModule,
+            commonModule,
         )
     }
 

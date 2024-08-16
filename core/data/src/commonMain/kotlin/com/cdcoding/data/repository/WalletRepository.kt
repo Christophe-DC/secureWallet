@@ -9,6 +9,7 @@ import com.cdcoding.common.utils.uuid4
 import com.cdcoding.database.db.SessionDao
 import com.cdcoding.database.db.WalletDao
 import com.cdcoding.datastore.ConfigRepository
+import com.cdcoding.datastore.password.PasswordStore
 import com.cdcoding.model.Account
 import com.cdcoding.model.AssetId
 import com.cdcoding.model.Chain
@@ -20,6 +21,7 @@ import com.cdcoding.model.WalletType
 import com.cdcoding.network.client.GemApiClient
 import com.cdcoding.network.util.getOrNull
 import com.cdcoding.wallet.client.WalletClient
+import com.cdcoding.wallet.operator.StorePhraseOperator
 import com.cdcoding.wallet.validator.InvalidPhrase
 import com.cdcoding.wallet.validator.InvalidWords
 import com.cdcoding.wallet.validator.PhraseValidator
@@ -33,7 +35,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 
 class WalletRepository(
-    private val walletsDao: WalletDao,
+    private val walletDao: WalletDao,
     private val sessionDao: SessionDao,
     private val assetRepository: AssetRepository,
     private val walletClient: WalletClient,
@@ -41,16 +43,18 @@ class WalletRepository(
     private val gemApiClient: GemApiClient,
     private val configRepository: ConfigRepository,
     private val tokensRepository: TokenRepository,
+    private val passwordStore: PasswordStore,
+    private val storePhraseOperator: StorePhraseOperator,
 ) {
 
     private val visibleByDefault =
         listOf(Chain.Ethereum, Chain.Bitcoin, Chain.SmartChain, Chain.Solana)
 
     suspend fun getNextWalletNumber(): Int {
-        return (walletsDao.getAllWallets().firstOrNull()?.size ?: 0) + 1
+        return (walletDao.getAllWallets().firstOrNull()?.size ?: 0) + 1
     }
 
-    suspend fun getAllWallets() = walletsDao.getAllWallets()
+    suspend fun getAllWallets() = walletDao.getAllWallets()
 
     suspend fun insertWallet(walletName: String, address: String, chain: Chain): Result<Unit> {
         return runCatching {
@@ -107,15 +111,14 @@ class WalletRepository(
         return if (result.isFailure || wallet == null) {
             result
         } else {
-            result
-            /*val password = passwordStore.createPassword(wallet.id)
+            val password = passwordStore.createPassword(wallet.id)
             val storeResult = storePhraseOperator(wallet.id, cleanedData, password)
             if (storeResult.isSuccess) {
                 result
             } else {
-                walletsRepository.removeWallet(wallet.id)
+                walletDao.removeWallet(wallet.id)
                 Result.failure(storeResult.exceptionOrNull() ?: ImportError.CreateError("Unknown error"))
-            }*/
+            }
         }
     }
 
@@ -141,7 +144,7 @@ class WalletRepository(
             accounts = accounts
         )
 
-        walletsDao.insertWalletWithAccount(wallet, accounts)
+        walletDao.insertWalletWithAccount(wallet, accounts)
         Result.success(wallet)
     }
 
@@ -215,7 +218,7 @@ class WalletRepository(
 
     private suspend fun syncSubscription() {
         val deviceId = configRepository.getDeviceId()
-        val wallets = walletsDao.getAllWallets().firstOrNull() ?: return
+        val wallets = walletDao.getAllWallets().firstOrNull() ?: return
         val subscriptionsIndex = mutableMapOf<String, Subscription>()
 
         wallets.forEach { wallet ->

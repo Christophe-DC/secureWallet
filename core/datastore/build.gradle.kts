@@ -36,6 +36,11 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+
+        androidMain.dependencies {
+            // EncryptedPreferences
+            implementation(libs.androidx.security.crypto)
+        }
     }
 }
 

@@ -145,7 +145,7 @@ class WalletDetailViewModel constructor(
             val current = it.balances
                 .calcTotal()
                 .convert(it.asset.decimals, it.price?.price?.price ?: 0.0)
-                .atomicValue.doubleValue(true)//.toDouble()
+                .atomicValue.doubleValue(true)
             val changed = current * ((it.price?.price?.priceChangePercentage24h ?: 0.0) / 100)
             Pair(current, changed)
         }.fold(Pair(0.0, 0.0)) { acc, pair ->

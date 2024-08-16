@@ -1,0 +1,90 @@
+import com.cdcoding.database.db.model.TransactionDirectionEntity;
+import com.cdcoding.database.db.model.TransactionStateEntity;
+import com.cdcoding.database.db.model.TransactionTypeEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS TransactionEntity(
+    id TEXT NOT NULL PRIMARY KEY,
+    hash TEXT NOT NULL,
+    assetId TEXT NOT NULL,
+    feeAssetId TEXT NOT NULL,
+    owner TEXT NOT NULL,
+    recipient TEXT NOT NULL,
+    contract TEXT,
+    metadata TEXT,
+    state TEXT AS TransactionStateEntity NOT NULL,
+    type TEXT AS TransactionTypeEntity NOT NULL,
+    blockNumber TEXT NOT NULL,
+    sequence TEXT NOT NULL,
+    fee TEXT NOT NULL,
+    value TEXT NOT NULL,
+    payload TEXT,
+    direction TEXT AS TransactionDirectionEntity NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS TxSwapMetadataEntity(
+    txId TEXT NOT NULL PRIMARY KEY,
+    fromAssetId TEXT NOT NULL,
+    toAssetId TEXT NOT NULL,
+    fromAmount TEXT NOT NULL,
+    toAmount TEXT NOT NULL
+);
+
+
+insertTransaction:
+INSERT OR REPLACE INTO TransactionEntity(id,
+                                   hash,
+                                   assetId,
+                                   feeAssetId,
+                                   owner,
+                                   recipient,
+                                   contract,
+                                   metadata,
+                                   state,
+                                   type,
+                                   blockNumber,
+                                   sequence,
+                                   fee,
+                                   value,
+                                   payload,
+                                   direction,
+                                   createdAt,
+                                   updatedAt
+                                    )
+                                   VALUES (?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?);
+
+
+
+
+insertSwapMetadata:
+INSERT OR REPLACE INTO TxSwapMetadataEntity(txId,
+                                          fromAssetId,
+                                           toAssetId,
+                                           fromAmount,
+                                           toAmount )
+                                         VALUES (?,
+                                          ?,
+                                          ?,
+                                          ?,
+                                          ?);
+

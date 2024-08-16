@@ -88,6 +88,7 @@ kotlin {
                 api(projects.feature.createwallet.createwalletDi)
                 api(projects.feature.createwallet.createwalletImpl)
                 api(projects.feature.amount)
+                api(projects.feature.confirm)
                 api(projects.feature.home.homeDi)
                 api(projects.feature.home.homeImpl)
                 api(projects.feature.selectAsset)

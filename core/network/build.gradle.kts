@@ -30,6 +30,7 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(projects.core.blockchain.wallet)
             implementation(projects.core.common)
             implementation(projects.core.model)
             implementation(libs.koin.core)

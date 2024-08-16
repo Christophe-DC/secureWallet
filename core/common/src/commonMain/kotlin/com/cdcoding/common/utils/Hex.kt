@@ -1,5 +1,7 @@
 package com.cdcoding.common.utils
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+
 
 private const val HEX_CHARS = "0123456789abcdef"
 
@@ -34,4 +36,11 @@ fun String.decodeHex(): ByteArray {
             i += 2
         }
     }
+}
+
+
+fun String.hexToBigInteger(): BigInteger? = try {
+    if (has0xPrefix()) BigInteger.parseString(clean0xPrefix(), 16) else BigInteger.parseString(this)
+} catch (err: NumberFormatException) {
+    null
 }

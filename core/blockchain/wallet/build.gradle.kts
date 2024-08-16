@@ -61,13 +61,11 @@ kotlin {
                 api(libs.koin.core)
                 api(libs.kotlinx.serialization.json)
                 api(libs.kotlinx.coroutines.core)
-               // implementation(libs.wallet.core)
-                api("com.trustwallet:wallet-core-kotlin:+")
+                api(libs.wallet.core)
                 api(projects.core.database)
                 api(projects.core.common)
                 api(projects.core.datastore)
                 api(projects.core.model)
-                api(projects.core.network)
                 api(libs.bignum)
             }
         }
