@@ -44,7 +44,7 @@ class HomeScreen() : Screen {
     override fun Content() {
 
         val viewModel: HomeViewModel = useInject()
-        val uiState = viewModel.state.collectAsStateWithLifecycle()
+        val uiState = viewModel.uiState.collectAsStateWithLifecycle()
         val navigator = LocalNavigator.currentOrThrow
 
         val welcomeScreen = rememberScreen(WelcomeDestination.Welcome)

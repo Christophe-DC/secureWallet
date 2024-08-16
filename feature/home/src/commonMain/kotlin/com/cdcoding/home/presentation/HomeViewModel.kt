@@ -1,28 +1,18 @@
 package com.cdcoding.home.presentation
 
-import androidx.lifecycle.ViewModel
+import com.cdcoding.common.utils.CommonViewModel
 import com.cdcoding.domain.GetHasSessionUseCase
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 
 class HomeViewModel(
-   private val getHasSessionUseCase: GetHasSessionUseCase,
-)  : ViewModel() {
+    private val getHasSessionUseCase: GetHasSessionUseCase,
+) : CommonViewModel<HomeUIState, HomeEffect, HomeIntent>() {
 
+    override fun createInitialState(): HomeUIState = HomeUIState()
 
-   private val _state = MutableStateFlow(HomeState(hasSession = getHasSessionUseCase()))
-   val state = _state.asStateFlow()
+    override fun handleIntent(intent: HomeIntent) {}
 
-   private val _eventFlow = MutableSharedFlow<HomeEffect>()
-   val eventFlow = _eventFlow.asSharedFlow()
-
-
-   fun onEvent(event: HomeEvent) {
-      /*when(event) {
-         HomeEvent.OnClick -> TODO()
-      }*/
-   }
+    init {
+        setState { copy(hasSession = getHasSessionUseCase()) }
+    }
 }

@@ -1,22 +1,21 @@
 package com.cdcoding.welcome.presentation
 
-import androidx.lifecycle.ViewModel
+import com.cdcoding.common.utils.CommonViewModel
 
 
-class WelcomeViewModel()  : ViewModel() {
+class WelcomeViewModel : CommonViewModel<WelcomeUIState, WelcomeEffect, WelcomeIntent>() {
 
 
-   fun onEvent(event: WelcomeEvent) {
-      when(event) {
-         WelcomeEvent.OnCreateNewWallet -> onCreateNewWallet()
-         WelcomeEvent.OnImportWallet -> onImportWallet()
-      }
-   }
+    override fun createInitialState(): WelcomeUIState = WelcomeUIState()
 
-   private fun onCreateNewWallet() {
+    override fun handleIntent(intent: WelcomeIntent) {
+        when (intent) {
+            WelcomeIntent.OnCreateNewWallet -> onCreateNewWallet()
+            WelcomeIntent.OnImportWallet -> onImportWallet()
+        }
+    }
 
-   }
-   private fun onImportWallet() {
+    private fun onCreateNewWallet() {}
 
-   }
+    private fun onImportWallet() {}
 }

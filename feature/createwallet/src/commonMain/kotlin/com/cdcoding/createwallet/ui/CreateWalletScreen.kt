@@ -39,11 +39,11 @@ import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.name
 import com.cdcoding.core.resource.wallet_created
 import com.cdcoding.createwallet.presentation.CreateWalletEffect
-import com.cdcoding.createwallet.presentation.CreateWalletEvent
+import com.cdcoding.createwallet.presentation.CreateWalletIntent
 import com.cdcoding.createwallet.presentation.CreateWalletState
 import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.createwallet.presentation.CreateWalletViewModel
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -56,31 +56,18 @@ class CreateWalletScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val viewModel: CreateWalletViewModel = useInject()
-        val uiState = viewModel.state.collectAsStateWithLifecycle()
-
-
-        /* val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
-         val accountScreen = rememberScreen(AccountDestination.Account)
-         val authenticatorScreen = rememberScreen(AuthenticatorDestination.Authenticator)
-         val passwordHealthScreen = rememberScreen(PasswordHealthDestination.PasswordHealth)
-         val helpScreen = rememberScreen(HelpDestination.Help)
-         val generatePasswordScreen = rememberScreen(GeneratePasswordDestination.GeneratePassword)
-         val uiState = viewModel.state.collectAsStateWithLifecycle()*/
-
-        // val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
-        //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
+        val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
         val homeScreenWithWalletCreatedEvent = rememberScreen(HomeDestination.Home)
 
         CreateWalletScreenContent(
             uiState = uiState.value,
-            onEvent = viewModel::onEvent,
-            eventFlow = viewModel.eventFlow,
+            onEvent = viewModel::setIntent,
+            eventFlow = viewModel.effect,
             popBackStack = { navigator.pop() },
             onWalletCreated = {
                 navigator.replaceAll(homeScreenWithWalletCreatedEvent)
             }
-            //     navigateToImportWallet = { navigator.push(importWalletScreen) },
         )
     }
 }
@@ -91,42 +78,14 @@ class CreateWalletScreen : Screen {
 fun CreateWalletScreenContent(
     modifier: Modifier = Modifier,
     uiState: CreateWalletState,
-    onEvent: (CreateWalletEvent) -> Unit,
-    eventFlow: SharedFlow<CreateWalletEffect>,
+    onEvent: (CreateWalletIntent) -> Unit,
+    eventFlow: Flow<CreateWalletEffect>,
     popBackStack: () -> Unit,
     onWalletCreated: () -> Unit,
 ) {
-
-    /*useEffect(true) {
-        flow.collectLatest { effect ->
-            when (effect) {
-                is AddNewPasswordEffect.Failure -> {
-                    scope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = effect.message,
-                        )
-                    }
-                }
-                AddNewPasswordEffect.GeneratePassword -> {
-                    navigateToGeneratePassword.invoke()
-                }
-                is AddNewPasswordEffect.Success -> {
-                    scope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = effect.message,
-                        )
-                    }
-                }
-            }
-        }
-    }*/
-
     val snackbarState = useSnackbar()
     val scope = useScope()
-    //var text by remember { mutableStateOf("") }
-
     useEffect(true) {
-
         eventFlow.collectLatest { newEffect ->
             when (newEffect) {
                 is CreateWalletEffect.Failure -> {
@@ -141,7 +100,6 @@ fun CreateWalletScreenContent(
             }
         }
     }
-
 
     Scaffold(
         modifier = modifier,
@@ -184,7 +142,7 @@ fun CreateWalletScreenContent(
                 label = stringResource(Res.string.name),
                 hint = uiState.defaultWalletName,
                 textValue = uiState.walletName,
-                onValueChanged = { newText -> onEvent(CreateWalletEvent.OnWalletNameChanged(newText)) },
+                onValueChanged = { newText -> onEvent(CreateWalletIntent.OnWalletNameChanged(newText)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -193,7 +151,7 @@ fun CreateWalletScreenContent(
             } else {
                 FilledTonalButton(
                     modifier = Modifier.padding(bottom = largeMarginDimens.margin),
-                    onClick = { onEvent(CreateWalletEvent.OnCreateNewWallet) },
+                    onClick = { onEvent(CreateWalletIntent.OnCreateNewWallet) },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -209,5 +167,5 @@ fun CreateWalletScreenContent(
 
         }
     }
-
 }
+

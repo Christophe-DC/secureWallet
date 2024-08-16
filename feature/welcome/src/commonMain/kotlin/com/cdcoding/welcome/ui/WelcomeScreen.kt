@@ -52,37 +52,26 @@ class WelcomeScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val viewModel: WelcomeViewModel = useInject()
-       // val viewModel = koinViewModel<WelcomeViewModel>()
-        //val uiState = viewModel.state.collectAsStateWithLifecycle()
-
-
-
-       /* val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
-        val accountScreen = rememberScreen(AccountDestination.Account)
-        val authenticatorScreen = rememberScreen(AuthenticatorDestination.Authenticator)
-        val passwordHealthScreen = rememberScreen(PasswordHealthDestination.PasswordHealth)
-        val helpScreen = rememberScreen(HelpDestination.Help)
-        val generatePasswordScreen = rememberScreen(GeneratePasswordDestination.GeneratePassword)
-        val uiState = viewModel.state.collectAsStateWithLifecycle()*/
-
         val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
-      //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
+        //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
 
         WelcomeScreenContent(
-           navigateToCreateWallet = { navigator.push(createWalletScreen) },
-       //     navigateToImportWallet = { navigator.push(importWalletScreen) },
-            )
+            navigateToCreateWallet = { navigator.push(createWalletScreen) },
+            //     navigateToImportWallet = { navigator.push(importWalletScreen) },
+        )
     }
 }
 
 
 @Composable
-fun WelcomeScreenContent(modifier: Modifier = Modifier,
-                         navigateToCreateWallet: () -> Unit = {},
-                         navigateToImportWallet: () -> Unit = {}) {
+fun WelcomeScreenContent(
+    modifier: Modifier = Modifier,
+    navigateToCreateWallet: () -> Unit = {},
+    navigateToImportWallet: () -> Unit = {}
+) {
 
     Column(
-        Modifier.fillMaxWidth()
+        modifier.fillMaxWidth()
             .padding(largeMarginDimens.margin),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
