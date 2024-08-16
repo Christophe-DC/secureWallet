@@ -11,14 +11,14 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.cdcoding.amount.di.amountScreenModule
 import com.cdcoding.confirm.di.confirmScreenModule
 import com.cdcoding.core.navigation.tab.registry.TabRegistry
-import com.cdcoding.createwalletdi.createWalletScreenModule
-import com.cdcoding.homedi.homeScreenModule
-import com.cdcoding.homeimpl.ui.HomeScreen
+import com.cdcoding.createwallet.di.createWalletScreenModule
+import com.cdcoding.home.di.homeScreenModule
+import com.cdcoding.home.ui.HomeScreen
 import com.cdcoding.selectasset.di.selectAssetScreenModule
 import com.cdcoding.sendasset.di.sendAssetScreenModule
 import com.cdcoding.system.ui.theme.SecureWalletTheme
-import com.cdcoding.walletdetaildi.walletDetailScreenModule
-import com.cdcoding.welcomedi.welcomeScreenModule
+import com.cdcoding.walletdetail.di.walletDetailScreenModule
+import com.cdcoding.welcome.di.welcomeScreenModule
 
 
 @Composable

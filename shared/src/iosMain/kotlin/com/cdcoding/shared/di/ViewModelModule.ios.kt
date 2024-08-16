@@ -1,10 +1,10 @@
 package com.cdcoding.shared.di
 
 import org.koin.dsl.module
-import com.cdcoding.welcomeimpl.presentation.WelcomeViewModel
-import com.cdcoding.createwalletimpl.presentation.CreateWalletViewModel
-import com.cdcoding.homeimpl.presentation.HomeViewModel
-import com.cdcoding.walletdetailimpl.presentation.WalletDetailViewModel
+import com.cdcoding.welcome.presentation.WelcomeViewModel
+import com.cdcoding.createwallet.presentation.CreateWalletViewModel
+import com.cdcoding.home.presentation.HomeViewModel
+import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
 import com.cdcoding.sendasset.presentation.SendAssetViewModel
 import com.cdcoding.amount.presentation.AmountViewModel
