@@ -1,31 +1,19 @@
 package com.cdcoding.createwallet.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.cdcoding.core.designsystem.circularProgress.CircularProgressIndicator32
+import com.cdcoding.core.designsystem.components.Scene
 import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.hooks.useScope
@@ -41,8 +29,8 @@ import com.cdcoding.core.resource.wallet_created
 import com.cdcoding.createwallet.presentation.CreateWalletEffect
 import com.cdcoding.createwallet.presentation.CreateWalletIntent
 import com.cdcoding.createwallet.presentation.CreateWalletState
-import com.cdcoding.system.ui.theme.largeMarginDimens
 import com.cdcoding.createwallet.presentation.CreateWalletViewModel
+import com.cdcoding.system.ui.theme.largeMarginDimens
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -73,10 +61,8 @@ class CreateWalletScreen : Screen {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateWalletScreenContent(
-    modifier: Modifier = Modifier,
     uiState: CreateWalletState,
     onEvent: (CreateWalletIntent) -> Unit,
     eventFlow: Flow<CreateWalletEffect>,
@@ -101,51 +87,11 @@ fun CreateWalletScreenContent(
         }
     }
 
-    Scaffold(
-        modifier = modifier,
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarState,
-                modifier = modifier.fillMaxWidth().wrapContentHeight(Alignment.Bottom),
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(Res.string.create_wallet),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = popBackStack) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(largeMarginDimens.margin),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            SWTextField(
-                label = stringResource(Res.string.name),
-                hint = uiState.defaultWalletName,
-                textValue = uiState.walletName,
-                onValueChanged = { newText -> onEvent(CreateWalletIntent.OnWalletNameChanged(newText)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
+    Scene(
+        title = stringResource(Res.string.create_wallet),
+        onClose = popBackStack,
+        snackbar = snackbarState,
+        mainAction = {
             if (uiState.walletIsCreating) {
                 CircularProgressIndicator32(modifier = Modifier.padding(bottom = largeMarginDimens.margin))
             } else {
@@ -164,8 +110,15 @@ fun CreateWalletScreenContent(
                     )
                 }
             }
-
         }
+    ) {
+        SWTextField(
+            label = stringResource(Res.string.name),
+            hint = uiState.defaultWalletName,
+            textValue = uiState.walletName,
+            onValueChanged = { newText -> onEvent(CreateWalletIntent.OnWalletNameChanged(newText)) },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

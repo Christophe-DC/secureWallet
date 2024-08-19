@@ -1,25 +1,20 @@
 package com.cdcoding.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
@@ -30,6 +25,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.cdcoding.core.designsystem.components.Scene
 import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
@@ -60,7 +56,7 @@ class HomeScreen : Screen {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalVoyagerApi::class)
+@OptIn(ExperimentalVoyagerApi::class)
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier
@@ -77,57 +73,45 @@ fun HomeScreenContent(
             )
         }
     ) { tabNavigator ->
-        Scaffold(
-            modifier = modifier,
-            containerColor = MaterialTheme.colorScheme.surface,
-            topBar = {
-                TopAppBar(
-                    title = {
-                        if (tabNavigator.current.key == walletDetailTab.key) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = tabNavigator.current.options.title,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Icon(
-                                    imageVector = Icons.Filled.ExpandMore,
-                                    contentDescription = null
-                                )
-                            }
-                        } else {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = tabNavigator.current.options.title,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    },
-                )
-            },
-            content = { innerPadding ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                ) {
-                    CurrentTab()
+        Scene(
+            title = {
+                if (tabNavigator.current.key == walletDetailTab.key) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = tabNavigator.current.options.title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.ExpandMore,
+                            contentDescription = null
+                        )
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = tabNavigator.current.options.title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             },
-            bottomBar = {
+            mainActionPadding = PaddingValues(0.dp),
+            mainAction = {
                 BottomNavigation {
                     TabNavigationItem(walletDetailTab)
                 }
             }
-        )
+        ) {
+            CurrentTab()
+        }
     }
 }
 

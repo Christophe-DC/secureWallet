@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddressChainField(
+    modifier: Modifier = Modifier,
     chain: Chain?,
     value: String,
     label: String,
@@ -67,7 +68,7 @@ fun AddressChainField(
         onValueChange(uiState.nameRecord?.name ?: value, uiState.nameRecord)
     }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()

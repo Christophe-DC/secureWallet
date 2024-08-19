@@ -19,13 +19,9 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
@@ -67,12 +62,12 @@ import com.cdcoding.selectasset.presentation.SelectAssetEvent
 import com.cdcoding.selectasset.presentation.SelectAssetIntent
 import com.cdcoding.selectasset.presentation.SelectAssetState
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
-import com.cdcoding.system.ui.theme.largeMarginDimens
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
+import com.cdcoding.core.designsystem.components.Scene
 
 
 class SelectAssetScreen(private val selectAssetType: SelectAssetType) : Screen {
@@ -146,68 +141,27 @@ fun SelectAssetScreenContent(
     snackbarState: SnackbarHostState? = null,
 ) {
 
-
-    Scaffold(
-        modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surface,
-        snackbarHost =  {
-            if (snackbarState != null) {
-                SnackbarHost(hostState = snackbarState)
-            }
-        } ,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.select_asset_send_title),
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = popBackStack) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-            )
-        }
-    ) { padding ->
-
+    Scene(
+        title = stringResource(Res.string.select_asset_send_title),
+        onClose = popBackStack,
+        snackbar = snackbarState,
+    ) {
         val items by remember(uiState.assets) { mutableStateOf(uiState.assets) }
 
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(largeMarginDimens.margin),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            SearchBar(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                query = query,
+        SearchBar(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            query = query,
+        )
+        Spacer16()
+        LazyColumn {
+            assets(
+                items = items,
+                onSelect = onSelect,
+                support = support,
+                itemTrailing = itemTrailing
             )
-            Spacer16()
-            LazyColumn {
-                assets(
-                    items = items,
-                    onSelect = onSelect,
-                    support = support,
-                    itemTrailing = itemTrailing
-                )
-                loading(loading = uiState.isLoading)
-                notFound(items = items, loading = uiState.isLoading, onAddAsset = onAddAsset)
-            }
-
+            loading(loading = uiState.isLoading)
+            notFound(items = items, loading = uiState.isLoading, onAddAsset = onAddAsset)
         }
     }
 }

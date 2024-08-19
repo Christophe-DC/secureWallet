@@ -1,25 +1,13 @@
 package com.cdcoding.amount.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -27,10 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
-import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -43,11 +29,11 @@ import com.cdcoding.amount.ui.component.AssetInfoCard
 import com.cdcoding.common.utils.getIconUrl
 import com.cdcoding.core.designsystem.button.MainActionButton
 import com.cdcoding.core.designsystem.components.FatalErrorView
+import com.cdcoding.core.designsystem.components.Scene
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.textfield.AmountField
 import com.cdcoding.core.navigation.ConfirmDestination
-import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.amount_error_invalid_amount
 import com.cdcoding.core.resource.common_continue
@@ -59,7 +45,6 @@ import com.cdcoding.core.resource.transfer_minimum_amount
 import com.cdcoding.model.AssetId
 import com.cdcoding.model.ConfirmParams
 import com.cdcoding.model.TransactionType
-import com.cdcoding.system.ui.theme.largeMarginDimens
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -111,67 +96,41 @@ fun AmountScreenContent(
     popBackStack: () -> Unit,
 ) {
 
-
-    Scaffold(
-        modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.transfer_amount_title),
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
+    Scene(
+        title = stringResource(Res.string.transfer_amount_title),
+        onClose = popBackStack,
+        mainAction = {
+            if(uiState.screen == AmountStateScreen.Loaded) {
+                MainActionButton(
+                    title = stringResource(Res.string.common_continue),
+                    enabled = uiState.error == AmountError.None,
+                    loading = uiState.loading,
+                    onClick = {
+                        onIntent(AmountIntent.OnNext(nextStack))
                     }
-                },
-                navigationIcon = {
-                    IconButton(onClick = popBackStack) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-            )
-        }
-    ) { padding ->
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(largeMarginDimens.margin),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            when (uiState.screen) {
-                is AmountStateScreen.Fatal -> FatalErrorView(
-                    message = uiState.screen.error,
                 )
+            }
+        }
+    ) {
+        when (uiState.screen) {
+            is AmountStateScreen.Fatal -> FatalErrorView(
+                message = uiState.screen.error,
+            )
 
-                is AmountStateScreen.Loaded -> {
-                    AmountLoaded(
-                        uiState = uiState,
-                        onIntent = onIntent,
-                        nextStack = nextStack,
-                    )
-                }
+            is AmountStateScreen.Loaded -> {
+                AmountLoaded(
+                    uiState = uiState,
+                    onIntent = onIntent,
+                    nextStack = nextStack,
+                )
+            }
 
-
-                is AmountStateScreen.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
+            is AmountStateScreen.Loading -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
             }
         }
-
     }
 }
 
@@ -223,17 +182,6 @@ private fun AmountLoaded(
 
         }
     }
-
-
-    MainActionButton(
-        title = stringResource(Res.string.common_continue),
-        enabled = uiState.error == AmountError.None,
-        loading = uiState.loading,
-        onClick = {
-            onIntent(AmountIntent.OnNext(nextStack))
-        }
-    )
-
 }
 
 
