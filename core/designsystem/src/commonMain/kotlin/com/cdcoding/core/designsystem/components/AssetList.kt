@@ -94,102 +94,102 @@ fun AssetList(
         modifier = Modifier.fillMaxSize(),
         state = listState,
     ) {
-        if(headerItem != null) {
+        if (headerItem != null) {
             item {
                 headerItem()
             }
         }
         transactionsList(transactions) { onTransactionClick(it) }
-       if (transactions.isNotEmpty()) {
-           item {
-               Spacer(modifier = Modifier.height(16.dp))
-               HorizontalDivider(thickness = 0.4.dp)
-           }
-       }
-      items(items = assets, key = { it.id.toIdentifier() }) { asset->
+        if (transactions.isNotEmpty()) {
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(thickness = 0.4.dp)
+            }
+        }
+        items(items = assets, key = { it.id.toIdentifier() }) { asset ->
 
-           var itemWidth by remember { mutableIntStateOf(0) }
-           Box(
-               modifier = Modifier.onSizeChanged { itemWidth = it.width }
-           ) {
-               AssetListItem(
-                   chain = asset.id.chain,
-                   title = asset.name,
-                   iconUrl = asset.icon,
-                   value = asset.value,
-                   assetType = asset.type,
-                   isZeroValue = asset.isZeroValue,
-                   fiatAmount = asset.fiat,
-                   price = asset.price,
-                   modifier = Modifier.combinedClickable(
-                       onClick = { onAssetClick(asset.id) },
-                       onLongClick = { longPressedAsset = asset.id },
-                   )
-               )
-               DropdownMenu(
-                   expanded = longPressedAsset == asset.id,
-                   offset = DpOffset((with(LocalDensity.current) { itemWidth.toDp() } / 2), 8.dp),
-                   onDismissRequest = { longPressedAsset = null },
-               ) {
-                   DropdownMenuItem(
-                       text = {
-                           Text(
-                               text = stringResource(Res.string.wallet_copy_address),
-                           )
-                       },
-                       trailingIcon = {
-                           Icon(
-                               imageVector = Icons.Default.ContentCopy,
-                               contentDescription = "address_copy"
-                           )
-                       },
-                       onClick = {
-                           clipboardManager.setText(AnnotatedString(asset.owner))
-                           longPressedAsset = null
-                       },
-                   )
-                   DropdownMenuItem(
-                       text = { Text(stringResource(Res.string.common_hide)) },
-                       trailingIcon = {
-                           Icon(
-                               imageVector = Icons.Default.VisibilityOff,
-                               contentDescription = "wallet_config"
-                           )
-                       },
-                       onClick = {
-                           onAssetHide(asset.id)
-                           longPressedAsset = null
-                       }
-                   )
-               }
-           }
-       }
-       item {
-           Box(
-               modifier = Modifier
-                   .clickable(onClick = onShowAssetManage)
-                   .fillMaxWidth()
-           ) {
-               Row(
-                   modifier = Modifier
-                       .align(Alignment.Center)
-                       .padding(16.dp),
-               ) {
-                   Icon(
-                       imageVector = Icons.Default.Tune,
-                       tint = MaterialTheme.colorScheme.onSurface,
-                       contentDescription = "asset_manager",
-                   )
-                   Spacer(modifier = Modifier.size(ButtonDefaults.IconSize))
-                   Text(
-                       text = stringResource(Res.string.wallet_manage_token_list),
-                       color = MaterialTheme.colorScheme.onSurface,
-                       style = MaterialTheme.typography.titleMedium,
-                   )
-               }
-           }
-           Spacer(modifier = Modifier.height(16.dp))
-       }
+            var itemWidth by remember { mutableIntStateOf(0) }
+            Box(
+                modifier = Modifier.onSizeChanged { itemWidth = it.width }
+            ) {
+                AssetListItem(
+                    chain = asset.id.chain,
+                    title = asset.name,
+                    iconUrl = asset.icon,
+                    value = asset.value,
+                    assetType = asset.type,
+                    isZeroValue = asset.isZeroValue,
+                    fiatAmount = asset.fiat,
+                    price = asset.price,
+                    modifier = Modifier.combinedClickable(
+                        onClick = { onAssetClick(asset.id) },
+                        onLongClick = { longPressedAsset = asset.id },
+                    )
+                )
+                DropdownMenu(
+                    expanded = longPressedAsset == asset.id,
+                    offset = DpOffset((with(LocalDensity.current) { itemWidth.toDp() } / 2), 8.dp),
+                    onDismissRequest = { longPressedAsset = null },
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(Res.string.wallet_copy_address),
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "address_copy"
+                            )
+                        },
+                        onClick = {
+                            clipboardManager.setText(AnnotatedString(asset.owner))
+                            longPressedAsset = null
+                        },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.common_hide)) },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.VisibilityOff,
+                                contentDescription = "wallet_config"
+                            )
+                        },
+                        onClick = {
+                            onAssetHide(asset.id)
+                            longPressedAsset = null
+                        }
+                    )
+                }
+            }
+        }
+        item {
+            Box(
+                modifier = Modifier
+                    .clickable(onClick = onShowAssetManage)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        contentDescription = "asset_manager",
+                    )
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSize))
+                    Text(
+                        text = stringResource(Res.string.wallet_manage_token_list),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
@@ -273,30 +273,29 @@ fun AssetListItem(
         assetType = assetType,
         iconUrl = iconUrl,
         price = price,
-        trailing = getBalanceInfo(isZeroValue, value, fiatAmount),
+        trailing = { getBalanceInfo(isZeroValue, value, fiatAmount) },
         badge = badge,
     )
 }
 
-fun getBalanceInfo(isZeroValue: Boolean, value: String, fiatAmount: String): @Composable () -> Unit {
-    return (@Composable {
-        if (isZeroValue) {
-            ListItemTitle(
-                modifier = Modifier.defaultMinSize(minHeight = 40.dp),
-                title = value,
-                color = MaterialTheme.colorScheme.secondary,
-                subtitle = "",
-                horizontalAlignment = Alignment.End,
-            )
-        } else {
-            ListItemTitle(
-                title = value,
-                color = MaterialTheme.colorScheme.onSurface,
-                subtitle = fiatAmount,
-                horizontalAlignment = Alignment.End
-            )
-        }
-    })
+@Composable
+fun getBalanceInfo(isZeroValue: Boolean, value: String, fiatAmount: String) {
+    if (isZeroValue) {
+        ListItemTitle(
+            modifier = Modifier.defaultMinSize(minHeight = 40.dp),
+            title = value,
+            color = MaterialTheme.colorScheme.secondary,
+            subtitle = "",
+            horizontalAlignment = Alignment.End,
+        )
+    } else {
+        ListItemTitle(
+            title = value,
+            color = MaterialTheme.colorScheme.onSurface,
+            subtitle = fiatAmount,
+            horizontalAlignment = Alignment.End
+        )
+    }
 }
 
 @Composable
@@ -365,7 +364,6 @@ fun AssetListItem(
         )
     }
 }
-
 
 
 @Composable

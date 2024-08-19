@@ -38,7 +38,7 @@ import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
 import com.cdcoding.home.presentation.HomeViewModel
 
-class HomeScreen() : Screen {
+class HomeScreen : Screen {
 
     @Composable
     override fun Content() {

@@ -32,6 +32,7 @@ import com.cdcoding.core.designsystem.components.AssetList
 import com.cdcoding.core.designsystem.components.WalletDetailHeader
 import com.cdcoding.core.designsystem.components.WalletDetailHeaderActions
 import com.cdcoding.core.navigation.SelectAssetDestination
+import com.cdcoding.model.SelectAssetType
 import kotlinx.collections.immutable.ImmutableList
 
 class WalletDetailScreen : Tab {
@@ -72,7 +73,8 @@ class WalletDetailScreen : Tab {
         val viewModel: WalletDetailViewModel = useInject()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        val selectAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset)
+        val selectSendAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset(SelectAssetType.Send))
+        val selectReceivedAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset(SelectAssetType.Receive))
 
         /* Box(
              Modifier.width(300.dp)
@@ -93,7 +95,10 @@ class WalletDetailScreen : Tab {
             swapEnabled = uiState.swapEnabled,
             onIntent = viewModel::setIntent,
             onSendClick = {
-                navigator.parent?.push(selectAssetDestinationEvent)
+                navigator.parent?.push(selectSendAssetDestinationEvent)
+            },
+            onReceiveClick = {
+                navigator.parent?.push(selectReceivedAssetDestinationEvent)
             }
             /*onShowWallets = onShowWallets,
             onShowAssetManage = onShowAssetManage,

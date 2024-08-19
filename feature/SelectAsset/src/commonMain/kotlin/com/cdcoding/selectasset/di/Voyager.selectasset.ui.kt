@@ -5,5 +5,5 @@ import com.cdcoding.core.navigation.SelectAssetDestination
 import com.cdcoding.selectasset.ui.SelectAssetScreen
 
 val selectAssetScreenModule = screenModule {
-    register<SelectAssetDestination.SelectAsset> { SelectAssetScreen() }
+    register<SelectAssetDestination.SelectAsset> { provider -> SelectAssetScreen(provider.selectAssetType) }
 }
