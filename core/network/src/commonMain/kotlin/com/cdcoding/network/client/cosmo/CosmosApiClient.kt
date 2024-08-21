@@ -1,9 +1,8 @@
 package com.cdcoding.network.client.cosmo
 
-import com.cdcoding.model.StakeValidator
-import com.cdcoding.model.bitcoin.BitcoinTransactionBroacastResult
 import com.cdcoding.model.cosmos.CosmosAccount
 import com.cdcoding.model.cosmos.CosmosAccountResponse
+import com.cdcoding.model.cosmos.CosmosBalances
 import com.cdcoding.model.cosmos.CosmosBlockResponse
 import com.cdcoding.model.cosmos.CosmosBroadcastResponse
 import com.cdcoding.model.cosmos.CosmosDelegations
@@ -11,10 +10,9 @@ import com.cdcoding.model.cosmos.CosmosInjectiveAccount
 import com.cdcoding.model.cosmos.CosmosRewards
 import com.cdcoding.model.cosmos.CosmosUnboundingDelegations
 import com.cdcoding.model.cosmos.CosmosValidators
-import com.cdcoding.network.client.GemApiClient.Companion.GEM_URL
 import com.cdcoding.network.util.NetworkError
-import com.cdcoding.network.util.getResult
 import com.cdcoding.network.util.Result
+import com.cdcoding.network.util.getResult
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -29,6 +27,10 @@ class CosmosApiClient(
 
     private val COMSMOS_URL = "https://cosmos.gemnodes.com"
 
+
+    suspend fun getBalance(owner: String): Result<CosmosBalances, NetworkError> {
+        return httpClient.get("$COMSMOS_URL/cosmos/bank/v1beta1/balances/$owner").getResult()
+    }
 
     suspend fun getValidators(): Result<CosmosValidators, NetworkError> {
         return httpClient.get("$COMSMOS_URL/cosmos/staking/v1beta1/validators?pagination.limit=1000").getResult()

@@ -3,6 +3,7 @@ package com.cdcoding.shared.di
 import org.koin.dsl.module
 import com.cdcoding.welcome.presentation.WelcomeViewModel
 import com.cdcoding.createwallet.presentation.CreateWalletViewModel
+import com.cdcoding.importwallet.presentation.ImportWalletViewModel
 import com.cdcoding.home.presentation.HomeViewModel
 import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
@@ -24,4 +25,5 @@ actual val viewModelModule = module {
     singleOf(::AmountViewModel)
     singleOf(::ConfirmViewModel)
     singleOf(::ReceiveAssetViewModel)
+    singleOf(::ImportWalletViewModel)
 }

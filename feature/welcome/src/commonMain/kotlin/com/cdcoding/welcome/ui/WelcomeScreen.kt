@@ -53,11 +53,11 @@ class WelcomeScreen : Screen {
 
         val viewModel: WelcomeViewModel = useInject()
         val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
-        //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
+        val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
 
         WelcomeScreenContent(
             navigateToCreateWallet = { navigator.push(createWalletScreen) },
-            //     navigateToImportWallet = { navigator.push(importWalletScreen) },
+            navigateToImportWallet = { navigator.push(importWalletScreen) },
         )
     }
 }
@@ -116,7 +116,7 @@ fun WelcomeScreenContent(
         Card(
             Modifier
                 .fillMaxWidth()
-                .clickable { },
+                .clickable { navigateToImportWallet() },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
             )

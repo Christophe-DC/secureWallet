@@ -11,6 +11,7 @@ import com.cdcoding.network.client.SignTransfer
 import com.cdcoding.network.client.SignTransferProxy
 import com.cdcoding.network.client.SignerPreload
 import com.cdcoding.network.client.aptos.AptosApiClient
+import com.cdcoding.network.client.aptos.AptosBalanceClient
 import com.cdcoding.network.client.aptos.AptosBroadcastClient
 import com.cdcoding.network.client.aptos.AptosSignClient
 import com.cdcoding.network.client.aptos.AptosSignerPreloader
@@ -20,33 +21,41 @@ import com.cdcoding.network.client.bitcoin.BitcoinBroadcastClient
 import com.cdcoding.network.client.bitcoin.BitcoinSignClient
 import com.cdcoding.network.client.bitcoin.BitcoinSignerPreloader
 import com.cdcoding.network.client.cosmo.CosmosApiClient
+import com.cdcoding.network.client.cosmo.CosmosBalanceClient
 import com.cdcoding.network.client.cosmo.CosmosBroadcastClient
 import com.cdcoding.network.client.cosmo.CosmosSignClient
 import com.cdcoding.network.client.cosmo.CosmosSignerPreloader
 import com.cdcoding.network.client.ethereum.EvmApiClient
+import com.cdcoding.network.client.ethereum.EvmBalanceClient
 import com.cdcoding.network.client.ethereum.EvmBroadcastClient
 import com.cdcoding.network.client.ethereum.EvmSignClient
 import com.cdcoding.network.client.ethereum.EvmSignerPreloader
 import com.cdcoding.network.client.near.NearApiClient
+import com.cdcoding.network.client.near.NearBalanceClient
 import com.cdcoding.network.client.near.NearBroadcastClient
 import com.cdcoding.network.client.near.NearSignClient
 import com.cdcoding.network.client.near.NearSignerPreloader
 import com.cdcoding.network.client.solana.SolanaApiClient
+import com.cdcoding.network.client.solana.SolanaBalanceClient
 import com.cdcoding.network.client.solana.SolanaBroadcastClient
 import com.cdcoding.network.client.solana.SolanaSignClient
 import com.cdcoding.network.client.solana.SolanaSignerPreloader
 import com.cdcoding.network.client.sui.SuiApiClient
+import com.cdcoding.network.client.sui.SuiBalanceClient
 import com.cdcoding.network.client.sui.SuiBroadcastClient
 import com.cdcoding.network.client.sui.SuiSignClient
 import com.cdcoding.network.client.ton.TonApiClient
+import com.cdcoding.network.client.ton.TonBalanceClient
 import com.cdcoding.network.client.ton.TonBroadcastClient
 import com.cdcoding.network.client.ton.TonSignClient
 import com.cdcoding.network.client.ton.TonSignerPreloader
 import com.cdcoding.network.client.tron.TronApiClient
+import com.cdcoding.network.client.tron.TronBalanceClient
 import com.cdcoding.network.client.tron.TronBroadcastClient
 import com.cdcoding.network.client.tron.TronSignClient
 import com.cdcoding.network.client.tron.TronSignerPreloader
 import com.cdcoding.network.client.xrp.XrpApiClient
+import com.cdcoding.network.client.xrp.XrpBalanceClient
 import com.cdcoding.network.client.xrp.XrpBroadcastClient
 import com.cdcoding.network.client.xrp.XrpSignClient
 import com.cdcoding.network.client.xrp.XrpSignerPreloader
@@ -114,50 +123,23 @@ val networkModule = module {
                 Chain.Linea,
                 Chain.Mantle,
                 Chain.Celo,
-                Chain.Ethereum -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) // EvmBalanceClient(it, rpcClients.getClient(it))
+                Chain.Ethereum -> EvmBalanceClient(it, get())
 
-                Chain.Solana -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) //SolanaBalanceClient(it, rpcClients.getClient(Chain.Solana))
+                Chain.Solana -> SolanaBalanceClient(it, get())
                 Chain.Thorchain,
                 Chain.Osmosis,
                 Chain.Celestia,
                 Chain.Injective,
                 Chain.Sei,
                 Chain.Noble,
-                Chain.Cosmos -> BitcoinBalanceClient(
-                    it,
-                    get()
-                )// CosmosBalanceClient(it, rpcClients.getClient(it))
+                Chain.Cosmos -> CosmosBalanceClient(it, get())
 
-                Chain.Ton -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) //TonBalanceClient(it, rpcClients.getClient(Chain.Ton))
-                Chain.Tron -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) // TronBalanceClient(it, rpcClients.getClient(Chain.Tron))
-                Chain.Aptos -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) // AptosBalanceClient(it, rpcClients.getClient(it))
-                Chain.Sui -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) //SuiBalanceClient(it, rpcClients.getClient(it))
-                Chain.Xrp -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) //XrpBalanceClient(it, rpcClients.getClient(it))
-                Chain.Near -> BitcoinBalanceClient(
-                    it,
-                    get()
-                ) //NearBalanceClient(it, rpcClients.getClient(it))
+                Chain.Ton -> TonBalanceClient(it, get())
+                Chain.Tron -> TronBalanceClient(it, get())
+                Chain.Aptos -> AptosBalanceClient(it, get())
+                Chain.Sui -> SuiBalanceClient(it, get())
+                Chain.Xrp -> XrpBalanceClient(it, get())
+                Chain.Near -> NearBalanceClient(it, get())
             }
         }
     }

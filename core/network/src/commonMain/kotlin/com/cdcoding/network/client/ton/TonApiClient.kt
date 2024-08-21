@@ -3,6 +3,7 @@ package com.cdcoding.network.client.ton
 import com.cdcoding.model.aptos.AptosAccount
 import com.cdcoding.model.sui.SuiTransaction
 import com.cdcoding.model.ton.TonBroadcastTransaction
+import com.cdcoding.model.ton.TonJettonBalance
 import com.cdcoding.model.ton.TonResult
 import com.cdcoding.model.ton.TonWalletInfo
 import com.cdcoding.network.model.JSONRpcRequest
@@ -56,6 +57,14 @@ class TonApiClient(
             contentType(ContentType.Application.Json)
             setBody(boc)
         }.getResult()
+    }
+
+
+    suspend fun tokenBalance(address: String): Result<TonResult<TonJettonBalance>, NetworkError> {
+        return httpClient.get("$TON_URL/api/v2/getTokenData") {
+            parameter("address", address)
+        }
+            .getResult()
     }
 
     data class Boc(

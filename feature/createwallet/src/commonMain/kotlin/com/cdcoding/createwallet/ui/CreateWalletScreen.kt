@@ -8,10 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cdcoding.core.designsystem.button.MainActionButton
 import com.cdcoding.core.designsystem.circularProgress.CircularProgressIndicator32
 import com.cdcoding.core.designsystem.components.Scene
 import com.cdcoding.core.designsystem.hooks.useEffect
@@ -22,6 +24,7 @@ import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.textfield.SWTextField
 import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.resource.Res
+import com.cdcoding.core.resource.common_continue
 import com.cdcoding.core.resource.create
 import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.name
@@ -92,24 +95,12 @@ fun CreateWalletScreenContent(
         onClose = popBackStack,
         snackbar = snackbarState,
         mainAction = {
-            if (uiState.walletIsCreating) {
-                CircularProgressIndicator32(modifier = Modifier.padding(bottom = largeMarginDimens.margin))
-            } else {
-                FilledTonalButton(
-                    modifier = Modifier.padding(bottom = largeMarginDimens.margin),
-                    onClick = { onEvent(CreateWalletIntent.OnCreateNewWallet) },
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ),
-                    enabled = uiState.walletName.isNotEmpty()
-                ) {
-                    Text(
-                        text = stringResource(Res.string.create),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
+            MainActionButton(
+                title = stringResource(Res.string.create),
+                enabled = uiState.walletName.isNotEmpty(),
+                loading = uiState.walletIsCreating,
+                onClick = { onEvent(CreateWalletIntent.OnCreateNewWallet) }
+            )
         }
     ) {
         SWTextField(
@@ -117,7 +108,7 @@ fun CreateWalletScreenContent(
             hint = uiState.defaultWalletName,
             textValue = uiState.walletName,
             onValueChanged = { newText -> onEvent(CreateWalletIntent.OnWalletNameChanged(newText)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
         )
     }
 }

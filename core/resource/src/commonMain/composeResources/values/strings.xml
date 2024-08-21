@@ -54,5 +54,14 @@
     <string name="copied_to_clipboard">The copy to the clipboard has been completed.</string>
     <string name="common_share">Share</string>
     <string name="common_copy">Copy</string>
+    <string name="common_paste">Paste</string>
     <string name="receive_title">Receive %1$s</string>
+    <string name="wallet_default_name">Wallet %1$d</string>
+    <string name="wallet_import_title">Import Wallet</string>
+    <string name="wallet_import_action">Import</string>
+    <string name="wallet_name">Name</string>
+    <string name="wallet_import_secret_phrase">Secret Recovery Phrase</string>
+    <string name="errors_create_wallet">Create Wallet Error: %1$s</string>
+    <string name="errors_import_invalid_secret_phrase">Invalid Secret Phrase</string>
+    <string name="errors_import_invalid_secret_phrase_word">Invalid Secret Phrase word: %1$s</string>
 </resources>

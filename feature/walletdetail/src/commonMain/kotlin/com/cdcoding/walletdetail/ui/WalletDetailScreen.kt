@@ -31,6 +31,7 @@ import com.cdcoding.walletdetail.presentation.WalletInfoUIState
 import com.cdcoding.core.designsystem.components.AssetList
 import com.cdcoding.core.designsystem.components.WalletDetailHeader
 import com.cdcoding.core.designsystem.components.WalletDetailHeaderActions
+import com.cdcoding.core.navigation.ImportWalletDestination
 import com.cdcoding.core.navigation.SelectAssetDestination
 import com.cdcoding.model.SelectAssetType
 import kotlinx.collections.immutable.ImmutableList
@@ -55,21 +56,6 @@ class WalletDetailScreen : Tab {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        //val viewModel: WalletDetailViewModel = useInject()
-        // val viewModel = koinViewModel<WelcomeViewModel>()
-        //val uiState = viewModel.state.collectAsStateWithLifecycle()
-
-
-        /* val addNewPasswordScreen = rememberScreen(AddNewPasswordDestination.AddNewPasswordScreen)
-         val accountScreen = rememberScreen(AccountDestination.Account)
-         val authenticatorScreen = rememberScreen(AuthenticatorDestination.Authenticator)
-         val passwordHealthScreen = rememberScreen(PasswordHealthDestination.PasswordHealth)
-         val helpScreen = rememberScreen(HelpDestination.Help)
-         val generatePasswordScreen = rememberScreen(GeneratePasswordDestination.GeneratePassword)
-         val uiState = viewModel.state.collectAsStateWithLifecycle()*/
-
-        // val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
-        //  val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
         val viewModel: WalletDetailViewModel = useInject()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

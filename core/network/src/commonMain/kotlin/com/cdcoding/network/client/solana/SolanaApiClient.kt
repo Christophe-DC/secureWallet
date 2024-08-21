@@ -1,5 +1,7 @@
 package com.cdcoding.network.client.solana
 
+import com.cdcoding.model.solana.SolanaBalance
+import com.cdcoding.model.solana.SolanaBalanceValue
 import com.cdcoding.model.solana.SolanaBlockhashResult
 import com.cdcoding.model.solana.SolanaPrioritizationFee
 import com.cdcoding.model.solana.SolanaStakeAccount
@@ -24,7 +26,21 @@ class SolanaApiClient(
     private val SOLANA_URL = "https://solana.gemnodes.com"
 
 
+    suspend fun getBalance(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<SolanaBalance>, NetworkError> {
+        return httpClient.post("$SOLANA_URL/") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
     suspend fun getTokenAccountByOwner(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<SolanaValue<List<SolanaTokenAccount>>>, NetworkError> {
+        return httpClient.post("$SOLANA_URL/") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
+    suspend fun getTokenBalance(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<SolanaValue<SolanaBalanceValue>>, NetworkError> {
         return httpClient.post("$SOLANA_URL/") {
             contentType(ContentType.Application.Json)
             setBody(request)

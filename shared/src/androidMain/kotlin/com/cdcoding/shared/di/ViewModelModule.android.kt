@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 import com.cdcoding.welcome.presentation.WelcomeViewModel
 import com.cdcoding.createwallet.presentation.CreateWalletViewModel
+import com.cdcoding.importwallet.presentation.ImportWalletViewModel
 import com.cdcoding.home.presentation.HomeViewModel
 import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
@@ -24,4 +25,5 @@ actual val viewModelModule = module {
     viewModelOf(::AmountViewModel)
     viewModelOf(::ConfirmViewModel)
     viewModelOf(::ReceiveAssetViewModel)
+    viewModelOf(::ImportWalletViewModel)
 }

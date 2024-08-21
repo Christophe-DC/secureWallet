@@ -5,6 +5,7 @@ import com.cdcoding.network.model.JSONRpcRequest
 import com.cdcoding.network.model.JSONRpcResponse
 import com.cdcoding.network.util.NetworkError
 import com.cdcoding.network.util.Result
+import com.cdcoding.network.util.getOrNull
 import com.cdcoding.network.util.getResult
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import io.ktor.client.HttpClient
@@ -20,6 +21,12 @@ class EvmApiClient (
 
     private val ETHEREUM_URL = "https://ethereum.gemnodes.com"
 
+    suspend fun getBalance(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<EvmNumber?>, NetworkError> {
+        return httpClient.post("$ETHEREUM_URL/"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
 
     suspend fun getNetVersion(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<EvmNumber?>, NetworkError> {
         return httpClient.post("$ETHEREUM_URL/"){
@@ -58,6 +65,14 @@ class EvmApiClient (
         }.getResult()
     }
 
+
+    suspend fun callString(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<String?>, NetworkError> {
+        return httpClient.post("$ETHEREUM_URL/"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
     suspend fun getFeeHistory(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<EthereumFeeHistory>, NetworkError> {
         return httpClient.post("$ETHEREUM_URL/"){
             contentType(ContentType.Application.Json)
@@ -76,4 +91,31 @@ class EvmApiClient (
         val value: String?,
         val data: String?,
     )
+}
+
+
+
+internal suspend fun EvmApiClient.getBalance(address: String): Result<JSONRpcResponse<EvmApiClient.EvmNumber?>, NetworkError> {
+    return getBalance(
+        JSONRpcRequest.create(
+            method = EvmMethod.GetBalance,
+            params = listOf(address, "latest")
+        )
+    )
+}
+
+
+internal suspend fun EvmApiClient.callString(contract: String, hexData: String): String? {
+    val params = mapOf(
+        "to" to contract,
+        "data" to hexData
+    )
+    val request = JSONRpcRequest.create(
+        EvmMethod.Call,
+        listOf(
+            params,
+            "latest"
+        )
+    )
+    return callString(request).getOrNull()?.result
 }

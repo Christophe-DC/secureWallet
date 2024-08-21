@@ -1,5 +1,6 @@
 package com.cdcoding.network.client.near
 
+import com.cdcoding.model.near.NearAccount
 import com.cdcoding.model.near.NearAccountAccessKey
 import com.cdcoding.model.near.NearBlock
 import com.cdcoding.model.near.NearBroadcastResult
@@ -23,6 +24,13 @@ class NearApiClient(
 ) {
 
     private val NEAR_URL = "https://near.gemnodes.com"
+
+    suspend fun account(params: JSONRpcRequest<Any>): Result<JSONRpcResponse<NearAccount>, NetworkError> {
+        return httpClient.post("$NEAR_URL/") {
+            contentType(ContentType.Application.Json)
+            setBody(params)
+        }.getResult()
+    }
 
     suspend fun accountAccessKey(params: JSONRpcRequest<Any>): Result<JSONRpcResponse<NearAccountAccessKey>, NetworkError> {
         return httpClient.post("$NEAR_URL/") {

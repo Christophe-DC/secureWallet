@@ -1,6 +1,7 @@
 package com.cdcoding.common.utils
 
 import com.cdcoding.model.Chain
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 val tokenAvailableChains = listOf(
     Chain.AvalancheC,
@@ -25,6 +26,11 @@ val tokenAvailableChains = listOf(
     Chain.Ton,
 )
 
+
+fun Chain.getReserveBalance(): BigInteger = when (this) {
+    Chain.Xrp -> BigInteger(10_000_000)
+    else -> BigInteger.ZERO
+}
 
 fun Chain.eip1559Support() = when (this) {
     Chain.OpBNB,
