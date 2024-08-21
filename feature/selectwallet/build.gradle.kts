@@ -6,11 +6,10 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.domain)
             implementation(projects.core.designsystem)
-            implementation(projects.core.common)
             implementation(projects.core.domain)
             implementation(projects.core.navigation)
-            implementation(projects.core.network)
             implementation(projects.core.resource)
             implementation(projects.core.system.ui)
             implementation(libs.voyager)
@@ -22,19 +21,10 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
-            implementation(libs.kamel.image)
-
-            implementation(libs.kotlinx.datetime)
-
-            implementation(libs.bignum)
-
-            implementation(libs.kotlinx.collections.immutable)
-
         }
     }
 }
 
 android {
-    namespace = "com.cdcoding.walletdetail"
+    namespace = "com.cdcoding.selectwallet"
 }

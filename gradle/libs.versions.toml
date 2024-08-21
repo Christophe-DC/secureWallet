@@ -3,14 +3,16 @@ agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.0"
-androidxCompose = "2.8.3"
+androidx-activityCompose = "1.9.1"
+androidxCompose = "2.8.4"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.1.4"
 androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
+composeGradlePlugin = "1.6.11"
+kotlinGradlePlugin = "1.9.0"
 kotlinxSerializationJson = "1.6.3"
 compose-plugin = "1.6.11"
 junit = "4.13.2"
@@ -33,8 +35,13 @@ kotlinxCollectionsImmutable = "0.3.7"
 lifecycleViewmodelAndroid = "2.8.4"
 qrKit = "1.0.8"
 securityCrypto = "1.1.0-alpha06"
+kotlinVersion = "1.9.23"
+spotless-plugin = "6.23.0"
 
 [libraries]
+compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeGradlePlugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -95,7 +102,7 @@ sqldelight-desktop = { group = "app.cash.sqldelight", name = "sqlite-driver", ve
 sqldelight-ext = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-adapter = { group = "app.cash.sqldelight", name = "primitive-adapters", version.ref = "sqldelight" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
-
+spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-plugin" }
 
 
 [plugins]
@@ -106,6 +113,11 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }
+
+securewallet-multiplatform-core = { id = "securewallet.multiplatform.core", version = "unspecified" }
+securewallet-compose = { id = "securewallet.compose", version = "unspecified" }
 
 [bundles]
 ktor = [

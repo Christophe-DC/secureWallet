@@ -1,29 +1,12 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.securewallet.multiplatform.core)
+    alias(libs.plugins.securewallet.compose)
     kotlin("native.cocoapods")
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
-
-    jvm("desktop")
-
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
    /* listOf(
         iosX64(),
         iosArm64(),
@@ -96,7 +79,6 @@ kotlin {
                 api(projects.feature.walletdetail)
                 //implementation(projects.feature.importWallet.importWalletDi)
                 api(libs.koin.compose)
-                api(libs.koin.core)
                 api(libs.navigation.compose)
                 api(compose.runtime)
                 api(compose.foundation)
@@ -110,11 +92,7 @@ kotlin {
                 implementation(libs.voyager.transitions)
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
+        val commonTest by getting
 
         val desktopMain by getting
 
@@ -157,12 +135,4 @@ kotlin {
 
 android {
     namespace = "com.cdcoding.shared"
-    compileSdk = 34
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 }

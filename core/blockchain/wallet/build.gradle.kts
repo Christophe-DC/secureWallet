@@ -1,35 +1,9 @@
-import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
-
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.securewallet.multiplatform.core)
     kotlin("native.cocoapods")
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
-
-    jvm("desktop")
-
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "wallet"
-            isStatic = false
-        }
-    }
-
-
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -58,9 +32,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.koin.core)
                 api(libs.kotlinx.serialization.json)
-                api(libs.kotlinx.coroutines.core)
                 api(libs.wallet.core)
                 api(projects.core.database)
                 api(projects.core.common)
@@ -70,17 +42,8 @@ kotlin {
             }
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                // Add android specific dependencies if needed
-            }
-        }
+        val commonTest by getting
+        val androidMain by getting
 
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -109,12 +72,4 @@ kotlin {
 
 android {
     namespace = "com.cdcoding.wallet"
-    compileSdk = 34
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 }
