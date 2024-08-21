@@ -2,7 +2,6 @@ package com.cdcoding.selectasset.presentation
 
 import androidx.compose.runtime.Immutable
 import com.cdcoding.model.AssetUIState
-import com.cdcoding.model.Wallet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

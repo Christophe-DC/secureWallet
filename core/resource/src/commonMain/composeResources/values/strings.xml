@@ -52,4 +52,7 @@
     <string name="swap_provider">Provider</string>
     <string name="transfer_memo">Memo</string>
     <string name="copied_to_clipboard">The copy to the clipboard has been completed.</string>
+    <string name="common_share">Share</string>
+    <string name="common_copy">Copy</string>
+    <string name="receive_title">Receive %1$s</string>
 </resources>

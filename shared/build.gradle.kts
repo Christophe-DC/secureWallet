@@ -89,6 +89,7 @@ kotlin {
                 api(projects.feature.amount)
                 api(projects.feature.confirm)
                 api(projects.feature.home)
+                api(projects.feature.receiveasset)
                 api(projects.feature.selectAsset)
                 api(projects.feature.sendasset)
                 api(projects.feature.walletdetail)

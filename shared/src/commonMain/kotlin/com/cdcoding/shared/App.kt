@@ -14,6 +14,7 @@ import com.cdcoding.core.navigation.tab.registry.TabRegistry
 import com.cdcoding.createwallet.di.createWalletScreenModule
 import com.cdcoding.home.di.homeScreenModule
 import com.cdcoding.home.ui.HomeScreen
+import com.cdcoding.receiveasset.di.receiveAssetScreenModule
 import com.cdcoding.selectasset.di.selectAssetScreenModule
 import com.cdcoding.sendasset.di.sendAssetScreenModule
 import com.cdcoding.system.ui.theme.SecureWalletTheme
@@ -37,6 +38,7 @@ fun App(
                 sendAssetScreenModule()
                 amountScreenModule()
                 confirmScreenModule()
+                receiveAssetScreenModule()
               //  importWalletScreenModule()
             }
 

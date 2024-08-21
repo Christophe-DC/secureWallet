@@ -44,9 +44,7 @@ fun WalletDetailHeaderActions(
     walletType: WalletType,
     onTransfer: (() -> Unit)?,
     transferEnabled: Boolean,
-    onReceive: (() -> Unit)?,
-    onBuy: (() -> Unit)?,
-    onSwap: (() -> Unit)?,
+    onReceive: (() -> Unit)?
 ) {
     if (walletType == WalletType.view) {
         AssetWatchOnly()
@@ -71,22 +69,6 @@ fun WalletDetailHeaderActions(
                 imageVector = Icons.Default.ArrowDownward,
                 contentDescription = "receive",
                 onClick = onReceive,
-            )
-        }
-        if (onBuy != null) {
-            WalletDetailAction(
-                title = stringResource(Res.string.wallet_buy),
-                imageVector = Icons.Default.Add,
-                contentDescription = "buy",
-                onClick = onBuy,
-            )
-        }
-        if (onSwap != null) {
-            WalletDetailAction(
-                title = stringResource(Res.string.wallet_swap),
-                imageVector = Icons.Default.SwapVert,
-                contentDescription = "swap",
-                onClick = onSwap,
             )
         }
     }

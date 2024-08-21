@@ -7,6 +7,7 @@ import com.cdcoding.home.presentation.HomeViewModel
 import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
 import com.cdcoding.sendasset.presentation.SendAssetViewModel
+import com.cdcoding.receiveasset.presentation.ReceiveAssetViewModel
 import com.cdcoding.amount.presentation.AmountViewModel
 import com.cdcoding.confirm.presentation.ConfirmViewModel
 import com.cdcoding.core.designsystem.components.AddressChainViewModel
@@ -22,4 +23,5 @@ actual val viewModelModule = module {
     singleOf(::AddressChainViewModel)
     singleOf(::AmountViewModel)
     singleOf(::ConfirmViewModel)
+    singleOf(::ReceiveAssetViewModel)
 }

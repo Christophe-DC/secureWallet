@@ -204,12 +204,6 @@ fun LazyListScope.transactionsList(
     //val calendar = Calendar.getInstance()
 
     items.forEachIndexed { index, item ->
-        /*calendar.timeInMillis = item.transaction.createdAt
-        calendar[Calendar.MILLISECOND] = 999
-        calendar[Calendar.SECOND] = 59
-        calendar[Calendar.MINUTE] = 59
-        calendar[Calendar.HOUR_OF_DAY] = 23
-        val createdAt = calendar.time.time*/
         val createdAt = item.transaction.createdAt
         if (prev != createdAt) {
             stickyHeader {
@@ -218,13 +212,6 @@ fun LazyListScope.transactionsList(
                 } else {
                     dateFormat.format(Date(item.transaction.createdAt))
                 }*/
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = MaterialTheme.colorScheme.background)
-                        .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 8.dp),
-                    text = "title"
-                )
             }
         }
         item(key = item.transaction.id) {

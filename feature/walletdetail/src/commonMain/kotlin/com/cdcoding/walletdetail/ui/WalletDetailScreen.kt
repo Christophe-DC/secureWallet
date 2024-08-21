@@ -76,17 +76,6 @@ class WalletDetailScreen : Tab {
         val selectSendAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset(SelectAssetType.Send))
         val selectReceivedAssetDestinationEvent = rememberScreen(SelectAssetDestination.SelectAsset(SelectAssetType.Receive))
 
-        /* Box(
-             Modifier.width(300.dp)
-                 .height(200.dp)
-                 .background(color = Color.Green)
-         ) {
-
-             Text("version", color = Color.Red,
-                 modifier = Modifier.background(color = Color.Blue).width(100.dp).height(200.dp)
-             )
-             //Text(uiState?.version.toString(), color = Color.Red)
-         }*/
         WalletDetailScreenContent(
             isLoading = uiState.isLoading,
             walletInfo = uiState.walletInfo,
@@ -151,9 +140,7 @@ fun WalletDetailScreenContent(
                             walletType = walletInfo.type,
                             onTransfer = onSendClick,
                             transferEnabled = true,
-                            onReceive = onReceiveClick,
-                            onBuy = onBuyClick,
-                            onSwap = if (swapEnabled) onSwapClick else null,
+                            onReceive = onReceiveClick
                         )
                     }
                 )

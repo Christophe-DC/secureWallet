@@ -9,7 +9,6 @@ import com.cdcoding.common.utils.getIconUrl
 import com.cdcoding.common.utils.tokenAvailableChains
 import com.cdcoding.data.repository.SessionRepository
 import com.cdcoding.domain.GetAssetsByQueryUseCase
-import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.PriceUIState
 import com.ionspin.kotlin.bignum.integer.BigInteger
@@ -49,11 +48,8 @@ class SelectAssetViewModel(
     override fun createInitialState(): SelectAssetState {
         return SelectAssetState()
     }
-    override fun handleIntent(intent: SelectAssetIntent) {
-        when (intent) {
-            is SelectAssetIntent.OnSelect -> onSelectAsset(intent.assetId)
-        }
-    }
+
+    override fun handleIntent(intent: SelectAssetIntent) {}
 
     init {
         viewModelScope.launch {
@@ -93,10 +89,6 @@ class SelectAssetViewModel(
                 }
             }
         }
-    }
-
-    fun onSelectAsset(assetId: AssetId) {
-
     }
 
 }
