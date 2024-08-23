@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -47,6 +48,7 @@ import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.spacer.Spacer16
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.navigation.CreateWalletDestination
+import com.cdcoding.core.navigation.EditWalletDestination
 import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.navigation.ImportWalletDestination
 import com.cdcoding.core.navigation.WelcomeDestination
@@ -67,7 +69,7 @@ import com.cdcoding.system.ui.theme.mediumMarginDimens
 import org.jetbrains.compose.resources.stringResource
 
 
-class SelectWalletScreen: Screen {
+class SelectWalletScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -87,7 +89,10 @@ class SelectWalletScreen: Screen {
             popBackStack = { navigator.pop() },
             onCreateWalletClick = { navigator.push(createWalletScreen) },
             onImportWalletClick = { navigator.push(importWalletScreen) },
-            onEdit = {},
+            onEdit = { walletId ->
+                val sendAssetScreen = ScreenRegistry.get(EditWalletDestination.EditWallet(walletId))
+                navigator.push(sendAssetScreen)
+            },
             onBoard = { navigator.replaceAll(welcomeScreen) },
             onSelectWallet = { navigator.replaceAll(homeScreen) },
         )
@@ -134,7 +139,9 @@ fun SelectWalletScreenContent(
                         FilledTonalIconButton(
                             onClick = {},
                             colors = IconButtonDefaults.filledTonalIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                                    alpha = 0.2f
+                                ),
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         ) {
@@ -163,7 +170,9 @@ fun SelectWalletScreenContent(
                         FilledTonalIconButton(
                             onClick = {},
                             colors = IconButtonDefaults.filledTonalIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                                    alpha = 0.2f
+                                ),
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         ) {
@@ -194,15 +203,17 @@ fun SelectWalletScreenContent(
                     )
                     DropdownMenu(
                         expanded = longPressedWallet == wallet.id,
-                        offset = DpOffset((with(LocalDensity.current) { itemWidth.toDp() } / 2), 8.dp),
+                        offset = DpOffset((with(LocalDensity.current) { itemWidth.toDp() } / 2),
+                            8.dp),
                         onDismissRequest = { longPressedWallet = "" },
                     ) {
                         DropdownMenuItem(
                             text = { Text(stringResource(Res.string.common_wallet)) },
-                            trailingIcon = { Icon(
-                                imageVector = Icons.Default.Settings,
-                                contentDescription = "wallet_config"
-                            )
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "wallet_config"
+                                )
                             },
                             onClick = {
                                 onEdit(longPressedWallet)
@@ -237,8 +248,10 @@ fun SelectWalletScreenContent(
         AlertDialog(
             text = {
                 Text(
-                    text = stringResource( Res.string.wallet_delete_wallet_confirmation,
-                        uiState.wallets.firstOrNull{ it.id == deleteWalletId}?.name ?: "" ),
+                    text = stringResource(
+                        Res.string.wallet_delete_wallet_confirmation,
+                        uiState.wallets.firstOrNull { it.id == deleteWalletId }?.name ?: ""
+                    ),
                 )
             },
             onDismissRequest = { deleteWalletId = "" },

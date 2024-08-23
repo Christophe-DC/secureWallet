@@ -69,4 +69,5 @@
     <string name="errors_import_invalid_secret_phrase_word">Invalid Secret Phrase word: %1$s</string>
     <string name="wallets_title">Wallets</string>
     <string name="wallet_delete_wallet_confirmation">Are sure you want to delete %1$s?</string>
+    <string name="common_show_secret_phrase">Show Secret Recovery Phrase</string>
 </resources>

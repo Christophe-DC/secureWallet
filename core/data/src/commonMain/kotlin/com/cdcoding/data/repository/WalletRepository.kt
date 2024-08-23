@@ -58,6 +58,10 @@ class WalletRepository(
 
     suspend fun getWallet(id: String) = walletDao.getWallet(id)
 
+    fun updateWallet(wallet: Wallet) {
+        walletDao.updateWallet(wallet)
+    }
+
     suspend fun removeWallet(walletId: String) = walletDao.removeWallet(walletId)
 
 

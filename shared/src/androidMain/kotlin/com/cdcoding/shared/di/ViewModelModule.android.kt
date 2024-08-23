@@ -13,6 +13,7 @@ import com.cdcoding.receiveasset.presentation.ReceiveAssetViewModel
 import com.cdcoding.amount.presentation.AmountViewModel
 import com.cdcoding.confirm.presentation.ConfirmViewModel
 import com.cdcoding.selectwallet.presentation.SelectWalletViewModel
+import com.cdcoding.editwallet.presentation.EditWalletViewModel
 import com.cdcoding.core.designsystem.components.AddressChainViewModel
 
 actual val viewModelModule = module {
@@ -28,4 +29,5 @@ actual val viewModelModule = module {
     viewModelOf(::ReceiveAssetViewModel)
     viewModelOf(::ImportWalletViewModel)
     viewModelOf(::SelectWalletViewModel)
+    viewModelOf(::EditWalletViewModel)
 }

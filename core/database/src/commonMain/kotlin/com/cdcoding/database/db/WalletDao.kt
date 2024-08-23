@@ -16,6 +16,7 @@ interface WalletDao {
     fun getWallet(id: String): Wallet
     fun getAllWallets(): Flow<List<Wallet>>
     fun insertWallet(wallet: Wallet)
+    fun updateWallet(wallet: Wallet)
     fun insertWalletWithAccount(wallet: Wallet, accounts: List<Account>)
     suspend fun removeWallet(walletId: String)
 }
@@ -50,6 +51,14 @@ class DefaultWalletDao(
                 name = wallet.name,
                 walletIndex = wallet.index,
                 type = wallet.type.asEntity()
+            )
+        }
+    }
+    override fun updateWallet(wallet: Wallet) {
+        walletQueries.transaction {
+            walletQueries.updateWallet(
+                id = wallet.id,
+                name = wallet.name
             )
         }
     }

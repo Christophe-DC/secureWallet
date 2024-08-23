@@ -12,6 +12,7 @@ import com.cdcoding.amount.di.amountScreenModule
 import com.cdcoding.confirm.di.confirmScreenModule
 import com.cdcoding.core.navigation.tab.registry.TabRegistry
 import com.cdcoding.createwallet.di.createWalletScreenModule
+import com.cdcoding.editwallet.di.editWalletScreenModule
 import com.cdcoding.home.di.homeScreenModule
 import com.cdcoding.home.ui.HomeScreen
 import com.cdcoding.importwallet.di.importWalletScreenModule
@@ -43,6 +44,7 @@ fun App(
                 receiveAssetScreenModule()
                 importWalletScreenModule()
                 selectWalletScreenModule()
+                editWalletScreenModule()
             }
 
             TabRegistry {

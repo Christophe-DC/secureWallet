@@ -15,7 +15,7 @@ class DeleteWalletUseCase (
     private val passwordStore: PasswordStore,
 ) {
 
-    suspend operator fun invoke(walletId: String, onBoard: () -> Unit) = withContext(Dispatchers.IO) {
+    suspend operator fun invoke(walletId: String, onBoard: () -> Unit = {}) = withContext(Dispatchers.IO) {
         val session = sessionRepository.getSession() ?: return@withContext
         walletRepository.removeWallet(walletId = walletId)
             if (!passwordStore.removePassword(walletId)) {
