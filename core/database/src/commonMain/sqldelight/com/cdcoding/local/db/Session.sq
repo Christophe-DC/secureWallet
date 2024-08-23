@@ -14,4 +14,5 @@ SELECT * FROM SessionEntity WHERE id=1;
 updateSession:
 INSERT OR REPLACE INTO SessionEntity(id, walletId, currency) VALUES (1, ?, ?);
 
-
+reset:
+DELETE FROM SessionEntity WHERE id=1;

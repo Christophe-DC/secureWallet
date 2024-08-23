@@ -21,6 +21,7 @@ import com.cdcoding.sendasset.di.sendAssetScreenModule
 import com.cdcoding.system.ui.theme.SecureWalletTheme
 import com.cdcoding.walletdetail.di.walletDetailScreenModule
 import com.cdcoding.welcome.di.welcomeScreenModule
+import com.cdcoding.selectwallet.di.selectWalletScreenModule
 
 
 @Composable
@@ -41,6 +42,7 @@ fun App(
                 confirmScreenModule()
                 receiveAssetScreenModule()
                 importWalletScreenModule()
+                selectWalletScreenModule()
             }
 
             TabRegistry {

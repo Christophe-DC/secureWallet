@@ -55,6 +55,9 @@
     <string name="common_share">Share</string>
     <string name="common_copy">Copy</string>
     <string name="common_paste">Paste</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_wallet">Wallet</string>
     <string name="receive_title">Receive %1$s</string>
     <string name="wallet_default_name">Wallet %1$d</string>
     <string name="wallet_import_title">Import Wallet</string>
@@ -64,4 +67,6 @@
     <string name="errors_create_wallet">Create Wallet Error: %1$s</string>
     <string name="errors_import_invalid_secret_phrase">Invalid Secret Phrase</string>
     <string name="errors_import_invalid_secret_phrase_word">Invalid Secret Phrase word: %1$s</string>
+    <string name="wallets_title">Wallets</string>
+    <string name="wallet_delete_wallet_confirmation">Are sure you want to delete %1$s?</string>
 </resources>

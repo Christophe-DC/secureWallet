@@ -1,6 +1,7 @@
 package com.cdcoding.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -10,8 +11,11 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +33,7 @@ import com.cdcoding.core.designsystem.components.Scene
 import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
+import com.cdcoding.core.navigation.SelectWalletDestination
 import com.cdcoding.core.navigation.WelcomeDestination
 import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
@@ -44,6 +49,7 @@ class HomeScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val welcomeScreen = rememberScreen(WelcomeDestination.Welcome)
+        val selectWalletScreen = rememberScreen(SelectWalletDestination.SelectWallet)
 
         useEffect(true) {
             if (!uiState.value.hasSession) {
@@ -51,7 +57,9 @@ class HomeScreen : Screen {
             }
         }
 
-        HomeScreenContent()
+        HomeScreenContent(
+            onSelectWallet = { navigator.push(selectWalletScreen) }
+        )
     }
 }
 
@@ -59,7 +67,8 @@ class HomeScreen : Screen {
 @OptIn(ExperimentalVoyagerApi::class)
 @Composable
 fun HomeScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSelectWallet: () -> Unit
 ) {
 
     val walletDetailTab = rememberTab(WalletDetailDestination.WalletDetail)
@@ -76,19 +85,24 @@ fun HomeScreenContent(
         Scene(
             title = {
                 if (tabNavigator.current.key == walletDetailTab.key) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = tabNavigator.current.options.title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.ExpandMore,
-                            contentDescription = null
-                        )
+                    Box {
+                        TextButton(onClick = onSelectWallet) {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = tabNavigator.current.options.title,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                Icon(
+                                    imageVector = Icons.Filled.ExpandMore,
+                                    contentDescription = null
+                                )
+                            }
+                        }
                     }
                 } else {
                     Row(

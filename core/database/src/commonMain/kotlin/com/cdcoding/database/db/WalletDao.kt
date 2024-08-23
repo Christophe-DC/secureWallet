@@ -13,7 +13,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.map
 
 interface WalletDao {
-    fun getAllWallet(id: String): Wallet
+    fun getWallet(id: String): Wallet
     fun getAllWallets(): Flow<List<Wallet>>
     fun insertWallet(wallet: Wallet)
     fun insertWalletWithAccount(wallet: Wallet, accounts: List<Account>)
@@ -27,7 +27,7 @@ class DefaultWalletDao(
 
     private val walletQueries = database.walletQueries
 
-    override fun getAllWallet(id: String): Wallet {
+    override fun getWallet(id: String): Wallet {
         val wallet = walletQueries.getAllWallet(id).executeAsList().first()
         val accounts = accountDao.getAccountsByWalletId(wallet.id)
         return wallet.asExternal(accounts)

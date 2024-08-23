@@ -56,6 +56,10 @@ class WalletRepository(
 
     suspend fun getAllWallets() = walletDao.getAllWallets()
 
+    suspend fun getWallet(id: String) = walletDao.getWallet(id)
+
+    suspend fun removeWallet(walletId: String) = walletDao.removeWallet(walletId)
+
 
     suspend fun createWallet(walletName: String): Result<Wallet> {
         val phrase = walletClient.createWallet()
@@ -73,7 +77,7 @@ class WalletRepository(
         val wallet = result.getOrNull() ?: return Result.failure(Exception("Unknown error"))
         syncSubscription()
         invalidateDefault(wallet.type, wallet, sessionDao.getSession()?.currency ?: Currency.USD)
-        sessionDao.setWallet(wallet)
+        sessionDao.setWallet(wallet.id)
         return Result.success(wallet)
     }
 

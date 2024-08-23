@@ -75,6 +75,7 @@ kotlin {
                 api(projects.feature.importwallet)
                 api(projects.feature.receiveasset)
                 api(projects.feature.selectAsset)
+                api(projects.feature.selectwallet)
                 api(projects.feature.sendasset)
                 api(projects.feature.walletdetail)
                 //implementation(projects.feature.importWallet.importWalletDi)

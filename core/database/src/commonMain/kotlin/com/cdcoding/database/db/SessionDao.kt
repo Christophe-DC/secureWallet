@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import com.cdcoding.model.Currency
 import com.cdcoding.model.Session
-import com.cdcoding.model.Wallet
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -18,7 +17,8 @@ interface SessionDao {
     fun session(): Flow<Session?>
     fun getSession(): Session?
     fun hasSession(): Boolean
-    suspend fun setWallet(wallet: Wallet)
+    suspend fun setWallet(walletId: String)
+    suspend fun reset()
     suspend fun setCurrency(currency: Currency)
 }
 
@@ -35,29 +35,31 @@ class DefaultSessionDao(
             .mapToOneOrNull(Dispatchers.IO)
             .map { sessionEntity ->
                 if (sessionEntity == null) return@map null
-                val wallet = walletDao.getAllWallet(sessionEntity.walletId)
+                val wallet = walletDao.getWallet(sessionEntity.walletId)
                 sessionEntity.asExternal(wallet)
             }
     }
 
     override fun getSession(): Session? {
         val sessionEntity = sessionQueries.getSession().executeAsOneOrNull() ?: return null
-        val wallet = walletDao.getAllWallet(sessionEntity.walletId)
+        val wallet = walletDao.getWallet(sessionEntity.walletId)
         return sessionEntity.asExternal(wallet)
     }
 
     override fun hasSession(): Boolean = getSession() != null
 
-    override suspend fun setWallet(wallet: Wallet)  = withContext(Dispatchers.IO) {
-        val session = getSession()?.copy(wallet = wallet) ?: Session(
-            wallet = wallet,
-            currency = Currency.USD,
-        )
+    override suspend fun setWallet(walletId: String)  = withContext(Dispatchers.IO) {
         sessionQueries.transaction {
             sessionQueries.updateSession(
-                walletId = session.wallet.id,
-                currency = session.currency.asEntity(),
+                walletId = walletId,
+                currency = Currency.USD.asEntity(),
             )
+        }
+    }
+
+    override suspend fun reset()  = withContext(Dispatchers.IO) {
+        sessionQueries.transaction {
+            sessionQueries.reset()
         }
     }
 

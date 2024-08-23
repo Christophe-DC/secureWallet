@@ -20,20 +20,19 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.cdcoding.core.designsystem.hooks.useInject
-import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
-import com.cdcoding.model.AssetId
-import com.cdcoding.model.TransactionExtended
-import com.cdcoding.model.AssetUIState
-import com.cdcoding.walletdetail.presentation.WalletDetailIntent
-import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
-import com.cdcoding.walletdetail.presentation.WalletInfoUIState
 import com.cdcoding.core.designsystem.components.AssetList
 import com.cdcoding.core.designsystem.components.WalletDetailHeader
 import com.cdcoding.core.designsystem.components.WalletDetailHeaderActions
-import com.cdcoding.core.navigation.ImportWalletDestination
+import com.cdcoding.core.designsystem.hooks.useInject
+import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.navigation.SelectAssetDestination
+import com.cdcoding.model.AssetId
+import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.SelectAssetType
+import com.cdcoding.model.TransactionExtended
+import com.cdcoding.walletdetail.presentation.WalletDetailIntent
+import com.cdcoding.walletdetail.presentation.WalletDetailViewModel
+import com.cdcoding.walletdetail.presentation.WalletInfoUIState
 import kotlinx.collections.immutable.ImmutableList
 
 class WalletDetailScreen : Tab {
@@ -42,11 +41,14 @@ class WalletDetailScreen : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Filled.Add)
+            val viewModel: WalletDetailViewModel = useInject()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-            return remember {
+            val title =  uiState.session?.wallet?.name ?: ""
+            return remember(title) {
                 TabOptions(
                     index = 0u,
-                    title = "Wallet 1",
+                    title = title,
                     icon = icon
                 )
             }
