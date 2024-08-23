@@ -31,6 +31,7 @@ import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.designsystem.table.CellEntity
 import com.cdcoding.core.designsystem.table.Table
 import com.cdcoding.core.navigation.HomeDestination
+import com.cdcoding.core.navigation.ShowPhraseDestination
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.common_delete
 import com.cdcoding.core.resource.common_show_secret_phrase
@@ -52,13 +53,13 @@ class EditWalletScreen(private val walletId: String) : Screen {
         val viewModel: EditWalletViewModel = useInject(arguments = arguments)
         val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-        val homeScreen = rememberScreen(HomeDestination.Home)
+        val showPhraseScreen = rememberScreen(ShowPhraseDestination.ShowPhrase(walletId))
 
         EditWalletScreenContent(
             uiState = uiState.value,
             onIntent = viewModel::setIntent,
             popBackStack = { navigator.pop() },
-            onShowPhrase = { navigator.replaceAll(homeScreen) },
+            onShowPhrase = { navigator.push(showPhraseScreen) },
         )
     }
 }

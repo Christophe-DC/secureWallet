@@ -16,8 +16,9 @@ class SWStorePhraseOperator(
             password.decodeHex(),
             CoinType.Bitcoin
         )
-        storedKey?.store("${keyStoreDir.path}/$walletId")
-        Result.success(true)
+        val result = storedKey?.store("${keyStoreDir.path}/$walletId") ?: false
+        println("SWStorePhraseOperator result: $result")
+        Result.success(result)
     } catch (err: Throwable) {
         Result.failure(err)
     }

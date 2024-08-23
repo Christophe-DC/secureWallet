@@ -78,6 +78,7 @@ kotlin {
                 api(projects.feature.selectAsset)
                 api(projects.feature.selectwallet)
                 api(projects.feature.sendasset)
+                api(projects.feature.showphrase)
                 api(projects.feature.walletdetail)
                 //implementation(projects.feature.importWallet.importWalletDi)
                 api(libs.koin.compose)
