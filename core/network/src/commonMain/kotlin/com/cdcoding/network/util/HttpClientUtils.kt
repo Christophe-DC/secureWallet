@@ -15,7 +15,6 @@ suspend inline fun <reified T> HttpResponse.getResult(): Result<T, NetworkError>
     } catch (e: SerializationException) {
         return Result.Error(NetworkError.SERIALIZATION)
     }
-
     return when (response.status.value) {
         in 200..299 -> {
             try {

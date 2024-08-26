@@ -1,6 +1,7 @@
 package com.cdcoding.network.client.ethereum
 
 import com.cdcoding.model.ethereum.EthereumFeeHistory
+import com.cdcoding.model.ethereum.EthereumTransactionReciept
 import com.cdcoding.network.model.JSONRpcRequest
 import com.cdcoding.network.model.JSONRpcResponse
 import com.cdcoding.network.util.NetworkError
@@ -73,6 +74,21 @@ class EvmApiClient (
         }.getResult()
     }
 
+
+    suspend fun getTransactionByHash(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<EthereumTransactionByHash?>, NetworkError> {
+        return httpClient.post("$ETHEREUM_URL/"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
+    suspend fun transaction(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<EthereumTransactionReciept?>, NetworkError> {
+        return httpClient.post("$ETHEREUM_URL/"){
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
     suspend fun getFeeHistory(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<EthereumFeeHistory>, NetworkError> {
         return httpClient.post("$ETHEREUM_URL/"){
             contentType(ContentType.Application.Json)
@@ -90,6 +106,10 @@ class EvmApiClient (
         val to: String,
         val value: String?,
         val data: String?,
+    )
+
+    class EthereumTransactionByHash(
+        val blockNumber: String,
     )
 }
 

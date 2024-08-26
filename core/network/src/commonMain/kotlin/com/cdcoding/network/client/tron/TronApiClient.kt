@@ -6,6 +6,7 @@ import com.cdcoding.model.tron.TronAccountUsage
 import com.cdcoding.model.tron.TronBlock
 import com.cdcoding.model.tron.TronSmartContractResult
 import com.cdcoding.model.tron.TronTransactionBroadcast
+import com.cdcoding.model.tron.TronTransactionReceipt
 import com.cdcoding.network.util.NetworkError
 import io.ktor.client.HttpClient
 import com.cdcoding.network.util.Result
@@ -54,6 +55,14 @@ class TronApiClient(
     }
 
     suspend fun broadcast(body: ByteArray): Result<TronTransactionBroadcast, NetworkError> {
+        return httpClient.post("$TRON_URL/wallet/broadcasttransaction") {
+            contentType(ContentType.Application.Json)
+            setBody(body)
+        }.getResult()
+    }
+
+
+    suspend fun transaction(value: TronValue): Result<TronTransactionReceipt, NetworkError> {
         return httpClient.post("$TRON_URL/wallet/broadcasttransaction") {
             contentType(ContentType.Application.Json)
             setBody(body)

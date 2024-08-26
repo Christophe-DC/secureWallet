@@ -15,6 +15,7 @@ import com.cdcoding.core.designsystem.components.AddressChainViewModel
 import com.cdcoding.selectwallet.presentation.SelectWalletViewModel
 import com.cdcoding.editwallet.presentation.EditWalletViewModel
 import com.cdcoding.showphrase.presentation.ShowPhraseViewModel
+import com.cdcoding.transactions.presentation.TransactionsViewModel
 import org.koin.core.module.dsl.singleOf
 
 actual val viewModelModule = module {
@@ -32,4 +33,5 @@ actual val viewModelModule = module {
     singleOf(::SelectWalletViewModel)
     singleOf(::EditWalletViewModel)
     singleOf(::ShowPhraseViewModel)
+    singleOf(::TransactionsViewModel)
 }

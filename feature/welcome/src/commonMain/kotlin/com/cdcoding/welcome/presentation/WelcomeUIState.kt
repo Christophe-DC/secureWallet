@@ -1,3 +1,5 @@
 package com.cdcoding.welcome.presentation
 
-class WelcomeUIState
+data class WelcomeUIState(
+    val hasSession: Boolean = false
+)

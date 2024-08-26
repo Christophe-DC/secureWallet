@@ -24,6 +24,7 @@ import com.cdcoding.system.ui.theme.SecureWalletTheme
 import com.cdcoding.walletdetail.di.walletDetailScreenModule
 import com.cdcoding.welcome.di.welcomeScreenModule
 import com.cdcoding.selectwallet.di.selectWalletScreenModule
+import com.cdcoding.transactions.di.transactionsScreenModule
 
 
 @Composable
@@ -51,6 +52,7 @@ fun App(
 
             TabRegistry {
                 walletDetailScreenModule()
+                transactionsScreenModule()
             }
 
             Surface(

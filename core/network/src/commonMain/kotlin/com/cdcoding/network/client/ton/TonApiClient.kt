@@ -5,6 +5,7 @@ import com.cdcoding.model.sui.SuiTransaction
 import com.cdcoding.model.ton.TonBroadcastTransaction
 import com.cdcoding.model.ton.TonJettonBalance
 import com.cdcoding.model.ton.TonResult
+import com.cdcoding.model.ton.TonTransactionMessage
 import com.cdcoding.model.ton.TonWalletInfo
 import com.cdcoding.network.model.JSONRpcRequest
 import com.cdcoding.network.util.NetworkError
@@ -41,6 +42,14 @@ class TonApiClient(
     suspend fun walletInfo(address: String): Result<TonResult<TonWalletInfo>, NetworkError> {
         return httpClient.get("$TON_URL/api/v2/getWalletInformation") {
             parameter("address", address)
+        }
+            .getResult()
+    }
+
+
+    suspend fun transaction(hash: String): Result<List<TonTransactionMessage>, NetworkError> {
+        return httpClient.get("$TON_URL/api/index/v1/getTransactionsByInMessageHash") {
+            parameter("msg_hash", hash)
         }
             .getResult()
     }

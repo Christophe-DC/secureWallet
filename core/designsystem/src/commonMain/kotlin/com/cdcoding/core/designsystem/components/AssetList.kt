@@ -74,15 +74,9 @@ fun AssetList(
     headerItem: (@Composable () -> Unit)? = null,
     assets: ImmutableList<AssetUIState>,
     transactions: ImmutableList<TransactionExtended>,
-    swapEnabled: Boolean,
     onShowAssetManage: () -> Unit,
-    onSendClick: () -> Unit,
-    onReceiveClick: () -> Unit,
-    onBuyClick: () -> Unit,
-    onSwapClick: () -> Unit,
     onTransactionClick: (String) -> Unit,
     onAssetClick: (AssetId) -> Unit,
-    onAssetHide: (AssetId) -> Unit,
     listState: LazyListState,
 ) {
 
@@ -147,19 +141,6 @@ fun AssetList(
                             clipboardManager.setText(AnnotatedString(asset.owner))
                             longPressedAsset = null
                         },
-                    )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(Res.string.common_hide)) },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "wallet_config"
-                            )
-                        },
-                        onClick = {
-                            onAssetHide(asset.id)
-                            longPressedAsset = null
-                        }
                     )
                 }
             }

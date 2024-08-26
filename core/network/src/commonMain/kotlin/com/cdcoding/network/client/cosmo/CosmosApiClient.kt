@@ -8,6 +8,7 @@ import com.cdcoding.model.cosmos.CosmosBroadcastResponse
 import com.cdcoding.model.cosmos.CosmosDelegations
 import com.cdcoding.model.cosmos.CosmosInjectiveAccount
 import com.cdcoding.model.cosmos.CosmosRewards
+import com.cdcoding.model.cosmos.CosmosTransactionResponse
 import com.cdcoding.model.cosmos.CosmosUnboundingDelegations
 import com.cdcoding.model.cosmos.CosmosValidators
 import com.cdcoding.network.util.NetworkError
@@ -30,6 +31,10 @@ class CosmosApiClient(
 
     suspend fun getBalance(owner: String): Result<CosmosBalances, NetworkError> {
         return httpClient.get("$COMSMOS_URL/cosmos/bank/v1beta1/balances/$owner").getResult()
+    }
+
+    suspend fun transaction(txId: String): Result<CosmosTransactionResponse, NetworkError> {
+        return httpClient.get("$COMSMOS_URL/cosmos/tx/v1beta1/txs/$txId").getResult()
     }
 
     suspend fun getValidators(): Result<CosmosValidators, NetworkError> {

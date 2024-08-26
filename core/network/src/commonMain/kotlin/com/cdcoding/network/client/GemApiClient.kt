@@ -8,6 +8,7 @@ import com.cdcoding.model.AssetPricesRequest
 import com.cdcoding.model.NameRecord
 import com.cdcoding.model.StakeValidator
 import com.cdcoding.model.Subscription
+import com.cdcoding.model.Transaction
 import com.cdcoding.network.model.FiatAssets
 import com.cdcoding.network.model.PricesResponse
 import com.cdcoding.network.util.NetworkError
@@ -44,6 +45,14 @@ class GemApiClient(
     suspend fun search(query: String): Result<List<AssetFull>, NetworkError> {
         return httpClient.get("$GEM_URL/v1/assets/search") {
             parameter("query", query)
+        }
+        .getResult()
+    }
+
+    suspend fun getTransactions(deviceId: String, walletIndex: Int, from: Long): Result<List<Transaction>, NetworkError> {
+        return httpClient.get("$GEM_URL/v1/transactions/by_device_id/$deviceId") {
+            parameter("wallet_index", walletIndex)
+            parameter("from_timestamp", from)
         }
         .getResult()
     }

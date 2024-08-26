@@ -62,6 +62,14 @@ class SuiApiClient(
         }
 
 
+        suspend fun transaction(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<SuiTransaction>, NetworkError> {
+            return httpClient.post("$SUI_URL/") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }.getResult()
+        }
+
+
         suspend fun broadcast(request: JSONRpcRequest<List<Any?>>): Result<JSONRpcResponse<SuiBroadcastTransaction>, NetworkError> {
             return httpClient.post("$SUI_URL/") {
                 contentType(ContentType.Application.Json)
@@ -95,4 +103,16 @@ internal suspend fun SuiApiClient.broadcast(data: String, sign: String): Result<
         )
     )
     return broadcast(request)
+}
+
+
+internal suspend fun SuiApiClient.transaction(txId: String): Result<JSONRpcResponse<SuiTransaction>, NetworkError> {
+    val request = JSONRpcRequest.create(
+        SuiMethod.Transaction,
+        listOf(
+            txId,
+            mapOf("showEffects" to true)
+        )
+    )
+    return transaction(request)
 }

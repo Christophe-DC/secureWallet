@@ -2,15 +2,12 @@ package com.cdcoding.network.client.bitcoin
 
 import com.cdcoding.model.bitcoin.BitcoinAccount
 import com.cdcoding.model.bitcoin.BitcoinFeeResult
+import com.cdcoding.model.bitcoin.BitcoinTransaction
 import com.cdcoding.model.bitcoin.BitcoinTransactionBroacastResult
 import com.cdcoding.model.bitcoin.BitcoinUTXO
-import com.cdcoding.network.client.GemApiClient.Companion.GEM_URL
-import com.cdcoding.network.client.ethereum.EvmApiClient.EvmNumber
-import com.cdcoding.network.model.JSONRpcRequest
-import com.cdcoding.network.model.JSONRpcResponse
 import com.cdcoding.network.util.NetworkError
-import com.cdcoding.network.util.getResult
 import com.cdcoding.network.util.Result
+import com.cdcoding.network.util.getResult
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -42,6 +39,10 @@ class BitcoinApiClient(
 
     suspend fun estimateFee(priority: String): Result<BitcoinFeeResult, NetworkError> {
         return httpClient.get("$BITCOIN_URL/api/v2/estimatefee/$priority").getResult()
+    }
+
+    suspend fun transaction(txId: String): Result<BitcoinTransaction, NetworkError> {
+        return httpClient.get("$BITCOIN_URL/api/v2/tx/$txId").getResult()
     }
 
 }

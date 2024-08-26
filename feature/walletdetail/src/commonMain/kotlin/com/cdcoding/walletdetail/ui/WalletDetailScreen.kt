@@ -5,7 +5,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -40,7 +42,7 @@ class WalletDetailScreen : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val icon = rememberVectorPainter(Icons.Filled.Add)
+            val icon = rememberVectorPainter(Icons.Filled.AccountBalanceWallet)
             val viewModel: WalletDetailViewModel = useInject()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -69,7 +71,6 @@ class WalletDetailScreen : Tab {
             walletInfo = uiState.walletInfo,
             assets = uiState.assets,
             transactions = uiState.pendingTransactions,
-            swapEnabled = uiState.swapEnabled,
             onIntent = viewModel::setIntent,
             onSendClick = {
                 navigator.parent?.push(selectSendAssetDestinationEvent)
@@ -77,18 +78,6 @@ class WalletDetailScreen : Tab {
             onReceiveClick = {
                 navigator.parent?.push(selectReceivedAssetDestinationEvent)
             }
-            /*onShowWallets = onShowWallets,
-            onShowAssetManage = onShowAssetManage,
-            onSendClick = onSendClick,
-            onReceiveClick = onReceiveClick,
-            onBuyClick = onBuyClick,
-            onSwapClick = onSwapClick,
-            onTransactionClick = onTransactionClick,
-            onAssetClick = onAssetClick,
-            onAssetHide = viewModel::hideAsset,
-            listState = listState*/
-            //   navigateToCreateWallet = { navigator.push(createWalletScreen) },
-            //     navigateToImportWallet = { navigator.push(importWalletScreen) },
         )
     }
 }
@@ -102,16 +91,12 @@ fun WalletDetailScreenContent(
     walletInfo: WalletInfoUIState,
     assets: ImmutableList<AssetUIState>,
     transactions: ImmutableList<TransactionExtended>,
-    swapEnabled: Boolean,
     onIntent: (WalletDetailIntent) -> Unit,
     onShowAssetManage: () -> Unit = {},
     onSendClick: () -> Unit = {},
     onReceiveClick: () -> Unit = {},
-    onBuyClick: () -> Unit = {},
-    onSwapClick: () -> Unit = {},
     onTransactionClick: (String) -> Unit = {},
     onAssetClick: (AssetId) -> Unit = {},
-    onAssetHide: (AssetId) -> Unit = {},
     listState: LazyListState = rememberLazyListState()
 ) {
     val pullRefreshState =
@@ -135,15 +120,9 @@ fun WalletDetailScreenContent(
             },
             assets = assets,
             transactions = transactions,
-            swapEnabled = swapEnabled,
             onShowAssetManage = onShowAssetManage,
-            onSendClick = onSendClick,
-            onReceiveClick = onReceiveClick,
-            onBuyClick = onBuyClick,
-            onSwapClick = onSwapClick,
             onTransactionClick = onTransactionClick,
             onAssetClick = onAssetClick,
-            onAssetHide = onAssetHide,
             listState = listState,
         )
         PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))

@@ -7,6 +7,7 @@ import com.cdcoding.model.solana.SolanaPrioritizationFee
 import com.cdcoding.model.solana.SolanaStakeAccount
 import com.cdcoding.model.solana.SolanaTokenAccount
 import com.cdcoding.model.solana.SolanaTokenAccountResult
+import com.cdcoding.model.solana.SolanaTransaction
 import com.cdcoding.model.solana.SolanaValue
 import com.cdcoding.network.model.JSONRpcRequest
 import com.cdcoding.network.model.JSONRpcResponse
@@ -41,6 +42,13 @@ class SolanaApiClient(
     }
 
     suspend fun getTokenBalance(request: JSONRpcRequest<List<String>>): Result<JSONRpcResponse<SolanaValue<SolanaBalanceValue>>, NetworkError> {
+        return httpClient.post("$SOLANA_URL/") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.getResult()
+    }
+
+    suspend fun transaction(request: JSONRpcRequest<List<Any>>): Result<JSONRpcResponse<SolanaTransaction>, NetworkError> {
         return httpClient.post("$SOLANA_URL/") {
             contentType(ContentType.Application.Json)
             setBody(request)

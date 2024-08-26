@@ -17,6 +17,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
@@ -34,6 +36,7 @@ import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.navigation.SelectWalletDestination
+import com.cdcoding.core.navigation.TransactionsDestination
 import com.cdcoding.core.navigation.WelcomeDestination
 import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
@@ -68,10 +71,11 @@ class HomeScreen : Screen {
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    onSelectWallet: () -> Unit
+    onSelectWallet: () -> Unit,
 ) {
 
     val walletDetailTab = rememberTab(WalletDetailDestination.WalletDetail)
+    val transactionsTab = rememberTab(TransactionsDestination.Transactions)
 
     TabNavigator(
         walletDetailTab,
@@ -119,8 +123,11 @@ fun HomeScreenContent(
             },
             mainActionPadding = PaddingValues(0.dp),
             mainAction = {
-                BottomNavigation {
+                BottomNavigation(
+                    backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                ) {
                     TabNavigationItem(walletDetailTab)
+                    TabNavigationItem(transactionsTab)
                 }
             }
         ) {
@@ -136,6 +143,13 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     BottomNavigationItem(
         selected = tabNavigator.current.key == tab.key,
         onClick = { tabNavigator.current = tab },
-        icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) }
+        icon = {
+            Icon(
+                modifier = Modifier.alpha(if (tabNavigator.current.key == tab.key) 1f else 0.5f),
+                painter = tab.options.icon!!,
+                contentDescription = tab.options.title
+            )
+        },
+        enabled = tabNavigator.current.key != tab.key,
     )
 }

@@ -1,5 +1,7 @@
 package com.cdcoding.data.repository
 
+import com.cdcoding.common.utils.getSwapMetadata
+import com.cdcoding.common.utils.toIdentifier
 import com.cdcoding.database.db.AssetDao
 import com.cdcoding.database.db.TransactionDao
 import com.cdcoding.model.Account
@@ -11,9 +13,11 @@ import com.cdcoding.model.Currency
 import com.cdcoding.model.Fee
 import com.cdcoding.model.Transaction
 import com.cdcoding.model.TransactionDirection
+import com.cdcoding.model.TransactionExtended
 import com.cdcoding.model.TransactionState
 import com.cdcoding.model.TransactionType
 import com.cdcoding.model.Wallet
+import com.cdcoding.network.client.TransactionStatusClient
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
@@ -43,11 +48,15 @@ interface TransactionRepository {
         metadata: String? = null,
         direction: TransactionDirection,
     ): Result<Transaction>
+
+    suspend fun putTransactions(transactions: List<Transaction>)
+    suspend fun getTransactions(assetId: AssetId? = null, vararg accounts: Account): Flow<List<TransactionExtended?>>
 }
 
 
 class DefaultTransactionsRepository(
     private val transactionDao: TransactionDao,
+    private val assetDao: AssetDao,
 ): TransactionRepository {
 
 
@@ -86,6 +95,35 @@ class DefaultTransactionsRepository(
         )
         transactionDao.addTransaction(transaction)
         Result.success(transaction)
+    }
+
+    override suspend fun putTransactions(transactions: List<Transaction>) = withContext(Dispatchers.IO) {
+        transactionDao.putTransactions(transactions)
+    }
+
+
+
+    override suspend fun getTransactions(assetId: AssetId?, vararg accounts: Account): Flow<List<TransactionExtended?>> = withContext(Dispatchers.IO) {
+        val chains = accounts.map { it.chain }
+        transactionDao.getExtendedTransactions(emptyList())
+            .map { list ->
+                list.filter {
+                    chains.contains(it?.asset?.id?.chain) &&
+                            (assetId == null || it?.asset?.id?.toIdentifier() == assetId.toIdentifier())
+                }.map {
+                    val metadata = it?.transaction?.getSwapMetadata()
+                    if (metadata != null) {
+                        it.copy(
+                            assets = listOf(
+                                assetDao.getAssetsById(metadata.fromAsset.toIdentifier()).firstOrNull(),
+                                assetDao.getAssetsById(metadata.toAsset.toIdentifier()).firstOrNull(),
+                            ).mapNotNull { asset -> asset }
+                        )
+                    } else {
+                        it
+                    }
+                }
+            }
     }
 
 }

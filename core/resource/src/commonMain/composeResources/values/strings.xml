@@ -73,4 +73,6 @@
     <string name="common_secret_phrase">Secret Recovery Phrase</string>
     <string name="secret_phrase_do_not_share_title">Do not share your Secret Phrase!</string>
     <string name="secret_phrase_do_not_share_description">If someone has your secret phrase they will have full control of your wallet!</string>
+    <string name="activity_title">Activity</string>
+    <string name="activity_empty_state_message">No activity yet.</string>
 </resources>

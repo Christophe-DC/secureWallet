@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 
 interface AssetRepository {
+    suspend fun getAsset( id: AssetId): Asset?
     suspend fun getById(accounts: List<Account>, ids: List<AssetId>): Result<List<AssetInfo>>
     suspend fun getById(accounts: List<Account>, assetId: AssetId): Result<List<AssetInfo>>
     fun getAllByAccounts(accounts: List<Account>, query: String): Flow<List<AssetInfo>>
@@ -60,6 +61,10 @@ class DefaultAssetRepository(
             balancesJob.await()
             pricesJob.await()
         }
+
+    override suspend fun getAsset(assetId: AssetId): Asset? {
+        return assetDao.getAssetsById(assetId.toIdentifier()).firstOrNull()
+    }
 
     override suspend fun getById(
         accounts: List<Account>,

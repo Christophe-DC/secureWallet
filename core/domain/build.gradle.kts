@@ -8,6 +8,7 @@ kotlin {
             api(projects.core.data)
             api(projects.core.blockchain.wallet)
             api(projects.core.model)
+            api(projects.core.network)
         }
     }
 }

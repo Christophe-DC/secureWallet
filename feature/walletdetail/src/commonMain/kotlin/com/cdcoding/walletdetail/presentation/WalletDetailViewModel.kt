@@ -6,7 +6,6 @@ import com.cdcoding.common.utils.getIconUrl
 import com.cdcoding.data.repository.AssetRepository
 import com.cdcoding.domain.GetAssetsByWalletUseCase
 import com.cdcoding.domain.GetSessionUseCase
-import com.cdcoding.model.AssetId
 import com.cdcoding.model.AssetInfo
 import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.Chain
@@ -41,7 +40,6 @@ class WalletDetailViewModel (
     override fun handleIntent(intent: WalletDetailIntent) {
         when (intent) {
             is WalletDetailIntent.OnRefresh -> onRefresh()
-            is WalletDetailIntent.HideAsset -> hideAsset(intent.assetId)
         }
     }
 
@@ -60,7 +58,6 @@ class WalletDetailViewModel (
                                 session = session,
                                 walletInfo = calcWalletInfo(session.wallet, assetInfos),
                                 assets = handleAssets(session.currency, assetInfos),
-                                // pendingTransactions = txs,
                                 currency = session.currency,
                                 swapEnabled = swapEnabled,
                             ).toUIState()
@@ -86,9 +83,6 @@ class WalletDetailViewModel (
             withContext(Dispatchers.IO) {
                 assetRepository.syncTokens(session.wallet, session.currency)
                 setState { copy(isLoading = false) }
-            }
-            withContext(Dispatchers.IO) {
-                //syncTransactions(session.wallet.index)
             }
         }
     }
@@ -124,14 +118,6 @@ class WalletDetailViewModel (
                     symbol = it.asset.symbol,
                 )
             }.toImmutableList()
-    }
-
-    fun hideAsset(assetId: AssetId) {
-        viewModelScope.launch(Dispatchers.IO) {
-            /* val session = sessionRepository.getSession() ?: return@launch
-             val account = session.wallet.getAccount(assetId.chain) ?: return@launch
-             assetsRepository.switchVisibility(account, assetId, false, session.currency)*/
-        }
     }
 
     private fun calcWalletInfo(wallet: Wallet, assets: List<AssetInfo>): WalletSummary {

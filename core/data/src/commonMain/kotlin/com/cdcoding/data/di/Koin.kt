@@ -13,9 +13,22 @@ import org.koin.dsl.module
 
 
 val dataModule = module {
-    single<SessionRepository> { DefaultSessionRepository( get()) }
-    single<AssetRepository> { DefaultAssetRepository( get(), get(), get(), get(), get()) }
-    single { WalletRepository(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    single<TokenRepository> { DefaultTokenRepository( get(), get()) }
-    single<TransactionRepository> { DefaultTransactionsRepository( get()) }
+    single<SessionRepository> { DefaultSessionRepository(get()) }
+    single<AssetRepository> { DefaultAssetRepository(get(), get(), get(), get(), get()) }
+    single {
+        WalletRepository(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+    single<TokenRepository> { DefaultTokenRepository(get(), get()) }
+    single<TransactionRepository> { DefaultTransactionsRepository(get(), get()) }
 }

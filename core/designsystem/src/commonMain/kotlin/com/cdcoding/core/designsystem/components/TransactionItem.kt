@@ -47,7 +47,7 @@ fun TransactionItem(
     assets: List<Asset>,
     supportIcon: String? = null,
     isLast: Boolean = false,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
 ) {
     ListItem(
         modifier = Modifier

@@ -1,9 +1,15 @@
 package com.cdcoding.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class TransactionType(val string: String) {
+	@SerialName("transfer")
 	Transfer("transfer"),
+	@SerialName("swap")
 	Swap("swap"),
+	@SerialName("tokenApproval")
 	TokenApproval("tokenApproval");
 }
 

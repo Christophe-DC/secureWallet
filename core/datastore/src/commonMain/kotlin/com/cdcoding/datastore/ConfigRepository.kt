@@ -7,4 +7,6 @@ interface ConfigRepository {
 
     suspend fun getDeviceId(): String
     suspend fun increaseSubscriptionVersion()
+    suspend fun getTxSyncTime(): Long
+    suspend fun setTxSyncTime(time: Long)
 }

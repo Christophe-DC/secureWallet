@@ -25,25 +25,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cdcoding.core.designsystem.hooks.useEffect
 import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.navigation.CreateWalletDestination
+import com.cdcoding.core.navigation.HomeDestination
 import com.cdcoding.core.navigation.ImportWalletDestination
-import com.cdcoding.system.ui.theme.largeMarginDimens
-import com.cdcoding.system.ui.theme.mediumMarginDimens
 import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.create_wallet
 import com.cdcoding.core.resource.import_wallet
 import com.cdcoding.core.resource.secure_wallet_logo
 import com.cdcoding.core.resource.welcome_msg
+import com.cdcoding.system.ui.theme.largeMarginDimens
+import com.cdcoding.system.ui.theme.mediumMarginDimens
 import com.cdcoding.welcome.presentation.WelcomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 class WelcomeScreen : Screen {
 
@@ -54,6 +54,14 @@ class WelcomeScreen : Screen {
         val viewModel: WelcomeViewModel = useInject()
         val createWalletScreen = rememberScreen(CreateWalletDestination.CreateWallet)
         val importWalletScreen = rememberScreen(ImportWalletDestination.ImportWallet)
+
+        val homeScreen = rememberScreen(HomeDestination.Home)
+
+        useEffect(true) {
+            if (!viewModel.uiState.value.hasSession) {
+                navigator.replace(homeScreen)
+            }
+        }
 
         WelcomeScreenContent(
             navigateToCreateWallet = { navigator.push(createWalletScreen) },
