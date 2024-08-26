@@ -21,6 +21,7 @@ class BalancesRetrofitRemoteSource (
         val nativeBalances = try {
             client.getNativeBalance(account.address)
         } catch (err: Throwable) {
+            err.printStackTrace()
             null
         }
 

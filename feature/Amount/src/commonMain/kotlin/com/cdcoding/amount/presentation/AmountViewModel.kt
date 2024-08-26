@@ -129,6 +129,7 @@ class AmountViewModel(
 
             TransactionType.Swap,
             TransactionType.TokenApproval -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
         onConfirm(params)
     }
@@ -223,6 +224,7 @@ class AmountViewModel(
             TransactionType.Transfer,
             TransactionType.Swap,
             TransactionType.TokenApproval -> assetInfo.balances.available()
+            else -> Crypto(BigInteger.ZERO)
         }
         if (amount.atomicValue > availableAmount.atomicValue) {
             return AmountError.InsufficientBalance(assetInfo.asset.name)

@@ -1,5 +1,8 @@
 package com.cdcoding.network.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class JSONRpcRequest<T>(
     val method: String,
     val params: T,

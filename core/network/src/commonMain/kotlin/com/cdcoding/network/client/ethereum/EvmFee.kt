@@ -3,17 +3,17 @@ package com.cdcoding.network.client.ethereum
 import com.cdcoding.common.utils.hexToBigInteger
 import com.cdcoding.common.utils.type
 import com.cdcoding.model.AssetId
+import com.cdcoding.model.AssetSubtype
 import com.cdcoding.model.ConfirmParams
 import com.cdcoding.model.EVMChain
 import com.cdcoding.model.Fee
+import com.cdcoding.model.GasFee
 import com.cdcoding.model.TransactionType
+import com.cdcoding.network.model.JSONRpcRequest
+import com.cdcoding.network.util.getOrNull
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.trustwallet.core.CoinType
 import kotlinx.coroutines.Dispatchers
-import com.cdcoding.model.AssetSubtype
-import com.cdcoding.model.GasFee
-import com.cdcoding.network.model.JSONRpcRequest
-import com.cdcoding.network.util.getOrNull
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
@@ -48,6 +48,7 @@ class EvmFee {
             TransactionType.Transfer -> if (assetId.type() == AssetSubtype.NATIVE && isMaxAmount) maxGasPrice else priorityFee
             TransactionType.Swap,
             TransactionType.TokenApproval -> priorityFee
+            else -> BigInteger.ZERO
         }
         GasFee(feeAssetId = feeAssetId, limit = gasLimit, maxGasPrice = maxGasPrice, minerFee = minerFee)
     }

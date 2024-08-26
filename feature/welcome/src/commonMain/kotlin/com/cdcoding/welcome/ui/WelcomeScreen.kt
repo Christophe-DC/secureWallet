@@ -57,8 +57,8 @@ class WelcomeScreen : Screen {
 
         val homeScreen = rememberScreen(HomeDestination.Home)
 
-        useEffect(true) {
-            if (!viewModel.uiState.value.hasSession) {
+        useEffect(viewModel.uiState.value.hasSession) {
+            if (viewModel.uiState.value.hasSession) {
                 navigator.replace(homeScreen)
             }
         }

@@ -117,6 +117,7 @@ class CosmosSignClient(
             TransactionType.Swap,
             TransactionType.Transfer,
             TransactionType.TokenApproval -> input.input.memo() ?: ""
+            else -> ""
         }
 
         val signInput = SigningInput(

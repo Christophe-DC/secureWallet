@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 
 class WelcomeViewModel(
-    sessionRepository: SessionRepository
+    sessionRepository: SessionRepository,
 ) : CommonViewModel<WelcomeUIState, WelcomeEffect, WelcomeIntent>() {
 
 

@@ -1,22 +1,28 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
-    alias(libs.plugins.securewallet.multiplatform.core)
-    alias(libs.plugins.securewallet.compose)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     kotlin("native.cocoapods")
 }
 
 kotlin {
-   /* listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = false
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
         }
-    }*/
+    }
+
+    jvm("desktop")
+
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
 
     cocoapods {
@@ -45,8 +51,6 @@ kotlin {
         dependencies {
             pod("TrustWalletCore", moduleName = "WalletCore")
         }
-
-       // extraSpecAttributes["resource"] = "'build/cocoapods/framework/shared.framework/*.bundle'"
 
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
@@ -82,6 +86,7 @@ kotlin {
                 api(projects.feature.transactions)
                 api(projects.feature.walletdetail)
                 api(libs.koin.compose)
+                api(libs.koin.core)
                 api(libs.navigation.compose)
                 api(compose.runtime)
                 api(compose.foundation)
@@ -95,7 +100,11 @@ kotlin {
                 implementation(libs.voyager.transitions)
             }
         }
-        val commonTest by getting
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
 
         val desktopMain by getting
 
@@ -138,4 +147,12 @@ kotlin {
 
 android {
     namespace = "com.cdcoding.shared"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }

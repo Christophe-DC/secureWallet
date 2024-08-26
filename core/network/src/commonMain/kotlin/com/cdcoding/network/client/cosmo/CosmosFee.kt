@@ -43,6 +43,7 @@ class  CosmosFee(
             TransactionType.Transfer -> BigInteger(200_000L)
             TransactionType.Swap,
             TransactionType.TokenApproval -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
         return GasFee(
             feeAssetId = assetId,

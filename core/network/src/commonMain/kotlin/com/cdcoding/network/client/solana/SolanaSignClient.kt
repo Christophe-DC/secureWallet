@@ -56,6 +56,7 @@ class SolanaSignClient(
             }
 
             TransactionType.TokenApproval -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
     }
 

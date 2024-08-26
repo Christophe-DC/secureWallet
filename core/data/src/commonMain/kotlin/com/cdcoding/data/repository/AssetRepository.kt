@@ -211,7 +211,9 @@ class DefaultAssetRepository(
     override suspend fun updateBalances(account: Account, tokens: List<AssetId>): List<Balances> {
         val balances =
             balancesRemoteSource.getBalances(account, tokens).getOrNull() ?: return emptyList()
-        // assetsLocalSource.setBalances(account, balances)
+        balances.forEach {
+            balanceDao.setBalances(account, it.items)
+        }
         return balances
     }
 

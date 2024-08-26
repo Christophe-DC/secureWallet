@@ -1,14 +1,10 @@
 package com.cdcoding.transactions.presentation
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.cdcoding.common.utils.CommonViewModel
 import com.cdcoding.data.repository.SessionRepository
 import com.cdcoding.data.repository.TransactionRepository
-import com.cdcoding.data.repository.WalletRepository
-import com.cdcoding.datastore.password.PasswordStore
 import com.cdcoding.domain.SyncTransactionUseCase
-import com.cdcoding.wallet.operator.LoadPhraseOperator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
