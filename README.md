@@ -103,3 +103,10 @@ Low coupling - Modules should be as independent as possible from one another, so
 High cohesion - A module should comprise a collection of code that acts as a system. It should have clearly defined responsibilities and stay within boundaries of certain domain knowledge.
 
 ![Diagram showing types of modules and their dependencies](resources/secure%20wallet%20modules.png "Diagram showing types of modules and their dependencies")
+
+
+## Contact with me
+
+💬  If you have any question / feedback, please do not hesitate to reach out to me in linkedin:
+
+[<img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white">](https://www.linkedin.com/in/christophe-da-costa-72225553/)
