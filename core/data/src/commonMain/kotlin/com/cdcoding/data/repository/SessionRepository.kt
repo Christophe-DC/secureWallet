@@ -3,7 +3,6 @@ package com.cdcoding.data.repository
 import kotlinx.coroutines.flow.Flow
 import com.cdcoding.database.db.SessionDao
 import com.cdcoding.model.Session
-import com.cdcoding.model.Wallet
 
 interface SessionRepository {
     fun session(): Flow<Session?>

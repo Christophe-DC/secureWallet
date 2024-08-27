@@ -4,5 +4,5 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class HomeUIState(
-    val hasSession: Boolean = false,
+    val hasSession: Boolean = true,
 )

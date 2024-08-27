@@ -26,10 +26,10 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class WalletDetailViewModel (
+class WalletDetailViewModel(
     private val getSessionUseCase: GetSessionUseCase,
     private val getAssetsByWalletUseCase: GetAssetsByWalletUseCase,
-    private val assetRepository: AssetRepository
+    private val assetRepository: AssetRepository,
 ) : CommonViewModel<WalletDetailUIState, WalletDetailEffect, WalletDetailIntent>() {
 
 
@@ -89,7 +89,7 @@ class WalletDetailViewModel (
 
     private fun handleAssets(
         currency: Currency,
-        assets: List<AssetInfo>
+        assets: List<AssetInfo>,
     ): ImmutableList<AssetUIState> {
         return assets
             .filter { asset ->
@@ -97,7 +97,10 @@ class WalletDetailViewModel (
             }
             .sortedByDescending {
                 it.balances.calcTotal()
-                    .convert(it.asset.decimals, it.price?.price?.price ?: 0.0).atomicValue
+                    .convert(
+                        it.asset.decimals,
+                        it.price?.price?.price ?: 0.0
+                    ).atomicValue
             }.map {
                 val totalBalance = it.balances.calcTotal()
                 AssetUIState(
@@ -111,7 +114,10 @@ class WalletDetailViewModel (
                     fiat = if (it.price == null || it.price?.price?.price == 0.0) {
                         ""
                     } else {
-                        totalBalance.convert(it.asset.decimals, it.price?.price?.price ?: 0.0)
+                        totalBalance.convert(
+                            it.asset.decimals,
+                            it.price?.price?.price ?: 0.0
+                        )
                             .format(0, currency.string, 2)
                     },
                     price = PriceUIState.create(it.price?.price, currency),
@@ -125,7 +131,7 @@ class WalletDetailViewModel (
             val current = it.balances
                 .calcTotal()
                 .convert(it.asset.decimals, it.price?.price?.price ?: 0.0)
-                .atomicValue.doubleValue(true)
+                .atomicValue.doubleValue(false)
             val changed = current * ((it.price?.price?.priceChangePercentage24h ?: 0.0) / 100)
             Pair(current, changed)
         }.fold(Pair(0.0, 0.0)) { acc, pair ->
@@ -170,7 +176,11 @@ private data class AssetsViewModelState(
             walletInfo = WalletInfoUIState(
                 name = walletInfo?.name ?: "",
                 icon = walletInfo?.icon ?: "",
-                totalValue = (walletInfo?.totalValue ?: Fiat(0.0)).format(0, currency.string, 2),
+                totalValue = (walletInfo?.totalValue ?: Fiat(0.0)).format(
+                    0,
+                    currency.string,
+                    2
+                ),
                 changedValue = (walletInfo?.changedValue ?: Fiat(0.0)).format(
                     0,
                     currency.string,
