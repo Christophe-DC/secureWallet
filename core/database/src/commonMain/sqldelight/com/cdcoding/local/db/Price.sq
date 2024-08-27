@@ -1,0 +1,19 @@
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS PriceEntity(
+    assetId TEXT PRIMARY KEY NOT NULL,
+    price REAL NOT NULL,
+    dayChanged REAL NOT NULL
+);
+
+getPrices:
+SELECT * FROM PriceEntity;
+
+getPricesByAssets:
+SELECT * FROM PriceEntity WHERE assetId IN ?;
+
+insertPrice:
+INSERT OR REPLACE INTO PriceEntity(assetId, price, dayChanged) VALUES (?, ?, ?);
+
+deletePrices:
+DELETE FROM PriceEntity;

@@ -1,0 +1,27 @@
+import com.cdcoding.database.db.model.WalletTypeEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS WalletEntity(
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    walletIndex INTEGER NOT NULL,
+    type TEXT AS WalletTypeEntity NOT NULL
+);
+
+getAllWallet:
+SELECT * FROM WalletEntity WHERE id=?;
+
+getAllWallets:
+SELECT * FROM WalletEntity;
+
+insertWallet:
+INSERT OR REPLACE INTO WalletEntity(id, name, walletIndex, type) VALUES (?, ?, ?, ?);
+
+updateWallet:
+UPDATE WalletEntity SET name=? WHERE id =?;
+
+
+deleteWallet:
+DELETE FROM WalletEntity WHERE id=?;
+
+

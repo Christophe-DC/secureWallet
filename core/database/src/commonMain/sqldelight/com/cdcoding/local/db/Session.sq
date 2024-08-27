@@ -1,0 +1,18 @@
+import com.cdcoding.database.db.model.CurrencyEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS SessionEntity(
+    id INTEGER PRIMARY KEY NOT NULL,
+    walletId TEXT NOT NULL,
+    currency TEXT AS CurrencyEntity NOT NULL,
+    FOREIGN KEY (walletId) REFERENCES WalletEntity(id) ON DELETE CASCADE
+);
+
+getSession:
+SELECT * FROM SessionEntity WHERE id=1;
+
+updateSession:
+INSERT OR REPLACE INTO SessionEntity(id, walletId, currency) VALUES (1, ?, ?);
+
+reset:
+DELETE FROM SessionEntity WHERE id=1;

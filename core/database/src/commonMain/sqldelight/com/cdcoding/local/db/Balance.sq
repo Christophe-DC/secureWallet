@@ -1,0 +1,30 @@
+import com.cdcoding.database.db.model.BalanceTypeEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS BalanceEntity(
+    assetId TEXT NOT NULL,
+    address TEXT NOT NULL,
+    type TEXT AS BalanceTypeEntity NOT NULL,
+    amount TEXT NOT NULL,
+    updatedAt INTEGER,
+    PRIMARY KEY (assetId, address)
+);
+
+getBalancesByAssetId:
+SELECT * FROM BalanceEntity WHERE address IN ? AND assetId IN ?;
+
+getBalancesByOwner:
+SELECT * FROM BalanceEntity WHERE address IN ?;
+
+insertBalance:
+INSERT OR REPLACE INTO BalanceEntity(assetId,
+                                   address,
+                                   type,
+                                   amount,
+                                   updatedAt
+                                    )
+                                   VALUES (?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?);

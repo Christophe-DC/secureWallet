@@ -1,0 +1,3 @@
+package com.cdcoding.walletdetail.presentation
+
+sealed interface WalletDetailEffect

@@ -1,0 +1,139 @@
+import com.cdcoding.database.db.model.TransactionDirectionEntity;
+import com.cdcoding.database.db.model.TransactionStateEntity;
+import com.cdcoding.database.db.model.TransactionTypeEntity;
+import com.cdcoding.database.db;
+
+CREATE TABLE IF NOT EXISTS TransactionEntity(
+    id TEXT NOT NULL PRIMARY KEY,
+    hash TEXT NOT NULL,
+    assetId TEXT NOT NULL,
+    feeAssetId TEXT NOT NULL,
+    owner TEXT NOT NULL,
+    recipient TEXT NOT NULL,
+    contract TEXT,
+    metadata TEXT,
+    state TEXT AS TransactionStateEntity NOT NULL,
+    type TEXT AS TransactionTypeEntity NOT NULL,
+    blockNumber TEXT NOT NULL,
+    sequence TEXT NOT NULL,
+    fee TEXT NOT NULL,
+    value TEXT NOT NULL,
+    payload TEXT,
+    direction TEXT AS TransactionDirectionEntity NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS TxSwapMetadataEntity(
+    txId TEXT NOT NULL PRIMARY KEY,
+    fromAssetId TEXT NOT NULL,
+    toAssetId TEXT NOT NULL,
+    fromAmount TEXT NOT NULL,
+    toAmount TEXT NOT NULL
+);
+
+
+insertTransaction:
+INSERT OR REPLACE INTO TransactionEntity(id,
+                                   hash,
+                                   assetId,
+                                   feeAssetId,
+                                   owner,
+                                   recipient,
+                                   contract,
+                                   metadata,
+                                   state,
+                                   type,
+                                   blockNumber,
+                                   sequence,
+                                   fee,
+                                   value,
+                                   payload,
+                                   direction,
+                                   createdAt,
+                                   updatedAt
+                                    )
+                                   VALUES (?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?,
+                                   ?);
+
+
+
+
+insertSwapMetadata:
+INSERT OR REPLACE INTO TxSwapMetadataEntity(txId,
+                                          fromAssetId,
+                                           toAssetId,
+                                           fromAmount,
+                                           toAmount )
+                                         VALUES (?,
+                                          ?,
+                                          ?,
+                                          ?,
+                                          ?);
+
+
+getExtendedTransactions:
+SELECT DISTINCT tx.id, tx.hash,
+       tx.assetId,
+       tx.feeAssetId,
+       tx.owner,
+       tx.recipient,
+       tx.contract,
+       tx.state,
+       tx.type,
+       tx.blockNumber,
+       tx.sequence,
+       tx.fee,
+       tx.value,
+       tx.payload,
+       tx.metadata,
+       tx.direction,
+       tx.createdAt,
+       tx.updatedAt,
+       assets.decimals AS assetDecimals,
+       assets.name AS assetName,
+       assets.type AS assetType,
+       assets.symbol AS assetSymbol,
+       feeAsset.decimals AS feeDecimals,
+       feeAsset.name AS feeName,
+       feeAsset.type AS feeType,
+       feeAsset.symbol AS feeSymbol,
+       prices.price AS assetPrice,
+       prices.dayChanged AS assetPriceChanged,
+       feePrices.price AS feePrice,
+       feePrices.dayChanged AS feePriceChanged
+FROM TransactionEntity AS tx
+INNER JOIN AssetEntity AS assets ON tx.assetId = assets.id
+INNER JOIN AssetEntity AS feeAsset ON tx.feeAssetId = feeAsset.id
+LEFT JOIN PriceEntity AS prices ON tx.assetId = prices.assetId
+LEFT JOIN PriceEntity AS feePrices ON tx.feeAssetId = feePrices.assetId
+WHERE tx.id IN ?
+   OR (tx.owner IN (
+       SELECT AccountEntity.address
+       FROM AccountEntity
+       INNER JOIN SessionEntity ON AccountEntity.walletId = SessionEntity.walletId
+       WHERE SessionEntity.id = 1
+   ) OR tx.recipient IN (
+       SELECT AccountEntity.address
+       FROM AccountEntity
+       INNER JOIN SessionEntity ON AccountEntity.walletId = SessionEntity.walletId
+       WHERE SessionEntity.id = 1
+   ))
+ORDER BY tx.createdAt DESC;
