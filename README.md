@@ -2,7 +2,14 @@
 
 Secure Wallet is a comprehensive cryptocurrency wallet designed designed for Android and iOS. It provide users with a seamless and reliable way to manage their digital assets. With a focus on usability, Secure Wallet allows users to store, send, and receive a wide range of cryptocurrencies while ensuring the utmost protection of their private keys and sensitive information.
 
-### Android Screenshots
+## Download
+
+<a href="https://play.google.com/store/apps/details?id=com.cdcoding.securewallet" target="_blank">
+<img src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png" width=240 />
+</a>
+
+
+## Android Screenshots
 
 <table>
   <td>
@@ -18,7 +25,7 @@ Secure Wallet is a comprehensive cryptocurrency wallet designed designed for And
 </tr>
 </table>
 
-### iOS Screenshots
+## iOS Screenshots
 
 <table>
   <td>
