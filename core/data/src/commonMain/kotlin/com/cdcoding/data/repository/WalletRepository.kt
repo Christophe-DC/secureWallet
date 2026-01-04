@@ -222,7 +222,7 @@ class WalletRepository(
         val result = gemApiClient.getSubscriptions(deviceId)
         val remoteSubscriptions = result.getOrNull() ?: emptyList()
         remoteSubscriptions.forEach {
-            subscriptionsIndex.remove("${it.chain.string}_${it.address}_${it.walletIndex}")
+            subscriptionsIndex.remove("${it.chain?.string}_${it.address}_${it.walletIndex}")
         }
         if (subscriptionsIndex.isNotEmpty()) {
             gemApiClient.addSubscriptions(deviceId, subscriptionsIndex.values.toList())

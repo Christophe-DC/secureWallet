@@ -6,7 +6,7 @@ import kotlinx.serialization.*
 data class Subscription (
 	@SerialName("wallet_index")
 	val walletIndex: Int,
-	val chain: Chain,
+	val chain: Chain? = null,
 	val address: String
 )
 

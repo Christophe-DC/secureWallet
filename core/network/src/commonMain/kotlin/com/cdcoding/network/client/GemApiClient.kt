@@ -14,6 +14,7 @@ import com.cdcoding.network.model.PricesResponse
 import com.cdcoding.network.util.NetworkError
 import com.cdcoding.network.util.Result
 import com.cdcoding.network.util.getResult
+import com.cdcoding.network.util.map
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -59,7 +60,11 @@ class GemApiClient(
 
 
     suspend fun getSubscriptions(deviceId: String): Result<List<Subscription>, NetworkError> {
-        return httpClient.get("$GEM_URL/v1/subscriptions/$deviceId").getResult()
+        val res: Result<List<Subscription>, NetworkError> = httpClient.get("$GEM_URL/v1/subscriptions/$deviceId").getResult()
+        val filteredRes = res.map { subscriptions ->
+            subscriptions.filter { it.chain != null }
+        }
+        return filteredRes
     }
 
     suspend fun addSubscriptions(deviceId: String, request: List<Subscription>): Result<Any, NetworkError> {

@@ -14,7 +14,6 @@ import com.trustwallet.core.theopennetwork.SendMode
 import com.trustwallet.core.theopennetwork.SigningInput
 import com.trustwallet.core.theopennetwork.SigningOutput
 import com.trustwallet.core.theopennetwork.Transfer
-import com.trustwallet.core.theopennetwork.WalletVersion
 import io.ktor.utils.io.core.toByteArray
 import okio.ByteString.Companion.toByteString
 
@@ -30,9 +29,9 @@ class TonSignClient : SignClient {
         val signingInput = SigningInput(
             messages = listOf(
                 Transfer(
-                    wallet_version = WalletVersion.WALLET_V4_R2,
+                    //wallet_version = WalletVersion.WALLET_V4_R2,
                     dest = params.input.destination(),
-                    amount = params.finalAmount.longValue(),
+                    amount = params.finalAmount.toByteArray().toByteString(),
                     comment = params.input.memo() ?: "",
                     //  sequenceNumber = (params.info as TonSignerPreloader.Info).sequence,
                     mode = SendMode.PAY_FEES_SEPARATELY.value or SendMode.IGNORE_ACTION_PHASE_ERRORS.value,
@@ -53,16 +52,16 @@ class TonSignClient : SignClient {
         val meta = params.info as TonSignerPreloader.Info
         val jettonTransfer = JettonTransfer(
             // transfer = transfer,
-            jetton_amount = params.finalAmount.longValue(),
+            jetton_amount = params.finalAmount.toByteArray().toByteString(),
             to_owner = params.input.destination(),
             response_address =  params.owner,
-            forward_amount = 1
+            forward_amount = BigInteger(1).toByteArray().toByteString()
         )
 
         val transfer = Transfer(
-            wallet_version = WalletVersion.WALLET_V4_R2,
+            //wallet_version = WalletVersion.WALLET_V4_R2,
             dest = meta.jettonAddress ?: "",
-            amount = (meta.fee.options[tokenAccountCreationKey] ?: BigInteger.ZERO).longValue(),
+            amount = (meta.fee.options[tokenAccountCreationKey] ?: BigInteger.ZERO).toByteArray().toByteString(),
             comment = params.input.memo() ?: "",
             jetton_transfer = jettonTransfer,
             mode =
