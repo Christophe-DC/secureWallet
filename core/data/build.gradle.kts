@@ -10,6 +10,7 @@ kotlin {
             implementation(projects.core.database)
             implementation(projects.core.common)
             implementation(projects.core.datastore)
+            implementation(projects.core.datasource)
             implementation(projects.core.model)
             implementation(projects.core.network)
             implementation(libs.bignum)

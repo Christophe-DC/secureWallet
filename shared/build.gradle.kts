@@ -1,3 +1,8 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
@@ -9,13 +14,16 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+    androidTarget()
+    targets.withType<KotlinAndroidTarget>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
+
+    /*targets.withType<KotlinJvmTarget>().configureEach {
+        compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
+    }*/
 
     jvm("desktop")
 
@@ -65,6 +73,7 @@ kotlin {
                 api(projects.core.domain)
                 api(projects.core.data)
                 api(projects.core.database)
+                api(projects.core.datasource)
                 api(projects.core.navigation)
                 api(projects.core.network)
                 api(projects.core.data)
@@ -84,6 +93,7 @@ kotlin {
                 api(projects.feature.sendasset)
                 api(projects.feature.showphrase)
                 api(projects.feature.transactions)
+                api(projects.feature.walletconnect)
                 api(projects.feature.walletdetail)
                 api(libs.koin.compose)
                 api(libs.koin.core)

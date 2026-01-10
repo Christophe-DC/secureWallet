@@ -10,7 +10,9 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,6 +38,7 @@ import com.cdcoding.core.designsystem.hooks.useInject
 import com.cdcoding.core.designsystem.state.collectAsStateWithLifecycle
 import com.cdcoding.core.navigation.SelectWalletDestination
 import com.cdcoding.core.navigation.TransactionsDestination
+import com.cdcoding.core.navigation.WalletConnectDestination
 import com.cdcoding.core.navigation.WelcomeDestination
 import com.cdcoding.core.navigation.tab.WalletDetailDestination
 import com.cdcoding.core.navigation.tab.registry.rememberTab
@@ -52,6 +55,7 @@ class HomeScreen : Screen {
 
         val welcomeScreen = rememberScreen(WelcomeDestination.Welcome)
         val selectWalletScreen = rememberScreen(SelectWalletDestination.SelectWallet)
+        val wcScanScreen = rememberScreen(WalletConnectDestination.WalletConnectScan)
 
         useEffect(uiState.value.hasSession) {
             if (!uiState.value.hasSession) {
@@ -60,7 +64,8 @@ class HomeScreen : Screen {
         }
 
         HomeScreenContent(
-            onSelectWallet = { navigator.push(selectWalletScreen) }
+            onSelectWallet = { navigator.push(selectWalletScreen) },
+            onWalletConnectScan = { navigator.push(wcScanScreen) },
         )
     }
 }
@@ -71,6 +76,7 @@ class HomeScreen : Screen {
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     onSelectWallet: () -> Unit,
+    onWalletConnectScan: () -> Unit,
 ) {
 
     val walletDetailTab = rememberTab(WalletDetailDestination.WalletDetail)
@@ -88,10 +94,15 @@ fun HomeScreenContent(
         Scene(
             title = {
                 if (tabNavigator.current.key == walletDetailTab.key) {
-                    Box {
-                        TextButton(onClick = onSelectWallet) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        TextButton(
+                            onClick = onSelectWallet,
+                            modifier = Modifier.align(Alignment.Center)
+                        ) {
                             Row(
-                                horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
@@ -105,6 +116,15 @@ fun HomeScreenContent(
                                     contentDescription = null
                                 )
                             }
+                        }
+                        IconButton(
+                            onClick = onWalletConnectScan,
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.QrCodeScanner,
+                                contentDescription = "WalletConnect Scan"
+                            )
                         }
                     }
                 } else {

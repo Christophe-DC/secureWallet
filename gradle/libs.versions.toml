@@ -1,5 +1,5 @@
 [versions]
-agp = "8.2.2"
+agp = "8.13.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -12,13 +12,13 @@ androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 composeGradlePlugin = "1.6.11"
-kotlinGradlePlugin = "1.9.0"
+kotlinGradlePlugin = "2.3.0"
 kotlinxSerializationJson = "1.6.3"
 compose-plugin = "1.6.11"
 junit = "4.13.2"
-kotlin = "2.0.20-RC"
+kotlin = "2.3.0"
 ktorClientCore = "2.3.12"
-voyager = "1.0.0-rc10"
+voyager = "1.1.0-beta02"
 navigation-compose = "2.7.0-alpha07"
 koin-core = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
@@ -35,8 +35,12 @@ kotlinxCollectionsImmutable = "0.3.7"
 lifecycleViewmodelAndroid = "2.8.4"
 qrKit = "1.0.8"
 securityCrypto = "1.1.0-alpha06"
-kotlinVersion = "1.9.23"
+kotlinVersion = "2.3.0"
 spotless-plugin = "6.23.0"
+walletconnect = "1.5.2"
+kotlinStdlib = "2.2.21"
+runner = "1.7.0"
+core = "1.7.0"
 
 [libraries]
 compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeGradlePlugin" }
@@ -87,6 +91,8 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 
 wallet-core = { module = "com.trustwallet:wallet-core-kotlin", version.ref = "wallet-core" }
 
+walletconnect-core = { module = "com.reown:android-core", version.ref = "walletconnect" }
+walletconnect-sign = { module = "com.reown:walletkit", version.ref = "walletconnect" }
 
 bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 
@@ -103,6 +109,9 @@ sqldelight-ext = { group = "app.cash.sqldelight", name = "coroutines-extensions"
 sqldelight-adapter = { group = "app.cash.sqldelight", name = "primitive-adapters", version.ref = "sqldelight" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-plugin" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 
 [plugins]
@@ -118,6 +127,8 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless-plugin" }
 
 securewallet-multiplatform-core = { id = "securewallet.multiplatform.core", version = "unspecified" }
 securewallet-compose = { id = "securewallet.compose", version = "unspecified" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
 
 [bundles]
 ktor = [

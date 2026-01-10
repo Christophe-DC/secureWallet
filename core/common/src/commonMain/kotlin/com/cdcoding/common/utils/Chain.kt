@@ -80,3 +80,37 @@ fun List<Chain>.filter(query: String): List<Chain> {
         it.string.lowercase().startsWith(query)
     }
 }
+
+data class CaipChain(
+    val namespace: String,
+    val chainId: String,
+    val displayName: String
+)
+
+val Chain.caip: CaipChain?
+    get() = when (this) {
+
+        Chain.Ethereum   -> CaipChain("eip155", "1", "Ethereum")
+        Chain.Polygon    -> CaipChain("eip155", "137", "Polygon")
+        Chain.Arbitrum   -> CaipChain("eip155", "42161", "Arbitrum")
+        Chain.Optimism   -> CaipChain("eip155", "10", "Optimism")
+        Chain.Base       -> CaipChain("eip155", "8453", "Base")
+        Chain.AvalancheC -> CaipChain("eip155", "43114", "Avalanche")
+        Chain.Fantom     -> CaipChain("eip155", "250", "Fantom")
+        Chain.Gnosis     -> CaipChain("eip155", "100", "Gnosis")
+        Chain.Celo       -> CaipChain("eip155", "42220", "Celo")
+        Chain.Linea      -> CaipChain("eip155", "59144", "Linea")
+        Chain.ZkSync     -> CaipChain("eip155", "324", "zkSync")
+        Chain.Mantle     -> CaipChain("eip155", "5000", "Mantle")
+        Chain.Blast      -> CaipChain("eip155", "81457", "Blast")
+        Chain.OpBNB      -> CaipChain("eip155", "204", "opBNB")
+        Chain.SmartChain -> CaipChain("eip155", "56", "BNB Smart Chain")
+
+        Chain.Solana     -> CaipChain("solana", "mainnet", "Solana")
+        Chain.Cosmos     -> CaipChain("cosmos", "cosmoshub-4", "Cosmos")
+        Chain.Osmosis    -> CaipChain("cosmos", "osmosis-1", "Osmosis")
+        Chain.Thorchain  -> CaipChain("cosmos", "thorchain-mainnet-v1", "Thorchain")
+        Chain.Near       -> CaipChain("near", "mainnet", "Near")
+
+        else -> null
+    }

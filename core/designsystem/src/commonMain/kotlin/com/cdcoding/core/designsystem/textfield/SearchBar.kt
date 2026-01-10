@@ -1,6 +1,5 @@
 package com.cdcoding.core.designsystem.textfield
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -10,10 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.TextFieldState
-import androidx.compose.foundation.text2.input.clearText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -38,36 +33,40 @@ import com.cdcoding.core.resource.Res
 import com.cdcoding.core.resource.search_hint
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchBar(
-    query: TextFieldState,
+    query: String,
+    onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     Row(
-        modifier = modifier.fillMaxWidth().height(40.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .height(40.dp)
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            BasicTextField2(
+
+            BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(30.dp))
-                    .padding(start = 48.dp, top = 10.dp, end = 32.dp, bottom = 10.dp)
-                ,
+                    .padding(start = 48.dp, top = 10.dp, end = 32.dp, bottom = 10.dp),
+                value = query,
+                onValueChange = onQueryChange,
+                singleLine = true,
                 textStyle = TextStyle.Default.copy(
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                 ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                state = query,
-                lineLimits = TextFieldLineLimits.SingleLine,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             )
-            if (query.text.isEmpty()) {
+
+            if (query.isEmpty()) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
@@ -78,14 +77,16 @@ fun SearchBar(
                     fontSize = 14.sp,
                 )
             }
+
             IconButton(onClick = focusRequester::requestFocus) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "search")
             }
-            if (query.text.isNotEmpty()) {
+
+            if (query.isNotEmpty()) {
                 IconButton(
                     modifier = Modifier.align(Alignment.CenterEnd),
                     onClick = {
-                        query.clearText()
+                        onQueryChange("")
                         focusManager.clearFocus()
                     }
                 ) {

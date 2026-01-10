@@ -8,6 +8,8 @@ import com.cdcoding.data.repository.DefaultTransactionsRepository
 import com.cdcoding.data.repository.SessionRepository
 import com.cdcoding.data.repository.TokenRepository
 import com.cdcoding.data.repository.TransactionRepository
+import com.cdcoding.data.repository.WalletConnectRepository
+import com.cdcoding.data.repository.WalletConnectRepositoryImpl
 import com.cdcoding.data.repository.WalletRepository
 import org.koin.dsl.module
 
@@ -31,4 +33,5 @@ val dataModule = module {
     }
     single<TokenRepository> { DefaultTokenRepository(get(), get()) }
     single<TransactionRepository> { DefaultTransactionsRepository(get(), get()) }
+    single<WalletConnectRepository> { WalletConnectRepositoryImpl(get()) }
 }

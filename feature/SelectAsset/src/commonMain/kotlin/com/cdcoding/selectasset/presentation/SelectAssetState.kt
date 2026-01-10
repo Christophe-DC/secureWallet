@@ -11,4 +11,5 @@ data class SelectAssetState(
     val isAddAssetAvailable: Boolean = false,
     val error: String = "",
     val assets: ImmutableList<AssetUIState> = listOf<AssetUIState>().toImmutableList(),
+    val query: String = "",
 )

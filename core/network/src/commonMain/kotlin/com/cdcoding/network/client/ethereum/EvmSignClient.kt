@@ -15,6 +15,7 @@ import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.trustwallet.core.AnySigner
 import com.trustwallet.core.Blockchain
 import com.trustwallet.core.CoinType
+import com.trustwallet.core.Hash
 import com.trustwallet.core.PrivateKey
 import com.trustwallet.core.ethereum.SigningInput
 import com.trustwallet.core.ethereum.SigningOutput
@@ -29,9 +30,26 @@ class EvmSignClient(
 ) : SignClient {
 
     override suspend fun signMessage(input: ByteArray, privateKey: ByteArray): ByteArray {
-        val result = PrivateKey(privateKey).sign(input, CoinType.Ethereum.curve) ?: byteArrayOf()
-        result[64] = (result[64] + 27).toByte()
-        return result
+        val digest = personalSignDigest(input)
+
+        val sig = PrivateKey(privateKey).sign(digest, CoinType.Ethereum.curve)
+            ?: byteArrayOf()
+
+        // WalletConnect attend v=27/28 (pas 0/1)
+        sig[64] = (sig[64] + 27).toByte()
+        return sig
+    }
+
+    private fun personalSignDigest(message: ByteArray): ByteArray {
+        val prefix = "\u0019Ethereum Signed Message:\n${message.size}"
+            .encodeToByteArray()
+
+        val prefixed = ByteArray(prefix.size + message.size).apply {
+            prefix.copyInto(this, 0)
+            message.copyInto(this, prefix.size)
+        }
+
+        return Hash.keccak256(prefixed)
     }
 
     override suspend fun signTransfer(

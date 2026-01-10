@@ -17,7 +17,6 @@ class HomeViewModel(
     init {
         viewModelScope.launch {
             sessionRepository.session().collect { session ->
-                println("session :$session")
                 val hasSession = session != null
                 setState { copy(hasSession = hasSession) }
             }

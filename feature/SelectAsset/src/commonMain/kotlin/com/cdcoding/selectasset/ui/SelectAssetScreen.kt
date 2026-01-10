@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.Icon
@@ -56,6 +55,7 @@ import com.cdcoding.model.AssetSubtype
 import com.cdcoding.model.AssetUIState
 import com.cdcoding.model.SelectAssetType
 import com.cdcoding.selectasset.presentation.SelectAssetEvent
+import com.cdcoding.selectasset.presentation.SelectAssetIntent
 import com.cdcoding.selectasset.presentation.SelectAssetState
 import com.cdcoding.selectasset.presentation.SelectAssetViewModel
 import kotlinx.coroutines.flow.Flow
@@ -67,7 +67,6 @@ import org.jetbrains.compose.resources.stringResource
 
 class SelectAssetScreen(private val selectAssetType: SelectAssetType) : Screen {
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -82,21 +81,19 @@ class SelectAssetScreen(private val selectAssetType: SelectAssetType) : Screen {
 
         SelectAssetScreenContent(
             uiState = uiState.value,
-            query = viewModel.query,
+            query = uiState.value.query,
+            onIntent = viewModel::setIntent,
             popBackStack = { navigator.pop() },
             snackbarState = snackbarState,
             onSelect = { assetId ->
                 when (selectAssetType) {
                     SelectAssetType.Send -> {
-                        val sendAssetScreen =
-                            ScreenRegistry.get(SendAssetDestination.SendAsset(assetId))
-                        navigator.push(sendAssetScreen)
+                        val screen = ScreenRegistry.get(SendAssetDestination.SendAsset(assetId))
+                        navigator.push(screen)
                     }
-
                     SelectAssetType.Receive -> {
-                        val receiveAssetScreen =
-                            ScreenRegistry.get(ReceiveAssetDestination.ReceiveAsset(assetId))
-                        navigator.push(receiveAssetScreen)
+                        val screen = ScreenRegistry.get(ReceiveAssetDestination.ReceiveAsset(assetId))
+                        navigator.push(screen)
                     }
                 }
             },
@@ -104,13 +101,8 @@ class SelectAssetScreen(private val selectAssetType: SelectAssetType) : Screen {
             itemTrailing = { asset ->
                 when (selectAssetType) {
                     SelectAssetType.Send -> {
-                        getBalanceInfo(
-                            asset.isZeroValue,
-                            asset.value,
-                            asset.fiat
-                        )
+                        getBalanceInfo(asset.isZeroValue, asset.value, asset.fiat)
                     }
-
                     SelectAssetType.Receive -> {
                         IconButton(onClick = {
                             clipboardManager.setText(AnnotatedString(asset.owner))
@@ -128,11 +120,12 @@ class SelectAssetScreen(private val selectAssetType: SelectAssetType) : Screen {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun SelectAssetScreenContent(
     uiState: SelectAssetState,
-    query: TextFieldState,
+    query: String,
+    onIntent: (SelectAssetIntent) -> Unit,
     popBackStack: () -> Unit,
     onSelect: ((AssetId) -> Unit)? = {},
     support: ((AssetUIState) -> String?)?,
@@ -140,7 +133,6 @@ fun SelectAssetScreenContent(
     onAddAsset: (() -> Unit)? = null,
     snackbarState: SnackbarHostState? = null,
 ) {
-
     Scene(
         title = stringResource(Res.string.select_asset_send_title),
         onClose = popBackStack,
@@ -151,8 +143,11 @@ fun SelectAssetScreenContent(
         SearchBar(
             modifier = Modifier.padding(horizontal = 16.dp),
             query = query,
+            onQueryChange = { onIntent((SelectAssetIntent.OnQueryChanged(it))) }
         )
+
         Spacer16()
+
         LazyColumn {
             assets(
                 items = items,
@@ -165,6 +160,7 @@ fun SelectAssetScreenContent(
         }
     }
 }
+
 
 private fun LazyListScope.assets(
     items: List<AssetUIState>,

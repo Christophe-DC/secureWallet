@@ -1,4 +1,6 @@
 package com.cdcoding.selectasset.presentation
 
 
-sealed class SelectAssetIntent
+sealed interface SelectAssetIntent {
+    data class OnQueryChanged(val value: String) : SelectAssetIntent
+}
