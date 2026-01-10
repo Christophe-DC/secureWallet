@@ -110,31 +110,6 @@ class WalletConnectDataSourceAndroid(
                         )
                     )
                 )
-
-
-                /*val pk = sessionProposal.proposerPublicKey
-                proposalsByPk[pk] = sessionProposal
-
-                val dapp = WcDappMeta(
-                    name = sessionProposal.name,
-                    url = sessionProposal.url,
-                    iconUrl = sessionProposal.icons.firstOrNull()?.path
-                )
-
-                val requiredEip155 = sessionProposal.requiredNamespaces["eip155"]
-                val requiredChains = requiredEip155?.chains.orEmpty()
-                val requiredMethods = requiredEip155?.methods.orEmpty()
-
-                _events.tryEmit(
-                    WcEvent.ProposalReceived(
-                        WcProposal(
-                            proposerPublicKey = sessionProposal.proposerPublicKey,
-                            dapp = dapp,
-                            requiredChains = requiredChains,
-                            requiredMethods = requiredMethods
-                        )
-                    )
-                )*/
             }
 
             override fun onSessionRequest(
@@ -145,11 +120,6 @@ class WalletConnectDataSourceAndroid(
                 val id = sessionRequest.request.id
                 val method = sessionRequest.request.method
 
-                /*val paramsList: List<String> = when (val p = sessionRequest.request.params) {
-                    is List<*> -> p.mapNotNull { it?.toString() }
-                    null -> emptyList()
-                    else -> listOf(p.toString())
-                }*/
                 val paramsList =  listOf(sessionRequest.request.params)
 
                 _events.tryEmit(
@@ -226,12 +196,6 @@ class WalletConnectDataSourceAndroid(
         }
     }
 
-    /**
-     * Variante 2:
-     * - Construit supportedNamespaces (ce que TON wallet supporte),
-     * - Utilise WalletKit.generateApprovedNamespaces(proposal, supportedNamespaces)
-     * - Approve via proposerPublicKey
-     */
     override suspend fun approve(
         proposerPublicKey: String,
         accounts: List<Account>
@@ -254,20 +218,7 @@ class WalletConnectDataSourceAndroid(
                 buildSupportedNamespacesFromWallet(accounts)
 
 
-            /*// 1) Ce que TON wallet supporte (EVM only)
-            //    - chains: tu passes celles que tu supportes réellement (ex: eip155:1 + eip155:137)
-            //    - methods: tu passes celles que tu supportes réellement (tu peux mettre plus tard eth_signTypedData, etc.)
-            //    - events: selon doc EVM: chainChanged/accountsChanged
-            val supportedNamespaces = mapOf(
-                "eip155" to Wallet.Model.Namespace.Session(
-                    chains = chains,                 // tes chains supportées
-                    methods = methods,               // tes méthodes supportées
-                    events = listOf("chainChanged", "accountsChanged"),
-                    accounts = accounts              // CAIP10 accounts
-                )
-            )*/
 
-            // 2) Helper WalletKit pour sortir les namespaces approuvables
             val approvedNamespaces =
                 WalletKit.generateApprovedNamespaces(proposal, supportedNamespaces)
 
@@ -401,8 +352,6 @@ class WalletConnectDataSourceAndroid(
     }
 
     override suspend fun disconnectAll() {
-        // WalletKit expose parfois une liste de sessions actives selon version.
-        // Sinon, il faut tracker les topics depuis onSessionSettleResponse/onSessionDelete.
         _events.tryEmit(WcEvent.Error("disconnectAll not implemented (no active session listing yet)"))
     }
 }
