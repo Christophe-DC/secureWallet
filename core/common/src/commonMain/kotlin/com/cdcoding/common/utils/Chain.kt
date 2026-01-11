@@ -106,7 +106,7 @@ val Chain.caip: CaipChain?
         Chain.OpBNB      -> CaipChain("eip155", "204", "opBNB")
         Chain.SmartChain -> CaipChain("eip155", "56", "BNB Smart Chain")
 
-        Chain.Solana     -> CaipChain("solana", "mainnet", "Solana")
+        Chain.Solana     -> CaipChain("solana", "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp", "Solana")
         Chain.Cosmos     -> CaipChain("cosmos", "cosmoshub-4", "Cosmos")
         Chain.Osmosis    -> CaipChain("cosmos", "osmosis-1", "Osmosis")
         Chain.Thorchain  -> CaipChain("cosmos", "thorchain-mainnet-v1", "Thorchain")

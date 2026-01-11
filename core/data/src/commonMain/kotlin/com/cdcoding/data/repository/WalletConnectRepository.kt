@@ -3,6 +3,7 @@ package com.cdcoding.data.repository
 import com.cdcoding.datasource.WalletConnectDataSource
 import com.cdcoding.model.Account
 import com.cdcoding.model.WcEvent
+import com.cdcoding.model.WcNamespaceRequest
 import kotlinx.coroutines.flow.Flow
 
 interface WalletConnectRepository {
@@ -17,7 +18,8 @@ interface WalletConnectRepository {
 
     suspend fun previewApprovedChains(
         proposerPublicKey: String,
-        walletAccounts: List<Account>
+        walletAccounts: List<Account>,
+        requestedNamespaces: Map<String, WcNamespaceRequest>
     ): List<String>
 
     suspend fun reject(proposerPublicKey: String, reason: String)
@@ -43,8 +45,9 @@ class WalletConnectRepositoryImpl(
 
     override suspend fun previewApprovedChains(
         proposerPublicKey: String,
-        walletAccounts: List<Account>
-    ) = ds.previewApprovedChains(proposerPublicKey,  walletAccounts)
+        walletAccounts: List<Account>,
+        requestedNamespaces: Map<String, WcNamespaceRequest>
+    ) = ds.previewApprovedChains(proposerPublicKey,  walletAccounts, requestedNamespaces)
 
     override suspend fun reject(proposerPublicKey: String, reason: String) =
         ds.reject(proposerPublicKey, reason)

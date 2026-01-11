@@ -24,11 +24,11 @@ class WalletConnectDataSourceAndroid(
     private val connectionType: ConnectionType = ConnectionType.AUTOMATIC,
     private val telemetryEnabled: Boolean = true,
 ) : WalletConnectDataSource {
-
     private val _events = MutableSharedFlow<WcEvent>(extraBufferCapacity = 64)
     override val events = _events.asSharedFlow()
 
     private val proposalsByPk = mutableMapOf<String, Wallet.Model.SessionProposal>()
+
 
     init {
         initSdk()
@@ -90,10 +90,16 @@ class WalletConnectDataSourceAndroid(
                 val dapp = WcDappMeta(
                     name = sessionProposal.name,
                     url = sessionProposal.url,
-                    iconUrl = sessionProposal.icons.firstOrNull()?.path
+                    iconUrl = sessionProposal.icons.firstOrNull()?.toString()
                 )
 
-                val required = sessionProposal.requiredNamespaces.mapValues { (_, ns) ->
+                val requestedNamespaces: Map<String, Wallet.Model.Namespace.Proposal> =
+                    mergeProposalNamespaces(
+                        required = sessionProposal.requiredNamespaces,
+                        optional = sessionProposal.optionalNamespaces
+                    )
+
+                val requested = requestedNamespaces.mapValues { (_, ns) ->
                     WcNamespaceRequest(
                         chains = ns.chains.orEmpty(),
                         methods = ns.methods.orEmpty(),
@@ -106,7 +112,7 @@ class WalletConnectDataSourceAndroid(
                         WcProposal(
                             proposerPublicKey = pk,
                             dapp = dapp,
-                            requiredNamespaces = required
+                            requestedNamespaces = requested
                         )
                     )
                 )
@@ -212,10 +218,22 @@ class WalletConnectDataSourceAndroid(
                 return
             }
 
+            val requestedNamespaces: Map<String, Wallet.Model.Namespace.Proposal> =
+                mergeProposalNamespaces(
+                    required = proposal.requiredNamespaces,
+                    optional = proposal.optionalNamespaces
+                )
 
+            val requested = requestedNamespaces.mapValues { (_, ns) ->
+                WcNamespaceRequest(
+                    chains = ns.chains.orEmpty(),
+                    methods = ns.methods.orEmpty(),
+                    events = ns.events.orEmpty()
+                )
+            }
 
             val supportedNamespaces =
-                buildSupportedNamespacesFromWallet(accounts)
+                buildSupportedNamespacesFromWallet(accounts, requested)
 
 
 
@@ -237,12 +255,13 @@ class WalletConnectDataSourceAndroid(
 
     override suspend fun previewApprovedChains(
         proposerPublicKey: String,
-        walletAccounts: List<Account>
+        walletAccounts: List<Account>,
+        requestedNamespaces: Map<String, WcNamespaceRequest>
     ): List<String> {
         val proposal = proposalsByPk[proposerPublicKey] ?: return emptyList()
 
         val supportedNamespaces =
-            buildSupportedNamespacesFromWallet(walletAccounts)
+            buildSupportedNamespacesFromWallet(walletAccounts, requestedNamespaces)
 
         val approved =
             WalletKit.generateApprovedNamespaces(proposal, supportedNamespaces)
@@ -252,35 +271,46 @@ class WalletConnectDataSourceAndroid(
             .distinct()
     }
 
+
     private fun buildSupportedNamespacesFromWallet(
-        accounts: List<Account>
+        walletAccounts: List<Account>,
+        requested: Map<String, WcNamespaceRequest>
     ): Map<String, Wallet.Model.Namespace.Session> {
 
-        val grouped = accounts
-            .mapNotNull { account ->
-                val caip = account.chain.caip ?: return@mapNotNull null
-                Triple(
-                    caip.namespace,
-                    "${caip.namespace}:${caip.chainId}",
-                    "${caip.namespace}:${caip.chainId}:${account.address}"
-                )
-            }
-            .groupBy { it.first }
+        val byNamespace = walletAccounts.mapNotNull { acc ->
+            val caip = acc.chain.caip ?: return@mapNotNull null
+            val chain = "${caip.namespace}:${caip.chainId}"
+            val account = "${caip.namespace}:${caip.chainId}:${acc.address}"
+            Triple(caip.namespace, chain, account)
+        }.groupBy { it.first }
 
-        return grouped.mapValues { (_, entries) ->
-            Wallet.Model.Namespace.Session(
-                chains = entries.map { it.second }.distinct(),
-                accounts = entries.map { it.third }.distinct(),
-                methods = listOf(
-                    "personal_sign",
-                    "eth_sign",
-                    "eth_signTypedData",
-                    "eth_signTypedData_v4",
-                    "eth_sendTransaction"
-                ),
-                events = listOf("chainChanged", "accountsChanged")
+        return requested.mapNotNull { (namespace, req) ->
+            val entries = byNamespace[namespace].orEmpty()
+            if (entries.isEmpty()) return@mapNotNull null
+
+            val walletChains = entries.map { it.second }.toSet()
+            val walletAccountsCaip10 = entries.map { it.third }.toSet()
+            val requestedChains = req.chains.toSet()
+            val approvedChains = walletChains.intersect(requestedChains)
+            if (approvedChains.isEmpty()) return@mapNotNull null
+
+            val approvedAccounts = walletAccountsCaip10.filter { accStr ->
+                val chainPart = accStr.substringBeforeLast(":")
+                chainPart in approvedChains
+            }
+
+            val approvedMethods = req.methods.toSet()
+            if (approvedMethods.isEmpty()) return@mapNotNull null
+
+            val approvedEvents = req.events.toSet()
+
+            namespace to Wallet.Model.Namespace.Session(
+                chains = requestedChains.toList().sorted(),
+                accounts = approvedAccounts.distinct(),
+                methods = approvedMethods.toList().sorted(),
+                events = approvedEvents.toList().sorted(),
             )
-        }
+        }.toMap()
     }
 
     override suspend fun reject(proposerPublicKey: String, reason: String) {
@@ -353,5 +383,29 @@ class WalletConnectDataSourceAndroid(
 
     override suspend fun disconnectAll() {
         _events.tryEmit(WcEvent.Error("disconnectAll not implemented (no active session listing yet)"))
+    }
+
+    private fun mergeProposalNamespaces(
+        required: Map<String, Wallet.Model.Namespace.Proposal>,
+        optional: Map<String, Wallet.Model.Namespace.Proposal>
+    ): Map<String, Wallet.Model.Namespace.Proposal> {
+        if (optional.isEmpty()) return required
+        if (required.isEmpty()) return optional
+
+        val merged = required.toMutableMap()
+
+        optional.forEach { (key, opt) ->
+            val req = merged[key]
+            if (req == null) {
+                merged[key] = opt
+            } else {
+                merged[key] = Wallet.Model.Namespace.Proposal(
+                    chains = (req.chains.orEmpty() + opt.chains.orEmpty()).distinct(),
+                    methods = (req.methods.orEmpty() + opt.methods.orEmpty()).distinct(),
+                    events = (req.events.orEmpty() + opt.events.orEmpty()).distinct()
+                )
+            }
+        }
+        return merged
     }
 }

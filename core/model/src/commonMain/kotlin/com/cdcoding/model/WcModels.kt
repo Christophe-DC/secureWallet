@@ -9,7 +9,7 @@ data class WcDappMeta(
 data class WcProposal(
     val proposerPublicKey: String,
     val dapp: WcDappMeta,
-    val requiredNamespaces: Map<String, WcNamespaceRequest>,
+    val requestedNamespaces: Map<String, WcNamespaceRequest>,
 )
 
 data class WcNamespaceRequest(

@@ -43,7 +43,8 @@ class WalletConnectViewModel(
 
                         val networksToConnect = runCatching {
                             previewWalletConnectApprovedChainsUseCase(
-                                proposerPublicKey = event.proposal.proposerPublicKey
+                                proposerPublicKey = event.proposal.proposerPublicKey,
+                                requestedNamespaces = event.proposal.requestedNamespaces
                             )
                         }.getOrElse { emptyList() }
 

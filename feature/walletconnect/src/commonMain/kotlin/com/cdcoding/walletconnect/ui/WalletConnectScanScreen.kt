@@ -121,6 +121,7 @@ private fun WalletConnectScanContent(
                 WalletConnectConfirmContent(
                     dappName = proposal.dapp.name,
                     dappUrl = proposal.dapp.url,
+                    dappIconUrl = proposal.dapp.iconUrl,
                     networksToConnect = state.networksToConnect,
                     walletAccounts = state.walletAccounts,
                     onCancel = { onIntent(WalletConnectIntent.OnConfirmReject) },
@@ -192,6 +193,7 @@ private fun ConnectedContent(
 private fun WalletConnectConfirmContent(
     dappName: String,
     dappUrl: String?,
+    dappIconUrl: String?,
     networksToConnect: List<String>,
     walletAccounts: List<com.cdcoding.model.Account>,
     onCancel: () -> Unit,
@@ -203,6 +205,14 @@ private fun WalletConnectConfirmContent(
 
         // ✅ Header (center)
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            if(dappIconUrl != null) {
+                KamelImage(
+                    resource = asyncPainterResource(data = dappIconUrl),
+                    contentDescription = "Dapp icon url",
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(Modifier.height(6.dp))
+            }
             Text("DApp connected", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(16.dp))
 
